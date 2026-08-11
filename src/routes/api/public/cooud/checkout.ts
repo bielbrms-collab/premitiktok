@@ -20,11 +20,9 @@ type ProductConfig = {
 
 const PRODUCTS: Record<string, ProductConfig> = {
   "01KZ7W13DD2MVBGG66NPG9EA9T": {
-    name: "Tasa de seguridad reembolsable",
-    // Rótulo interno enviado à Cooud para identificar a oferta no painel.
-    cooudLabel: "[MAIN] Tasa de seguridad reembolsable — 19,90 €",
-    priceId: "price_01KZQ6ERVHC5454CDTJJHP40K6",
-    // Usado apenas como fallback de exibição até a Cooud responder com o valor real.
+    name: "How to learn French",
+    // Rótulo enviado à Cooud: sem priceId, o nome do line_item aparece na gateway.
+    cooudLabel: "How to learn French",
     amount: 1990,
     currency: "EUR",
   },
