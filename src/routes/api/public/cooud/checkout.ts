@@ -100,7 +100,7 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
 
         const checkoutOrigin = new URL(parsed.data.origin).origin;
         const successUrl = new URL(parsed.data.returnPath, checkoutOrigin);
-        const cancelUrl = new URL("/#ten", checkoutOrigin);
+        const cancelUrl = new URL("/pressel/index.html#ten", checkoutOrigin);
         const commonHeaders = {
           Authorization: `Bearer ${apiKey}`,
           "Cooud-Compat-Date": COMPAT_DATE,
