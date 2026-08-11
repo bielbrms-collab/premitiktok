@@ -32,7 +32,7 @@ function Index() {
       <div className="max-w-2xl text-left bg-card p-6 rounded-xl border shadow-sm">
         <p className="font-mono text-xs text-muted-foreground mb-4">Diagnostic Mode: Enabled</p>
         <p className="text-sm whitespace-pre-wrap">
-          Configure a variável de ambiente COOUD_SECRET_KEY no meu ambiente de execução para o backend conseguir autenticar as chamadas da Cooud.
+          me de o weebook pra colocar la na cooud para marca venda paga e manda para upssel
         </p>
       </div>
     </div>
