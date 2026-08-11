@@ -192,6 +192,11 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
             sessionId: session.id,
             requestId: config.request_id,
           });
+          // Quando a oferta vem do catálogo, o valor autoritativo é o da sessão.
+          const resolvedAmount =
+            typeof session.amount === "number" ? session.amount : product.amount;
+          const resolvedCurrency =
+            typeof session.currency === "string" ? session.currency.toUpperCase() : product.currency;
           return json({
             sessionId: session.id,
             elementToken: config.cooud_element_token,
