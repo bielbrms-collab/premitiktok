@@ -35,7 +35,7 @@ const PRODUCTS: Record<string, ProductConfig> = {
   "65009b71-7660-44ef-ba87-24f29c7599a4": {
     name: "Reintento de liberación",
     cooudLabel: "How to learn Germany",
-    amount: 2990,
+    amount: 1990,
     currency: "EUR",
   },
 };
