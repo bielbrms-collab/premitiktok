@@ -202,7 +202,11 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
             elementToken: config.cooud_element_token,
             sessionSecret: config.cooud_session_secret,
             appearance: config.element,
-            product,
+            product: {
+              name: product.name,
+              amount: resolvedAmount,
+              currency: resolvedCurrency,
+            },
           });
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error);
