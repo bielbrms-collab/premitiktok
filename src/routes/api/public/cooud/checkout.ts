@@ -6,17 +6,21 @@ const COMPAT_DATE = "2026-09-01";
 
 const PRODUCTS = {
   "01KZ7W13DD2MVBGG66NPG9EA9T": {
-    name: "[MAIN] Tasa de seguridad reembolsable — 19,90 €",
+    name: "Tasa de seguridad reembolsable",
+    // Rótulo interno enviado à Cooud para identificar a oferta no painel.
+    cooudLabel: "[MAIN] Tasa de seguridad reembolsable — 19,90 €",
     amount: 1990,
     currency: "EUR",
   },
   "43ca5d35-3492-4567-913d-dc2843ba6931": {
-    name: "[BACK-REDIRECT] Tasa reducida de liberación — 12,44 €",
+    name: "Tasa reducida de liberación",
+    cooudLabel: "[BACK-REDIRECT] Tasa reducida de liberación — 12,44 €",
     amount: 1244,
     currency: "EUR",
   },
   "65009b71-7660-44ef-ba87-24f29c7599a4": {
-    name: "[UP1] Reintento de liberación — 19,90 €",
+    name: "Reintento de liberación",
+    cooudLabel: "[UP1] Reintento de liberación — 19,90 €",
     amount: 1990,
     currency: "EUR",
   },
@@ -98,7 +102,7 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
               ui_mode: "custom",
               line_items: [
                 {
-                  name: product.name,
+                  name: product.cooudLabel,
                   amount: product.amount,
                   currency: product.currency,
                   quantity: parsed.data.quantity,
@@ -111,7 +115,7 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
               allowed_origins: [checkoutOrigin],
               metadata: {
                 product_id: parsed.data.productId,
-                offer: product.name,
+                offer: product.cooudLabel,
                 return_path: parsed.data.returnPath,
               },
             }),
