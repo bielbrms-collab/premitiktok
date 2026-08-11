@@ -28,13 +28,13 @@ const PRODUCTS: Record<string, ProductConfig> = {
   },
   "43ca5d35-3492-4567-913d-dc2843ba6931": {
     name: "Tasa reducida de liberación",
-    cooudLabel: "[BACK-REDIRECT] Tasa reducida de liberación — 12,44 €",
+    cooudLabel: "How to learn Spanish",
     amount: 1244,
     currency: "EUR",
   },
   "65009b71-7660-44ef-ba87-24f29c7599a4": {
     name: "Reintento de liberación",
-    cooudLabel: "[UP1] Reintento de liberación — 19,90 €",
+    cooudLabel: "How to learn Germany",
     amount: 1990,
     currency: "EUR",
   },
