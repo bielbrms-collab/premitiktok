@@ -18,6 +18,7 @@ import { Route as ObrigadoRouteImport } from './routes/obrigado'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as BackRedirectRouteImport } from './routes/back-redirect'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicCooudWebhookRouteImport } from './routes/api/public/cooud/webhook'
 import { Route as ApiPublicCooudCheckoutRouteImport } from './routes/api/public/cooud/checkout'
 
 const Up1Route = Up1RouteImport.update({
@@ -65,6 +66,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCooudWebhookRoute = ApiPublicCooudWebhookRouteImport.update({
+  id: '/api/public/cooud/webhook',
+  path: '/api/public/cooud/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicCooudCheckoutRoute = ApiPublicCooudCheckoutRouteImport.update({
   id: '/api/public/cooud/checkout',
   path: '/api/public/cooud/checkout',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
+  '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
+  '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
+  '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/pressel'
     | '/up1'
     | '/api/public/cooud/checkout'
+    | '/api/public/cooud/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/pressel'
     | '/up1'
     | '/api/public/cooud/checkout'
+    | '/api/public/cooud/webhook'
   id:
     | '__root__'
     | '/'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/pressel'
     | '/up1'
     | '/api/public/cooud/checkout'
+    | '/api/public/cooud/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -158,6 +170,7 @@ export interface RootRouteChildren {
   PresselRoute: typeof PresselRoute
   Up1Route: typeof Up1Route
   ApiPublicCooudCheckoutRoute: typeof ApiPublicCooudCheckoutRoute
+  ApiPublicCooudWebhookRoute: typeof ApiPublicCooudWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -225,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/cooud/webhook': {
+      id: '/api/public/cooud/webhook'
+      path: '/api/public/cooud/webhook'
+      fullPath: '/api/public/cooud/webhook'
+      preLoaderRoute: typeof ApiPublicCooudWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/cooud/checkout': {
       id: '/api/public/cooud/checkout'
       path: '/api/public/cooud/checkout'
@@ -246,6 +266,7 @@ const rootRouteChildren: RootRouteChildren = {
   PresselRoute: PresselRoute,
   Up1Route: Up1Route,
   ApiPublicCooudCheckoutRoute: ApiPublicCooudCheckoutRoute,
+  ApiPublicCooudWebhookRoute: ApiPublicCooudWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
