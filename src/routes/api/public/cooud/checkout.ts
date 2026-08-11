@@ -23,7 +23,7 @@ const PRODUCTS: Record<string, ProductConfig> = {
     name: "Tasa de seguridad reembolsable",
     // Rótulo interno enviado à Cooud para identificar a oferta no painel.
     cooudLabel: "[MAIN] Tasa de seguridad reembolsable — 19,90 €",
-    priceId: "price_01KZQ9PPFFJ6SJ8MN0X86JE1XD",
+    priceId: "price_01KZQ6ERVHC5454CDTJJHP40K6",
     // Usado apenas como fallback de exibição até a Cooud responder com o valor real.
     amount: 1990,
     currency: "EUR",
