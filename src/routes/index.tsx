@@ -31,9 +31,6 @@ function Index() {
       <h1 className="mb-4 text-2xl font-bold">TikTok Rewards</h1>
       <div className="max-w-2xl text-left bg-card p-6 rounded-xl border shadow-sm">
         <p className="font-mono text-xs text-muted-foreground mb-4">Diagnostic Mode: Enabled</p>
-        <p className="text-sm whitespace-pre-wrap">
-          me de o weebook pra colocar la na cooud para marca venda paga e manda para upssel
-        </p>
       </div>
     </div>
   );
