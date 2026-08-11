@@ -113,66 +113,78 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
         };
 
         try {
-          // 1) Busca o produto real na Cooud pelo id enviado pelo front.
-          const productResponse = await fetch(
-            `${API_BASE}/products/${encodeURIComponent(parsed.data.productId)}`,
-            { headers: commonHeaders },
-          );
-          const productBody = await readBody(productResponse);
-          if (!productResponse.ok) {
-            console.error("[Cooud v2] product lookup failed", {
-              status: productResponse.status,
-              productId: parsed.data.productId,
-              requestId: cooudRequestId(productBody, productResponse),
-              response: productBody,
+          // O preço tem que vir do catálogo da Cooud, nunca de valores fixos aqui.
+          // Tentativa 1: line item referenciando só o product_id (a Cooud resolve preço/nome).
+          // Tentativa 2 (fallback): lê o produto no catálogo e envia os valores dele.
+          const baseSessionPayload = {
+            ui_mode: "custom",
+            customer_email: parsed.data.buyerEmail,
+            success_url: successUrl.toString(),
+            cancel_url: cancelUrl.toString(),
+            allowed_origins: [checkoutOrigin],
+            metadata: { product_id: parsed.data.productId },
+          };
+
+          async function createSession(lineItem: Record<string, unknown>) {
+            const response = await fetch(`${API_BASE}/checkout-sessions`, {
+              method: "POST",
+              headers: { ...commonHeaders, "Idempotency-Key": crypto.randomUUID() },
+              body: JSON.stringify({ ...baseSessionPayload, line_items: [lineItem] }),
             });
-            return json(
-              {
-                error: "cooud_product_not_found",
-                status: productResponse.status,
-                requestId: cooudRequestId(productBody, productResponse),
-                details: productBody.error ?? productBody,
-              },
-              productResponse.status === 404 ? 400 : 502,
-            );
+            return { response, body: await readBody(response) };
           }
 
-          const product = resolveProduct(productBody as Record<string, unknown>);
-          if (!product) {
-            console.error("[Cooud v2] product without usable price", {
-              productId: parsed.data.productId,
-              response: productBody,
-            });
-            return json({ error: "cooud_product_price_missing" }, 502);
-          }
-
-          const sessionResponse = await fetch(`${API_BASE}/checkout-sessions`, {
-            method: "POST",
-            headers: {
-              ...commonHeaders,
-              "Idempotency-Key": crypto.randomUUID(),
-            },
-            body: JSON.stringify({
-              ui_mode: "custom",
-              line_items: [
-                {
-                  product_id: parsed.data.productId,
-                  name: product.name,
-                  amount: product.amount,
-                  currency: product.currency,
-                  quantity: parsed.data.quantity,
-                  delivery: { mode: "external" },
-                },
-              ],
-              customer_email: parsed.data.buyerEmail,
-              success_url: successUrl.toString(),
-              cancel_url: cancelUrl.toString(),
-              allowed_origins: [checkoutOrigin],
-              metadata: { product_id: parsed.data.productId },
-            }),
+          let product: ResolvedProduct | null = null;
+          let attempt = await createSession({
+            product_id: parsed.data.productId,
+            quantity: parsed.data.quantity,
           });
 
-          const session = await readBody(sessionResponse);
+          if (!attempt.response.ok) {
+            console.warn("[Cooud v2] product_id line item rejected, trying catalog lookup", {
+              status: attempt.response.status,
+              requestId: cooudRequestId(attempt.body, attempt.response),
+              response: attempt.body,
+            });
+
+            const productResponse = await fetch(
+              `${API_BASE}/products/${encodeURIComponent(parsed.data.productId)}`,
+              { headers: commonHeaders },
+            );
+            const productBody = await readBody(productResponse);
+            product = productResponse.ok
+              ? resolveProduct(productBody as Record<string, unknown>)
+              : null;
+
+            if (!product) {
+              console.error("[Cooud v2] catalog lookup failed", {
+                status: productResponse.status,
+                productId: parsed.data.productId,
+                requestId: cooudRequestId(productBody, productResponse),
+                response: productBody,
+              });
+              return json(
+                {
+                  error: "cooud_session_failed",
+                  status: attempt.response.status,
+                  requestId: cooudRequestId(attempt.body, attempt.response),
+                  details: attempt.body.error ?? attempt.body,
+                },
+                502,
+              );
+            }
+
+            attempt = await createSession({
+              name: product.name,
+              amount: product.amount,
+              currency: product.currency,
+              quantity: parsed.data.quantity,
+              delivery: { mode: "external" },
+            });
+          }
+
+          const sessionResponse = attempt.response;
+          const session = attempt.body;
           if (!sessionResponse.ok || typeof session.id !== "string") {
             console.error("[Cooud v2] create checkout session failed", {
               status: sessionResponse.status,
@@ -189,6 +201,14 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
               502,
             );
           }
+
+          // Nome/valor exibidos no resumo vêm da própria sessão criada pela Cooud.
+          const sessionLineItem = Array.isArray(session["line_items"])
+            ? ((session["line_items"] as Record<string, unknown>[])[0] ?? {})
+            : {};
+          const displayProduct =
+            resolveProduct(sessionLineItem) ??
+            product ?? { name: "Producto", amount: 0, currency: "EUR" };
 
           const configResponse = await fetch(
             `${API_BASE}/checkout-sessions/${encodeURIComponent(session.id)}/element-config`,
@@ -226,7 +246,7 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
             elementToken: config.cooud_element_token,
             sessionSecret: config.cooud_session_secret,
             appearance: config.element,
-            product,
+            product: displayProduct,
           });
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error);
