@@ -4,11 +4,27 @@ import { z } from "zod";
 const API_BASE = "https://api.cooud.com/v2";
 const COMPAT_DATE = "2026-09-01";
 
-const PRODUCTS = {
+/**
+ * Cada oferta pode ser vendida de duas formas:
+ *  - `priceId` (preferido): preço do catálogo da Cooud. O valor real vem da Cooud,
+ *    e a venda fica atribuída à oferta no painel.
+ *  - `amount`/`currency`: line item dinâmico (fallback para ofertas sem catálogo).
+ */
+type ProductConfig = {
+  readonly name: string;
+  readonly cooudLabel: string;
+  readonly amount: number;
+  readonly currency: string;
+  readonly priceId?: string;
+};
+
+const PRODUCTS: Record<string, ProductConfig> = {
   "01KZ7W13DD2MVBGG66NPG9EA9T": {
     name: "Tasa de seguridad reembolsable",
     // Rótulo interno enviado à Cooud para identificar a oferta no painel.
     cooudLabel: "[MAIN] Tasa de seguridad reembolsable — 19,90 €",
+    priceId: "price_01KZQ9PPFFJ6SJ8MN0X86JE1XD",
+    // Usado apenas como fallback de exibição até a Cooud responder com o valor real.
     amount: 1990,
     currency: "EUR",
   },
@@ -24,7 +40,7 @@ const PRODUCTS = {
     amount: 1990,
     currency: "EUR",
   },
-} as const;
+};
 
 const requestSchema = z.object({
   productId: z.string().min(1),
@@ -73,7 +89,7 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
           return json({ error: "invalid_request", details: parsed.error.flatten() }, 400);
         }
 
-        const product = PRODUCTS[parsed.data.productId as keyof typeof PRODUCTS];
+        const product = PRODUCTS[parsed.data.productId];
         if (!product) return json({ error: "unknown_product" }, 400);
 
         const apiKey = process.env["COOUD_SECRET_KEY"];
