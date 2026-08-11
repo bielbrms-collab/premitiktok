@@ -6,6 +6,8 @@ const COMPAT_DATE = "2026-09-01";
 
 type ResolvedProduct = { name: string; amount: number; currency: string };
 
+type CatalogPrice = ResolvedProduct & { id: string };
+
 /**
  * Lê o produto real na Cooud. Nada de preço fixo no código: o valor cobrado
  * precisa ser exatamente o configurado no painel para aquele product_id.
@@ -48,6 +50,29 @@ function resolveProduct(raw: Record<string, unknown>): ResolvedProduct | null {
     "Producto";
 
   return { name, amount, currency: currency.toUpperCase() };
+}
+
+function normalizeCatalogId(id: string, prefix: "prod" | "price"): string {
+  return id.startsWith(`${prefix}_`) ? id : `${prefix}_${id}`;
+}
+
+function firstRecord(raw: CooudError): Record<string, unknown> | null {
+  const candidates = [raw["data"], raw["prices"], raw["items"]];
+  for (const candidate of candidates) {
+    if (Array.isArray(candidate) && candidate[0] && typeof candidate[0] === "object") {
+      return candidate[0] as Record<string, unknown>;
+    }
+  }
+  return null;
+}
+
+function resolveCatalogPrice(raw: CooudError, productName: string): CatalogPrice | null {
+  const price = firstRecord(raw) ?? (raw as Record<string, unknown>);
+  const id = typeof price["id"] === "string" ? price["id"] : null;
+  const amount = pickNumber(price["unit_amount"], price["amount"]);
+  const currency = typeof price["currency"] === "string" ? price["currency"] : null;
+  if (!id || !amount || !currency) return null;
+  return { id, name: productName, amount, currency: currency.toUpperCase() };
 }
 
 const requestSchema = z.object({
@@ -113,42 +138,39 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
         };
 
         try {
-          // O preço tem que vir do catálogo da Cooud, nunca de valores fixos aqui.
-          // Tentativa 1: line item referenciando só o product_id (a Cooud resolve preço/nome).
-          // Tentativa 2 (fallback): lê o produto no catálogo e envia os valores dele.
+          // O valor vem do Price nativo do catálogo. A API v2 exige os prefixos
+          // prod_/price_; o painel também pode exibir apenas a parte ULID.
+          const catalogProductId = normalizeCatalogId(parsed.data.productId, "prod");
           const baseSessionPayload = {
             ui_mode: "custom",
             customer_email: parsed.data.buyerEmail,
             success_url: successUrl.toString(),
             cancel_url: cancelUrl.toString(),
             allowed_origins: [checkoutOrigin],
-            metadata: { product_id: parsed.data.productId },
+            metadata: { product_id: catalogProductId },
           };
 
-          async function createSession(lineItem: Record<string, unknown>) {
+          async function createSession(priceId: string) {
             const response = await fetch(`${API_BASE}/checkout-sessions`, {
               method: "POST",
               headers: { ...commonHeaders, "Idempotency-Key": crypto.randomUUID() },
-              body: JSON.stringify({ ...baseSessionPayload, line_items: [lineItem] }),
+              body: JSON.stringify({ ...baseSessionPayload, prices: [priceId] }),
             });
             return { response, body: await readBody(response) };
           }
 
-          // A API v2 só aceita line items com name/amount/currency/quantity/delivery.
-          // Por isso o preço real precisa ser lido antes no catálogo, pelo product_id.
           const productResponse = await fetch(
-            `${API_BASE}/products/${encodeURIComponent(parsed.data.productId)}`,
+            `${API_BASE}/products/${encodeURIComponent(catalogProductId)}`,
             { headers: commonHeaders },
           );
           const productBody = await readBody(productResponse);
-          const product: ResolvedProduct | null = productResponse.ok
-            ? resolveProduct(productBody as Record<string, unknown>)
-            : null;
+          const productRecord = (productBody["product"] as Record<string, unknown> | undefined) ?? productBody;
+          const productName = typeof productRecord["name"] === "string" ? productRecord["name"] : "Producto";
 
-          if (!product) {
+          if (!productResponse.ok) {
             console.error("[Cooud v2] catalog lookup failed", {
               status: productResponse.status,
-              productId: parsed.data.productId,
+              productId: catalogProductId,
               requestId: cooudRequestId(productBody, productResponse),
               response: productBody,
             });
@@ -163,26 +185,31 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
             );
           }
 
-          const baseLineItem = {
-            name: product.name,
-            amount: product.amount,
-            currency: product.currency,
-            quantity: parsed.data.quantity,
-          };
-
-          let attempt = await createSession(baseLineItem);
-          if (!attempt.response.ok) {
-            console.warn("[Cooud v2] retrying line item with delivery", {
-              status: attempt.response.status,
-              requestId: cooudRequestId(attempt.body, attempt.response),
-              response: attempt.body,
+          const pricesResponse = await fetch(
+            `${API_BASE}/products/${encodeURIComponent(catalogProductId)}/prices`,
+            { headers: commonHeaders },
+          );
+          const pricesBody = await readBody(pricesResponse);
+          const catalogPrice = pricesResponse.ok ? resolveCatalogPrice(pricesBody, productName) : null;
+          if (!catalogPrice) {
+            console.error("[Cooud v2] price lookup failed", {
+              status: pricesResponse.status,
+              productId: catalogProductId,
+              requestId: cooudRequestId(pricesBody, pricesResponse),
+              response: pricesBody,
             });
-            attempt = await createSession({
-              ...baseLineItem,
-              delivery: { mode: "external" },
-            });
+            return json(
+              {
+                error: "cooud_price_lookup_failed",
+                status: pricesResponse.status,
+                requestId: cooudRequestId(pricesBody, pricesResponse),
+                details: pricesBody.error ?? pricesBody,
+              },
+              502,
+            );
           }
 
+          const attempt = await createSession(normalizeCatalogId(catalogPrice.id, "price"));
           const sessionResponse = attempt.response;
           const session = attempt.body;
           if (!sessionResponse.ok || typeof session.id !== "string") {
@@ -208,7 +235,7 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
             : {};
           const displayProduct =
             resolveProduct(sessionLineItem) ??
-            product ?? { name: "Producto", amount: 0, currency: "EUR" };
+            catalogPrice;
 
           const configResponse = await fetch(
             `${API_BASE}/checkout-sessions/${encodeURIComponent(session.id)}/element-config`,
