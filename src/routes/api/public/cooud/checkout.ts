@@ -4,23 +4,51 @@ import { z } from "zod";
 const API_BASE = "https://api.cooud.com/v2";
 const COMPAT_DATE = "2026-09-01";
 
-const PRODUCTS = {
-  "01KZ7W13DD2MVBGG66NPG9EA9T": {
-    name: "Tasa de seguridad reembolsable",
-    amount: 1990,
-    currency: "EUR",
-  },
-  "43ca5d35-3492-4567-913d-dc2843ba6931": {
-    name: "Tasa reducida de liberación",
-    amount: 1244,
-    currency: "EUR",
-  },
-  "65009b71-7660-44ef-ba87-24f29c7599a4": {
-    name: "Reintento de liberación",
-    amount: 1990,
-    currency: "EUR",
-  },
-} as const;
+type ResolvedProduct = { name: string; amount: number; currency: string };
+
+/**
+ * Lê o produto real na Cooud. Nada de preço fixo no código: o valor cobrado
+ * precisa ser exatamente o configurado no painel para aquele product_id.
+ */
+function pickNumber(...values: unknown[]): number | null {
+  for (const value of values) {
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string" && value.trim() !== "" && Number.isFinite(Number(value))) {
+      return Number(value);
+    }
+  }
+  return null;
+}
+
+function resolveProduct(raw: Record<string, unknown>): ResolvedProduct | null {
+  const product = (raw["product"] as Record<string, unknown> | undefined) ?? raw;
+  const price =
+    (product["default_price"] as Record<string, unknown> | undefined) ??
+    (product["price"] as Record<string, unknown> | undefined) ??
+    (Array.isArray(product["prices"])
+      ? ((product["prices"] as Record<string, unknown>[])[0] ?? {})
+      : {});
+
+  const amount = pickNumber(
+    product["amount"],
+    product["unit_amount"],
+    price["amount"],
+    price["unit_amount"],
+  );
+  if (amount === null) return null;
+
+  const currency =
+    (typeof product["currency"] === "string" && product["currency"]) ||
+    (typeof price["currency"] === "string" && price["currency"]) ||
+    "EUR";
+
+  const name =
+    (typeof product["name"] === "string" && product["name"]) ||
+    (typeof product["title"] === "string" && product["title"]) ||
+    "Producto";
+
+  return { name, amount, currency: currency.toUpperCase() };
+}
 
 const requestSchema = z.object({
   productId: z.string().min(1),
@@ -69,9 +97,6 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
           return json({ error: "invalid_request", details: parsed.error.flatten() }, 400);
         }
 
-        const product = PRODUCTS[parsed.data.productId as keyof typeof PRODUCTS];
-        if (!product) return json({ error: "unknown_product" }, 400);
-
         const apiKey = process.env["COOUD_SECRET_KEY"];
         if (!apiKey) {
           console.error("[Cooud v2] COOUD_SECRET_KEY ausente no backend");
@@ -88,6 +113,39 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
         };
 
         try {
+          // 1) Busca o produto real na Cooud pelo id enviado pelo front.
+          const productResponse = await fetch(
+            `${API_BASE}/products/${encodeURIComponent(parsed.data.productId)}`,
+            { headers: commonHeaders },
+          );
+          const productBody = await readBody(productResponse);
+          if (!productResponse.ok) {
+            console.error("[Cooud v2] product lookup failed", {
+              status: productResponse.status,
+              productId: parsed.data.productId,
+              requestId: cooudRequestId(productBody, productResponse),
+              response: productBody,
+            });
+            return json(
+              {
+                error: "cooud_product_not_found",
+                status: productResponse.status,
+                requestId: cooudRequestId(productBody, productResponse),
+                details: productBody.error ?? productBody,
+              },
+              productResponse.status === 404 ? 400 : 502,
+            );
+          }
+
+          const product = resolveProduct(productBody as Record<string, unknown>);
+          if (!product) {
+            console.error("[Cooud v2] product without usable price", {
+              productId: parsed.data.productId,
+              response: productBody,
+            });
+            return json({ error: "cooud_product_price_missing" }, 502);
+          }
+
           const sessionResponse = await fetch(`${API_BASE}/checkout-sessions`, {
             method: "POST",
             headers: {
@@ -98,6 +156,7 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
               ui_mode: "custom",
               line_items: [
                 {
+                  product_id: parsed.data.productId,
                   name: product.name,
                   amount: product.amount,
                   currency: product.currency,
