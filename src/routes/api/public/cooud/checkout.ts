@@ -134,51 +134,51 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
             return { response, body: await readBody(response) };
           }
 
-          let product: ResolvedProduct | null = null;
-          let attempt = await createSession({
-            product_id: parsed.data.productId,
-            quantity: parsed.data.quantity,
-          });
+          // A API v2 só aceita line items com name/amount/currency/quantity/delivery.
+          // Por isso o preço real precisa ser lido antes no catálogo, pelo product_id.
+          const productResponse = await fetch(
+            `${API_BASE}/products/${encodeURIComponent(parsed.data.productId)}`,
+            { headers: commonHeaders },
+          );
+          const productBody = await readBody(productResponse);
+          const product: ResolvedProduct | null = productResponse.ok
+            ? resolveProduct(productBody as Record<string, unknown>)
+            : null;
 
+          if (!product) {
+            console.error("[Cooud v2] catalog lookup failed", {
+              status: productResponse.status,
+              productId: parsed.data.productId,
+              requestId: cooudRequestId(productBody, productResponse),
+              response: productBody,
+            });
+            return json(
+              {
+                error: "cooud_product_lookup_failed",
+                status: productResponse.status,
+                requestId: cooudRequestId(productBody, productResponse),
+                details: productBody.error ?? productBody,
+              },
+              502,
+            );
+          }
+
+          const baseLineItem = {
+            name: product.name,
+            amount: product.amount,
+            currency: product.currency,
+            quantity: parsed.data.quantity,
+          };
+
+          let attempt = await createSession(baseLineItem);
           if (!attempt.response.ok) {
-            console.warn("[Cooud v2] product_id line item rejected, trying catalog lookup", {
+            console.warn("[Cooud v2] retrying line item with delivery", {
               status: attempt.response.status,
               requestId: cooudRequestId(attempt.body, attempt.response),
               response: attempt.body,
             });
-
-            const productResponse = await fetch(
-              `${API_BASE}/products/${encodeURIComponent(parsed.data.productId)}`,
-              { headers: commonHeaders },
-            );
-            const productBody = await readBody(productResponse);
-            product = productResponse.ok
-              ? resolveProduct(productBody as Record<string, unknown>)
-              : null;
-
-            if (!product) {
-              console.error("[Cooud v2] catalog lookup failed", {
-                status: productResponse.status,
-                productId: parsed.data.productId,
-                requestId: cooudRequestId(productBody, productResponse),
-                response: productBody,
-              });
-              return json(
-                {
-                  error: "cooud_session_failed",
-                  status: attempt.response.status,
-                  requestId: cooudRequestId(attempt.body, attempt.response),
-                  details: attempt.body.error ?? attempt.body,
-                },
-                502,
-              );
-            }
-
             attempt = await createSession({
-              name: product.name,
-              amount: product.amount,
-              currency: product.currency,
-              quantity: parsed.data.quantity,
+              ...baseLineItem,
               delivery: { mode: "external" },
             });
           }
