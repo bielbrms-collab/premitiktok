@@ -1,5 +1,5 @@
 // ID do produto padrão. Pode ser sobrescrito por ?productId=... na URL.
-export const DEFAULT_PRODUCT_ID = "01KZQ9PPFFJ6SJ8MN0X86JE1XD";
+export const DEFAULT_PRODUCT_ID = "01KZ7W13DD2MVBGG66NPG9EA9T";
 
 // Produto da oferta de back-redirect.
 export const BACK_REDIRECT_PRODUCT_ID = "43ca5d35-3492-4567-913d-dc2843ba6931";
