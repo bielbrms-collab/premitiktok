@@ -116,15 +116,20 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
             },
             body: JSON.stringify({
               ui_mode: "custom",
-              line_items: [
-                {
-                  name: product.cooudLabel,
-                  amount: product.amount,
-                  currency: product.currency,
-                  quantity: parsed.data.quantity,
-                  delivery: { mode: "external" },
-                },
-              ],
+              // `prices` e `line_items` são mutuamente exclusivos na API v2.
+              ...(product.priceId
+                ? { prices: [product.priceId] }
+                : {
+                    line_items: [
+                      {
+                        name: product.cooudLabel,
+                        amount: product.amount,
+                        currency: product.currency,
+                        quantity: parsed.data.quantity,
+                        delivery: { mode: "external" },
+                      },
+                    ],
+                  }),
               customer_email: parsed.data.buyerEmail,
               success_url: successUrl.toString(),
               cancel_url: cancelUrl.toString(),
@@ -133,6 +138,7 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
                 product_id: parsed.data.productId,
                 offer: product.cooudLabel,
                 return_path: parsed.data.returnPath,
+                ...(product.priceId ? { price_id: product.priceId } : {}),
               },
             }),
           });
