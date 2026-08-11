@@ -1,5 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -18,23 +17,12 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  beforeLoad: () => {
+    throw redirect({ href: "/pressel/index.html" });
+  },
   component: Index,
 });
 
 function Index() {
-  useEffect(() => {
-    window.location.replace("/pressel/index.html");
-  }, []);
-
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4 text-center">
-      <h1 className="mb-4 text-2xl font-bold">TikTok Rewards</h1>
-      <div className="max-w-2xl text-left bg-card p-6 rounded-xl border shadow-sm">
-        <p className="font-mono text-xs text-muted-foreground mb-4">Diagnostic Mode: Enabled</p>
-        <p className="text-sm whitespace-pre-wrap">
-          me de o weebook pra colocar la na cooud para marca venda paga e manda para upssel
-        </p>
-      </div>
-    </div>
-  );
+  return null;
 }
