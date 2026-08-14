@@ -20,6 +20,7 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as BackRedirectRouteImport } from './routes/back-redirect'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicCooudWebhookRouteImport } from './routes/api/public/cooud/webhook'
+import { Route as ApiPublicCooudPaymentEventRouteImport } from './routes/api/public/cooud/payment-event'
 import { Route as ApiPublicCooudCheckoutRouteImport } from './routes/api/public/cooud/checkout'
 
 const Up1Route = Up1RouteImport.update({
@@ -77,6 +78,12 @@ const ApiPublicCooudWebhookRoute = ApiPublicCooudWebhookRouteImport.update({
   path: '/api/public/cooud/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCooudPaymentEventRoute =
+  ApiPublicCooudPaymentEventRouteImport.update({
+    id: '/api/public/cooud/payment-event',
+    path: '/api/public/cooud/payment-event',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicCooudCheckoutRoute = ApiPublicCooudCheckoutRouteImport.update({
   id: '/api/public/cooud/checkout',
   path: '/api/public/cooud/checkout',
@@ -95,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
+  '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -109,6 +117,7 @@ export interface FileRoutesByTo {
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
+  '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
 }
 export interface FileRoutesById {
@@ -124,6 +133,7 @@ export interface FileRoutesById {
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
+  '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/pressel'
     | '/up1'
     | '/api/public/cooud/checkout'
+    | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/pressel'
     | '/up1'
     | '/api/public/cooud/checkout'
+    | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
   id:
     | '__root__'
@@ -168,6 +180,7 @@ export interface FileRouteTypes {
     | '/pressel'
     | '/up1'
     | '/api/public/cooud/checkout'
+    | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -183,6 +196,7 @@ export interface RootRouteChildren {
   PresselRoute: typeof PresselRoute
   Up1Route: typeof Up1Route
   ApiPublicCooudCheckoutRoute: typeof ApiPublicCooudCheckoutRoute
+  ApiPublicCooudPaymentEventRoute: typeof ApiPublicCooudPaymentEventRoute
   ApiPublicCooudWebhookRoute: typeof ApiPublicCooudWebhookRoute
 }
 
@@ -265,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicCooudWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/cooud/payment-event': {
+      id: '/api/public/cooud/payment-event'
+      path: '/api/public/cooud/payment-event'
+      fullPath: '/api/public/cooud/payment-event'
+      preLoaderRoute: typeof ApiPublicCooudPaymentEventRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/cooud/checkout': {
       id: '/api/public/cooud/checkout'
       path: '/api/public/cooud/checkout'
@@ -287,6 +308,7 @@ const rootRouteChildren: RootRouteChildren = {
   PresselRoute: PresselRoute,
   Up1Route: Up1Route,
   ApiPublicCooudCheckoutRoute: ApiPublicCooudCheckoutRoute,
+  ApiPublicCooudPaymentEventRoute: ApiPublicCooudPaymentEventRoute,
   ApiPublicCooudWebhookRoute: ApiPublicCooudWebhookRoute,
 }
 export const routeTree = rootRouteImport
