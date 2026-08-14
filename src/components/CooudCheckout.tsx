@@ -111,6 +111,17 @@ export function CooudCheckout({
           setError(
             `${cooudError.message ?? "No se pudo procesar el pago."}${cooudError.code ? ` (${cooudError.code})` : ""}`,
           );
+          // Registra a recusa no backend para o relatório por oferta.
+          void fetch("/api/public/cooud/payment-event", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              productId,
+              sessionId: data.sessionId,
+              code: cooudError.code,
+              message: cooudError.message,
+            }),
+          }).catch(() => undefined);
         },
       });
       setConfig(data);
