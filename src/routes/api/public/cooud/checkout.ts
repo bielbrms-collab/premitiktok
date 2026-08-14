@@ -155,6 +155,21 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
             sessionId: session.id,
             requestId: config.request_id,
           });
+          // Denominador dos relatórios: uma tentativa iniciada por oferta.
+          try {
+            const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+            await supabaseAdmin.from("payment_events").insert({
+              source: "checkout",
+              event_type: "session_created",
+              product_id: parsed.data.productId,
+              offer: product.stage,
+              session_id: session.id,
+              amount: product.amount,
+              currency: product.currency,
+            });
+          } catch (logError) {
+            console.error("[Cooud v2] falha ao registrar sessão", logError);
+          }
           // Quando a oferta vem do catálogo, o valor autoritativo é o da sessão.
           const resolvedAmount =
             typeof session.amount === "number" ? session.amount : product.amount;
