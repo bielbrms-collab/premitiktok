@@ -93,7 +93,7 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
             amount: typeof data["amount"] === "number" ? (data["amount"] as number) : null,
             currency: typeof data["currency"] === "string" ? (data["currency"] as string) : null,
             message: paid ? "paid" : null,
-            payload: event as unknown as Record<string, unknown>,
+            payload: JSON.parse(raw) as never,
           });
         } catch (error) {
           console.error("[Cooud webhook] falha ao registrar evento", error);
