@@ -47,6 +47,51 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_events: {
+        Row: {
+          amount: number | null
+          code: string | null
+          created_at: string
+          currency: string | null
+          event_type: string | null
+          id: string
+          message: string | null
+          offer: string | null
+          payload: Json | null
+          product_id: string | null
+          session_id: string | null
+          source: string
+        }
+        Insert: {
+          amount?: number | null
+          code?: string | null
+          created_at?: string
+          currency?: string | null
+          event_type?: string | null
+          id?: string
+          message?: string | null
+          offer?: string | null
+          payload?: Json | null
+          product_id?: string | null
+          session_id?: string | null
+          source: string
+        }
+        Update: {
+          amount?: number | null
+          code?: string | null
+          created_at?: string
+          currency?: string | null
+          event_type?: string | null
+          id?: string
+          message?: string | null
+          offer?: string | null
+          payload?: Json | null
+          product_id?: string | null
+          session_id?: string | null
+          source?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
