@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ensureDeliverable } from "@/lib/deliverable.functions";
+import { ensureDeliverable, lookupDeliverableByEmail } from "@/lib/deliverable.functions";
 import { PHRASES, STEP_TITLES, type DeliverableState } from "@/lib/deliverable-content";
 
 export const SESSION_STORAGE_KEY = "tk_deliverable_session";
+export const EMAIL_STORAGE_KEY = "tk_deliverable_email";
 
 export const Route = createFileRoute("/entregavel")({
   head: () => ({
@@ -39,12 +40,31 @@ function readSessionId(): string | null {
 
 function EntregavelPage() {
   const ensure = useServerFn(ensureDeliverable);
+  const lookupByEmail = useServerFn(lookupDeliverableByEmail);
   const [state, setState] = useState<DeliverableState | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "missing" | "error">("loading");
+  const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     const sessionId = readSessionId();
+    const storedEmail =
+      typeof window !== "undefined" ? window.localStorage.getItem(EMAIL_STORAGE_KEY) : null;
     if (!sessionId) {
+      if (storedEmail) {
+        let active = true;
+        lookupByEmail({ data: { email: storedEmail } })
+          .then((result) => {
+            if (!active) return;
+            setState(result);
+            setStatus("ready");
+          })
+          .catch(() => active && setStatus("missing"));
+        return () => {
+          active = false;
+        };
+      }
       setStatus("missing");
       return;
     }
@@ -60,7 +80,28 @@ function EntregavelPage() {
     return () => {
       active = false;
     };
-  }, [ensure]);
+  }, [ensure, lookupByEmail]);
+
+  async function handleEmailSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const value = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      setFormError("Introduce un correo válido.");
+      return;
+    }
+    setFormError(null);
+    setSubmitting(true);
+    try {
+      const result = await lookupByEmail({ data: { email: value } });
+      window.localStorage.setItem(EMAIL_STORAGE_KEY, value);
+      setState(result);
+      setStatus("ready");
+    } catch {
+      setFormError("No pudimos consultar tu retiro. Inténtalo de nuevo.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <main className="min-h-screen w-full bg-[#f7f8fa] bg-[radial-gradient(1200px_600px_at_50%_-10%,rgba(254,44,85,0.10),transparent_60%),radial-gradient(900px_500px_at_90%_0%,rgba(37,244,238,0.10),transparent_55%)] px-4 pb-16 pt-6 sm:px-6">
@@ -69,7 +110,15 @@ function EntregavelPage() {
 
         <section className="rounded-[22px] border border-[#eceef1] bg-white px-5 py-7 shadow-[0_24px_60px_-30px_rgba(22,24,35,0.28)] sm:px-7">
           {status === "loading" && <Loading />}
-          {status === "missing" && <Missing />}
+          {status === "missing" && (
+            <EmailGate
+              email={email}
+              onEmailChange={setEmail}
+              onSubmit={handleEmailSubmit}
+              submitting={submitting}
+              error={formError}
+            />
+          )}
           {status === "error" && (
             <p className="py-10 text-center text-sm text-neutral-500">
               No pudimos cargar tu seguimiento ahora mismo. Actualiza la página en unos segundos.
