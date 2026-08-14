@@ -84,3 +84,41 @@ export const ensureDeliverable = createServerFn({ method: "POST" })
 
     return buildState(inserted.data);
   });
+
+const emailSchema = z.object({ email: z.string().email().max(200) });
+
+export const lookupDeliverableByEmail = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => emailSchema.parse(input))
+  .handler(async ({ data }): Promise<DeliverableState> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const email = data.email.trim().toLowerCase();
+
+    const existing = await supabaseAdmin
+      .from("deliverable_purchases")
+      .select("session_id, email, purchased_at, amount, currency")
+      .eq("email", email)
+      .order("purchased_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (existing.data) return buildState(existing.data);
+
+    const sessionId = `email:${email}`;
+    const inserted = await supabaseAdmin
+      .from("deliverable_purchases")
+      .insert({ session_id: sessionId, email })
+      .select("session_id, email, purchased_at, amount, currency")
+      .single();
+
+    if (inserted.error || !inserted.data) {
+      const retry = await supabaseAdmin
+        .from("deliverable_purchases")
+        .select("session_id, email, purchased_at, amount, currency")
+        .eq("session_id", sessionId)
+        .single();
+      if (retry.error || !retry.data) throw new Error("No se pudo consultar tu retiro.");
+      return buildState(retry.data);
+    }
+
+    return buildState(inserted.data);
+  });
