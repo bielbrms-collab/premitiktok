@@ -29,7 +29,7 @@ export const PRODUCTS: Record<string, ProductConfig> = {
     name: "Reintento de liberación",
     cooudLabel: "How to learn Germany",
     stage: "upsell",
-    amount: 1990,
+    amount: 990,
     currency: "EUR",
   },
 };
