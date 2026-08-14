@@ -167,16 +167,90 @@ function Loading() {
   );
 }
 
-function Missing() {
+function EmailGate({
+  email,
+  onEmailChange,
+  onSubmit,
+  submitting,
+  error,
+}: {
+  email: string;
+  onEmailChange: (value: string) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  submitting: boolean;
+  error: string | null;
+}) {
   return (
-    <div className="py-6 text-center">
-      <Eyebrow>Seguimiento</Eyebrow>
-      <h1 className="text-[24px] font-extrabold leading-tight tracking-tight text-[#161823]">
-        No encontramos tu <span className="text-[#FE2C55]">seguimiento</span>
+    <div className="py-2 text-center">
+      <div className="mx-auto mb-6 grid h-[112px] w-[112px] place-items-center rounded-full border border-dashed border-[#f3d3dc] bg-[radial-gradient(circle,rgba(254,44,85,0.07),transparent_70%)]">
+        <div className="grid h-[74px] w-[74px] place-items-center rounded-full bg-white shadow-[0_10px_25px_-14px_rgba(22,24,35,0.5)]">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-8 w-8 text-[#25F4EE]"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        </div>
+      </div>
+
+      <Eyebrow>Consulta de retiro</Eyebrow>
+      <h1 className="text-[26px] font-extrabold leading-tight tracking-tight text-[#161823]">
+        Introduce tu <span className="text-[#FE2C55]">correo</span>
       </h1>
       <p className="mx-auto mt-3 max-w-[360px] text-[14.5px] leading-relaxed text-neutral-500">
-        Abre esta página desde el enlace que recibiste después de completar tu pago para ver el
-        estado actualizado.
+        Introduce el correo que utilizaste en la compra para consultar el estado de tu retiro.
+      </p>
+
+      <form onSubmit={onSubmit} className="mt-6 text-left">
+        <label
+          htmlFor="deliverable-email"
+          className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-400"
+        >
+          Correo vinculado
+        </label>
+        <div className="flex items-center gap-3 rounded-[14px] border border-[#eceef1] bg-white px-4 shadow-[0_8px_24px_-20px_rgba(22,24,35,0.6)] focus-within:border-[#FE2C55]">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-4 w-4 shrink-0 text-neutral-400"
+          >
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="m3 7 9 6 9-6" />
+          </svg>
+          <input
+            id="deliverable-email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => onEmailChange(e.target.value)}
+            placeholder="tucorreo@email.com"
+            className="h-14 w-full bg-transparent text-[15px] text-[#161823] outline-none placeholder:text-neutral-300"
+          />
+        </div>
+        {error && <p className="mt-2 text-[12.5px] font-semibold text-[#FE2C55]">{error}</p>}
+
+        <button
+          type="submit"
+          disabled={submitting}
+          className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-[15px] bg-gradient-to-r from-[#ff3a63] via-[#fe2c55] to-[#e51e46] text-[13.5px] font-extrabold uppercase tracking-wide text-white shadow-[0_16px_30px_-12px_rgba(254,44,85,0.7)] transition active:scale-[0.99] disabled:opacity-60"
+        >
+          {submitting ? "Consultando..." : "Introduce tu correo para continuar →"}
+        </button>
+      </form>
+
+      <p className="mx-auto mt-4 max-w-[400px] text-[12px] leading-relaxed text-neutral-400">
+        Al continuar, verás el estado actualizado en tiempo real y la previsión de pago en tu cuenta.
       </p>
     </div>
   );
