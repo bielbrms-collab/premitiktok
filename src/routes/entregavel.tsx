@@ -147,10 +147,15 @@ function Brand() {
   );
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
+function Eyebrow({ children, live = false }: { children: React.ReactNode; live?: boolean }) {
   return (
     <div className="mb-2 flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500">
-      <span className="h-[7px] w-[7px] rounded-full bg-amber-400 shadow-[0_0_0_4px_rgba(244,180,0,0.15)]" />
+      <span className="relative flex h-[7px] w-[7px]">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75" />
+        <span
+          className={`relative inline-flex h-[7px] w-[7px] rounded-full bg-amber-400 shadow-[0_0_0_4px_rgba(244,180,0,0.15)] ${live ? "animate-pulse" : ""}`}
+        />
+      </span>
       {children}
     </div>
   );
@@ -261,7 +266,7 @@ function Tracking({ state }: { state: DeliverableState }) {
 
   return (
     <div>
-      <Eyebrow>Estado de la liberación</Eyebrow>
+      <Eyebrow live>Estado de la liberación</Eyebrow>
       {state.email && (
         <div className="mb-4 break-all text-center text-[12.5px] text-neutral-500">
           Seguimiento vinculado a <b className="text-[#161823]">{state.email}</b>
