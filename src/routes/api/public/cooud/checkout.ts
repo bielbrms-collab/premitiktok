@@ -1,44 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
+import { PRODUCTS } from "@/lib/cooud-products";
 
 const API_BASE = "https://api.cooud.com/v2";
 const COMPAT_DATE = "2026-09-01";
-
-/**
- * Cada oferta pode ser vendida de duas formas:
- *  - `priceId` (preferido): preço do catálogo da Cooud. O valor real vem da Cooud,
- *    e a venda fica atribuída à oferta no painel.
- *  - `amount`/`currency`: line item dinâmico (fallback para ofertas sem catálogo).
- */
-type ProductConfig = {
-  readonly name: string;
-  readonly cooudLabel: string;
-  readonly amount: number;
-  readonly currency: string;
-  readonly priceId?: string;
-};
-
-const PRODUCTS: Record<string, ProductConfig> = {
-  "01KZ7W13DD2MVBGG66NPG9EA9T": {
-    name: "How to learn French",
-    // Rótulo enviado à Cooud: sem priceId, o nome do line_item aparece na gateway.
-    cooudLabel: "How to learn French",
-    amount: 1990,
-    currency: "EUR",
-  },
-  "43ca5d35-3492-4567-913d-dc2843ba6931": {
-    name: "Tasa reducida de liberación",
-    cooudLabel: "How to learn Spanish",
-    amount: 1244,
-    currency: "EUR",
-  },
-  "65009b71-7660-44ef-ba87-24f29c7599a4": {
-    name: "Reintento de liberación",
-    cooudLabel: "How to learn Germany",
-    amount: 1990,
-    currency: "EUR",
-  },
-};
 
 const requestSchema = z.object({
   productId: z.string().min(1),
@@ -190,6 +155,21 @@ export const Route = createFileRoute("/api/public/cooud/checkout")({
             sessionId: session.id,
             requestId: config.request_id,
           });
+          // Denominador dos relatórios: uma tentativa iniciada por oferta.
+          try {
+            const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+            await supabaseAdmin.from("payment_events").insert({
+              source: "checkout",
+              event_type: "session_created",
+              product_id: parsed.data.productId,
+              offer: product.stage,
+              session_id: session.id,
+              amount: product.amount,
+              currency: product.currency,
+            });
+          } catch (logError) {
+            console.error("[Cooud v2] falha ao registrar sessão", logError);
+          }
           // Quando a oferta vem do catálogo, o valor autoritativo é o da sessão.
           const resolvedAmount =
             typeof session.amount === "number" ? session.amount : product.amount;

@@ -76,6 +76,29 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
           paid,
         });
 
+        // Guarda o payload cru para descobrir o formato real dos eventos da Cooud.
+        try {
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const data = (event.data ?? {}) as Record<string, unknown>;
+          const sessionId =
+            typeof data["checkout_session_id"] === "string"
+              ? (data["checkout_session_id"] as string)
+              : typeof data["id"] === "string"
+                ? (data["id"] as string)
+                : null;
+          await supabaseAdmin.from("payment_events").insert({
+            source: "webhook",
+            event_type: type || "unknown",
+            session_id: sessionId,
+            amount: typeof data["amount"] === "number" ? (data["amount"] as number) : null,
+            currency: typeof data["currency"] === "string" ? (data["currency"] as string) : null,
+            message: paid ? "paid" : null,
+            payload: JSON.parse(raw) as never,
+          });
+        } catch (error) {
+          console.error("[Cooud webhook] falha ao registrar evento", error);
+        }
+
         return Response.json({ received: true, paid });
       },
     },
