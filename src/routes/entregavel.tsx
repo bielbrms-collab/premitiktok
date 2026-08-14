@@ -266,7 +266,7 @@ function Tracking({ state }: { state: DeliverableState }) {
 
   return (
     <div>
-      <Eyebrow>Estado de la liberación</Eyebrow>
+      <Eyebrow live>Estado de la liberación</Eyebrow>
       {state.email && (
         <div className="mb-4 break-all text-center text-[12.5px] text-neutral-500">
           Seguimiento vinculado a <b className="text-[#161823]">{state.email}</b>
