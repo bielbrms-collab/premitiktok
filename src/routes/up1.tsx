@@ -138,9 +138,16 @@ function Up1Page() {
         {/* Checkout inline (Cooud API v2 Elements) */}
         {showCheckout && (
           <div className="mt-5 text-left">
-            <CooudCheckout productId={UP1_PRODUCT_ID} showSummary={false} />
+            <CooudCheckout productId={UP1_PRODUCT_ID} showSummary={false} returnPath="/entregavel" />
           </div>
         )}
+
+        <a
+          href="/entregavel"
+          className="mt-4 block text-center text-[12px] font-bold uppercase tracking-wide text-neutral-400 underline underline-offset-4"
+        >
+          Ver el seguimiento de mi acceso
+        </a>
 
 
         <div className="mt-6 border-t border-dashed border-neutral-200" />
