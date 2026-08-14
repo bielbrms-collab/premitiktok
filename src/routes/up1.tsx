@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { CooudCheckout } from "@/components/CooudCheckout";
 import { DEFAULT_PRODUCT_ID, UP1_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
+import { ensureDeliverable } from "@/lib/deliverable.functions";
+import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
 
 export const Route = createFileRoute("/up1")({
   head: () => ({
@@ -31,8 +34,16 @@ function Up1Page() {
 
   useTikTokPurchase({ productId: DEFAULT_PRODUCT_ID });
 
-
-
+  // Registra a compra do front (P1) assim que o pagamento é confirmado,
+  // ancorando a data/hora real usada no acompanhamento do entregável.
+  const ensure = useServerFn(ensureDeliverable);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get("checkout_session_id") ?? params.get("session_id");
+    if (!sessionId || window.localStorage.getItem(SESSION_STORAGE_KEY)) return;
+    window.localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+    void ensure({ data: { sessionId } }).catch(() => undefined);
+  }, [ensure]);
 
   return (
     <main className="min-h-screen w-full bg-gradient-to-b from-[#fdeef2] to-[#fbdde4] px-4 py-10 flex flex-col items-center">
