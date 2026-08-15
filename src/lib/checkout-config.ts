@@ -29,9 +29,9 @@ export function loadCooudElements(): Promise<unknown> {
     if (existing) {
       existing.addEventListener("load", () => {
         const loaded = (window as typeof window & { __CooudElements__?: unknown }).__CooudElements__;
-        loaded ? resolve(loaded) : reject(new Error("Cooud Elements no se inicializó."));
+        loaded ? resolve(loaded) : reject(new Error("Le module de paiement ne s’est pas initialisé."));
       });
-      existing.addEventListener("error", () => reject(new Error("No se pudo cargar Cooud Elements.")));
+      existing.addEventListener("error", () => reject(new Error("Impossible de charger le module de paiement.")));
       return;
     }
     const s = document.createElement("script");
@@ -40,9 +40,9 @@ export function loadCooudElements(): Promise<unknown> {
     s.dataset.cooudElements = "true";
     s.onload = () => {
       const loaded = (window as typeof window & { __CooudElements__?: unknown }).__CooudElements__;
-      loaded ? resolve(loaded) : reject(new Error("Cooud Elements no se inicializó."));
+      loaded ? resolve(loaded) : reject(new Error("Le module de paiement ne s’est pas initialisé."));
     };
-    s.onerror = () => reject(new Error("No se pudo cargar Cooud Elements."));
+    s.onerror = () => reject(new Error("Impossible de charger le module de paiement."));
     document.head.appendChild(s);
   });
   return cooudElementsPromise;
