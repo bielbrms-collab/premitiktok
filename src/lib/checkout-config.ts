@@ -11,7 +11,7 @@ export const UP1_PRODUCT_ID = "65009b71-7660-44ef-ba87-24f29c7599a4";
 export const DEFAULT_PRODUCT_NAME = "How to learn French";
 
 export function formatPrice(cents: number, currency: string) {
-  return new Intl.NumberFormat("es-ES", {
+  return new Intl.NumberFormat("fr-FR", {
     style: "currency",
     currency: (currency || "eur").toUpperCase(),
   }).format(cents / 100);
@@ -29,9 +29,9 @@ export function loadCooudElements(): Promise<unknown> {
     if (existing) {
       existing.addEventListener("load", () => {
         const loaded = (window as typeof window & { __CooudElements__?: unknown }).__CooudElements__;
-        loaded ? resolve(loaded) : reject(new Error("Cooud Elements no se inicializó."));
+        loaded ? resolve(loaded) : reject(new Error("Le module de paiement ne s’est pas initialisé."));
       });
-      existing.addEventListener("error", () => reject(new Error("No se pudo cargar Cooud Elements.")));
+      existing.addEventListener("error", () => reject(new Error("Impossible de charger le module de paiement.")));
       return;
     }
     const s = document.createElement("script");
@@ -40,9 +40,9 @@ export function loadCooudElements(): Promise<unknown> {
     s.dataset.cooudElements = "true";
     s.onload = () => {
       const loaded = (window as typeof window & { __CooudElements__?: unknown }).__CooudElements__;
-      loaded ? resolve(loaded) : reject(new Error("Cooud Elements no se inicializó."));
+      loaded ? resolve(loaded) : reject(new Error("Le module de paiement ne s’est pas initialisé."));
     };
-    s.onerror = () => reject(new Error("No se pudo cargar Cooud Elements."));
+    s.onerror = () => reject(new Error("Impossible de charger le module de paiement."));
     document.head.appendChild(s);
   });
   return cooudElementsPromise;

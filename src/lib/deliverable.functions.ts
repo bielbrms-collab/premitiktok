@@ -78,7 +78,7 @@ export const ensureDeliverable = createServerFn({ method: "POST" })
         .select("session_id, email, purchased_at, amount, currency")
         .eq("session_id", data.sessionId)
         .single();
-      if (retry.error || !retry.data) throw new Error("No se pudo registrar la compra.");
+      if (retry.error || !retry.data) throw new Error("Impossible d’enregistrer votre commande.");
       return buildState(retry.data);
     }
 
@@ -116,7 +116,7 @@ export const lookupDeliverableByEmail = createServerFn({ method: "POST" })
         .select("session_id, email, purchased_at, amount, currency")
         .eq("session_id", sessionId)
         .single();
-      if (retry.error || !retry.data) throw new Error("No se pudo consultar tu retiro.");
+      if (retry.error || !retry.data) throw new Error("Impossible de consulter votre retrait.");
       return buildState(retry.data);
     }
 
