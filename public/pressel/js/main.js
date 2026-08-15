@@ -1463,7 +1463,7 @@
   let threeAnimated = false;
 
   function formatBRL(value) {
-    return value.toLocaleString("es-ES", {
+    return value.toLocaleString("fr-FR", {
       style: "currency",
       currency: "EUR",
     });
@@ -1552,7 +1552,7 @@
   const SEL = "#three .valor-currency-dois[data-amount-target]";
 
   function formatBRL(value) {
-    return value.toLocaleString("es-ES", {
+    return value.toLocaleString("fr-FR", {
       style: "currency",
       currency: "EUR",
     });

@@ -11,7 +11,7 @@ export const UP1_PRODUCT_ID = "65009b71-7660-44ef-ba87-24f29c7599a4";
 export const DEFAULT_PRODUCT_NAME = "How to learn French";
 
 export function formatPrice(cents: number, currency: string) {
-  return new Intl.NumberFormat("es-ES", {
+  return new Intl.NumberFormat("fr-FR", {
     style: "currency",
     currency: (currency || "eur").toUpperCase(),
   }).format(cents / 100);
