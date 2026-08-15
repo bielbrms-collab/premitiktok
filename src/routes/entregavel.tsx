@@ -303,7 +303,7 @@ function Tracking({ state }: { state: DeliverableState }) {
       <div className="mt-5 rounded-2xl border border-[#eceef1] bg-[#fbfbfc] px-4 py-4">
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-400">
           <span className="h-2 w-2 animate-pulse rounded-full bg-[#16c784]" />
-          Jour {state.day} de {state.totalDays}
+          Jour {state.day} sur {state.totalDays}
         </div>
         <p className="mt-2 text-[14.5px] leading-relaxed text-neutral-700">{PHRASES[index]}</p>
       </div>

