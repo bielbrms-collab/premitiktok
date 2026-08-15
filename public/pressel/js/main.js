@@ -904,6 +904,20 @@
           placeholder: "+33 6 12 34 56 78",
           type: "tel",
         },
+        "sepa-instant": {
+          title: "Associer un virement SEPA instantané",
+          icon: "images/sepa-instant-logo.png",
+          label: "IBAN",
+          placeholder: "FR76 0000 0000 0000 0000 0000 000",
+          type: "text",
+        },
+        wero: {
+          title: "Associer Wero",
+          icon: "images/wero-logo.png",
+          label: "Numéro de téléphone",
+          placeholder: "+33 6 12 34 56 78",
+          type: "tel",
+        },
       };
       const cfg = config[method] || config.bizum;
       const titleEl = document.getElementById("vincular-title");
