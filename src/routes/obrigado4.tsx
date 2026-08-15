@@ -191,7 +191,7 @@ function Obrigado4Component() {
 
                 {/* Button */}
                 <button 
-                  onClick={() => window.location.href = 'https://pay.3bpagamentos.com.br/WJv5gA8oM9nK'}
+                  onClick={() => window.location.href = '/checkout'}
                   className="w-full group relative overflow-hidden bg-red-600 hover:bg-red-700 text-white font-black py-5 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-red-600/20"
                 >
                   <div className="absolute inset-0 w-1/2 h-full bg-white/20 -skew-x-[45deg] -translate-x-full group-hover:animate-shimmer" />
