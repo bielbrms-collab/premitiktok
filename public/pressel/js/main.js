@@ -704,7 +704,7 @@
     window.showScreen = showScreen;
   }
 
-  // Se preferir JS: torna o botão .btn-sacar um link para a screen 'three'
+  // Botão .btn-sacar na Pre-sale (#one) redireciona para a homepage
 
   document.addEventListener("DOMContentLoaded", () => {
     const btnSacar =
@@ -713,18 +713,8 @@
     if (btnSacar) {
       btnSacar.addEventListener("click", function (ev) {
         ev.preventDefault();
-        // fecha modal/timers caso haja algum aberto (opcional)
-        if (typeof clearModalTimer === "function") clearModalTimer();
-        if (typeof closeModal === "function" && activeModalId)
-          closeModal(activeModalId);
-
-        // usa a função global do router para trocar de tela
-        if (typeof window.showScreen === "function") {
-          window.showScreen("three");
-        } else {
-          // fallback: altera hash
-          location.hash = "#three";
-        }
+        // Redireciona para a homepage
+        window.location.href = "/inge-index.html";
       });
     }
   });
