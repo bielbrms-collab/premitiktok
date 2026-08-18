@@ -19,6 +19,7 @@ import { Route as EntregavelRouteImport } from './routes/entregavel'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as BackRedirectRouteImport } from './routes/back-redirect'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicVendepayWebhookRouteImport } from './routes/api/public/vendepay/webhook'
 import { Route as ApiPublicCooudWebhookRouteImport } from './routes/api/public/cooud/webhook'
 import { Route as ApiPublicCooudPaymentEventRouteImport } from './routes/api/public/cooud/payment-event'
 import { Route as ApiPublicCooudCheckoutRouteImport } from './routes/api/public/cooud/checkout'
@@ -73,6 +74,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicVendepayWebhookRoute =
+  ApiPublicVendepayWebhookRouteImport.update({
+    id: '/api/public/vendepay/webhook',
+    path: '/api/public/vendepay/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicCooudWebhookRoute = ApiPublicCooudWebhookRouteImport.update({
   id: '/api/public/cooud/webhook',
   path: '/api/public/cooud/webhook',
@@ -104,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
+  '/api/public/vendepay/webhook': typeof ApiPublicVendepayWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -119,6 +127,7 @@ export interface FileRoutesByTo {
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
+  '/api/public/vendepay/webhook': typeof ApiPublicVendepayWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -135,6 +144,7 @@ export interface FileRoutesById {
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
+  '/api/public/vendepay/webhook': typeof ApiPublicVendepayWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
     | '/api/public/cooud/checkout'
     | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
+    | '/api/public/vendepay/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/api/public/cooud/checkout'
     | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
+    | '/api/public/vendepay/webhook'
   id:
     | '__root__'
     | '/'
@@ -182,6 +194,7 @@ export interface FileRouteTypes {
     | '/api/public/cooud/checkout'
     | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
+    | '/api/public/vendepay/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -198,6 +211,7 @@ export interface RootRouteChildren {
   ApiPublicCooudCheckoutRoute: typeof ApiPublicCooudCheckoutRoute
   ApiPublicCooudPaymentEventRoute: typeof ApiPublicCooudPaymentEventRoute
   ApiPublicCooudWebhookRoute: typeof ApiPublicCooudWebhookRoute
+  ApiPublicVendepayWebhookRoute: typeof ApiPublicVendepayWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -272,6 +286,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/vendepay/webhook': {
+      id: '/api/public/vendepay/webhook'
+      path: '/api/public/vendepay/webhook'
+      fullPath: '/api/public/vendepay/webhook'
+      preLoaderRoute: typeof ApiPublicVendepayWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/cooud/webhook': {
       id: '/api/public/cooud/webhook'
       path: '/api/public/cooud/webhook'
@@ -310,6 +331,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicCooudCheckoutRoute: ApiPublicCooudCheckoutRoute,
   ApiPublicCooudPaymentEventRoute: ApiPublicCooudPaymentEventRoute,
   ApiPublicCooudWebhookRoute: ApiPublicCooudWebhookRoute,
+  ApiPublicVendepayWebhookRoute: ApiPublicVendepayWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
