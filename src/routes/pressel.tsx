@@ -136,7 +136,7 @@ function Pressel() {
           type="button"
           disabled={!done}
           onClick={() => {
-            window.location.href = "https://checkout.vendepay.com/2cd2b8a8-cfcf-4f72-a01f-01d7363cd7a5";
+            window.location.href = "/obrigado";
           }}
           className={`w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 active:scale-[0.99] text-white font-bold py-4 rounded-full shadow-lg flex items-center justify-center gap-2 transition-all duration-500 ${
             done
