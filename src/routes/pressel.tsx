@@ -136,7 +136,7 @@ function Pressel() {
           type="button"
           disabled={!done}
           onClick={() => {
-            window.location.href = `/pressel/index.html${window.location.search}`;
+            window.location.href = "https://checkout.vendepay.com/2cd2b8a8-cfcf-4f72-a01f-01d7363cd7a5";
           }}
           className={`w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 active:scale-[0.99] text-white font-bold py-4 rounded-full shadow-lg flex items-center justify-center gap-2 transition-all duration-500 ${
             done
@@ -144,10 +144,7 @@ function Pressel() {
               : "opacity-0 scale-95 pointer-events-none"
           }`}
         >
-          <span className="grid place-items-center h-5 w-5 rounded-full border-2 border-white text-xs font-black">
-            €
-          </span>
-          Débloquer ma progression
+          Continuar
         </button>
 
         <p className="text-center text-[11px] text-neutral-400 mt-4 leading-snug">
