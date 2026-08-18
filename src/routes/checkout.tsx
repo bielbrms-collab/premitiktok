@@ -55,7 +55,7 @@ function Checkout() {
     <main className="min-h-screen w-full bg-[#f5f5f7] px-4 py-8 text-neutral-900">
       <div className="mx-auto w-full max-w-md">
         {/* Header */}
-        <div className="mb-6 flex items-center justify-center gap-2 text-sm font-medium text-neutral-600">
+        <div className="mb-6 flex items-center justify-center gap-2 text-sm font-medium text-neutral-900">
           <Shield className="h-4 w-4 text-emerald-500" />
           Paiement sécurisé
         </div>
@@ -131,18 +131,20 @@ function Checkout() {
             <Lock className="h-4 w-4 text-neutral-900" />
             Coordonnées bancaires
           </h2>
-          <p className="mb-5 text-sm text-neutral-500">
+          <p className="text-sm text-neutral-500">
             Connexion sécurisée et chiffrée — vos données sont protégées.
           </p>
-          <button
-            type="button"
-            onClick={handleContinue}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-rose-600 py-4 text-sm font-bold text-white shadow-md transition-all hover:bg-rose-700 active:scale-[0.99]"
-          >
-            Continuar
-            <ArrowRight className="h-4 w-4" />
-          </button>
         </div>
+
+        {/* Bottom CTA button */}
+        <button
+          type="button"
+          onClick={handleContinue}
+          className="mb-4 flex w-full items-center justify-center gap-2 rounded-full bg-rose-600 py-4 text-sm font-bold text-white shadow-md transition-all hover:bg-rose-700 active:scale-[0.99]"
+        >
+          Continuar
+          <ArrowRight className="h-4 w-4" />
+        </button>
 
         {/* Footer */}
         <p className="text-center text-[11px] text-neutral-400">
