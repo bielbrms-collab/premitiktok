@@ -136,7 +136,7 @@ function Pressel() {
           type="button"
           disabled={!done}
           onClick={() => {
-            window.location.href = "/obrigado";
+            window.location.href = "/";
           }}
           className={`w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 active:scale-[0.99] text-white font-bold py-4 rounded-full shadow-lg flex items-center justify-center gap-2 transition-all duration-500 ${
             done
