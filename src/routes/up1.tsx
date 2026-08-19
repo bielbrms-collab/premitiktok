@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { CooudCheckout } from "@/components/CooudCheckout";
-import { DEFAULT_PRODUCT_ID, UP1_PRODUCT_ID } from "@/lib/checkout-config";
+import { DEFAULT_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
 import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
+
+const VENDEPAY_UP1_CHECKOUT_URL = "https://checkout.vendepay.com/4babd630-7eb0-4dd2-972e-6f93f677b7bc";
 
 export const Route = createFileRoute("/up1")({
   head: () => ({
