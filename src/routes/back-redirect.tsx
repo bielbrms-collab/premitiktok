@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import tiktokLogo from "@/assets/tiktok-logo-clean.png.asset.json";
-import { BACK_REDIRECT_PRODUCT_ID } from "@/lib/checkout-config";
-import { CooudCheckout } from "@/components/CooudCheckout";
+
+const VENDEPAY_BACK_REDIRECT_URL = "https://checkout.vendepay.com/ccef6ae4-dd83-44ef-a06e-478eb843f7f2";
 
 export const Route = createFileRoute("/back-redirect")({
   head: () => ({
@@ -36,7 +36,10 @@ function BackRedirect() {
   const [step, setStep] = useState(0);
   const [showOffer, setShowOffer] = useState(false);
   const [seconds, setSeconds] = useState(300);
-  const [showCheckout, setShowCheckout] = useState(false);
+
+  const handleCta = () => {
+    window.location.href = VENDEPAY_BACK_REDIRECT_URL;
+  };
 
   useEffect(() => {
     const timers = STEPS.map((_, i) =>
