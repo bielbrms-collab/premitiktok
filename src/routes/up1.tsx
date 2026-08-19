@@ -31,8 +31,6 @@ export const Route = createFileRoute("/up1")({
 });
 
 function Up1Page() {
-  const [showCheckout, setShowCheckout] = useState(false);
-
   useTikTokPurchase({ productId: DEFAULT_PRODUCT_ID });
 
   // Registra a compra do front (P1) assim que o pagamento é confirmado,
@@ -45,6 +43,10 @@ function Up1Page() {
     window.localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
     void ensure({ data: { sessionId } }).catch(() => undefined);
   }, [ensure]);
+
+  const handleRetry = () => {
+    window.location.href = VENDEPAY_UP1_CHECKOUT_URL;
+  };
 
   return (
     <main className="min-h-screen w-full bg-gradient-to-b from-[#fdeef2] to-[#fbdde4] px-4 py-10 flex flex-col items-center">
