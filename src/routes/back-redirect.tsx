@@ -123,23 +123,13 @@ function BackRedirect() {
           </p>
         </div>
 
-        {showCheckout ? (
-          <div className="w-full">
-            <CooudCheckout
-              productId={BACK_REDIRECT_PRODUCT_ID}
-              showSummary={false}
-              returnPath="/up1"
-            />
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setShowCheckout(true)}
-            className="w-full rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-6 text-xl font-black uppercase tracking-tighter text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
-          >
-            Profiter de ma réduction + bonus
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={handleCta}
+          className="w-full rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-6 text-xl font-black uppercase tracking-tighter text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
+        >
+          Profiter de ma réduction + bonus
+        </button>
       </section>
     </main>
   );
