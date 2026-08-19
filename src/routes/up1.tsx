@@ -116,34 +116,25 @@ function Up1Page() {
         </div>
 
         {/* CTA */}
-        {!showCheckout && (
-          <button
-            type="button"
-            onClick={() => setShowCheckout(true)}
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-rose-500/30 transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
+        <button
+          type="button"
+          onClick={handleRetry}
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-rose-500/30 transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
+        >
+          Réessayer
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-4 w-4"
           >
-            Réessayer
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
-            >
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
-          </button>
-        )}
-
-        {/* Checkout inline (Cooud API v2 Elements) */}
-        {showCheckout && (
-          <div className="mt-5 text-left">
-            <CooudCheckout productId={UP1_PRODUCT_ID} showSummary={false} returnPath="/entregavel" />
-          </div>
-        )}
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </button>
 
         <a
           href="/entregavel"
@@ -151,7 +142,6 @@ function Up1Page() {
         >
           Suivre l’état de mon accès
         </a>
-
 
         <div className="mt-6 border-t border-dashed border-neutral-200" />
 
