@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { CooudCheckout } from "@/components/CooudCheckout";
-import { DEFAULT_PRODUCT_ID, UP1_PRODUCT_ID } from "@/lib/checkout-config";
+import { DEFAULT_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
 import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
+
+const VENDEPAY_UP1_CHECKOUT_URL = "https://checkout.vendepay.com/4babd630-7eb0-4dd2-972e-6f93f677b7bc";
 
 export const Route = createFileRoute("/up1")({
   head: () => ({
@@ -30,8 +31,6 @@ export const Route = createFileRoute("/up1")({
 });
 
 function Up1Page() {
-  const [showCheckout, setShowCheckout] = useState(false);
-
   useTikTokPurchase({ productId: DEFAULT_PRODUCT_ID });
 
   // Registra a compra do front (P1) assim que o pagamento é confirmado,
@@ -44,6 +43,10 @@ function Up1Page() {
     window.localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
     void ensure({ data: { sessionId } }).catch(() => undefined);
   }, [ensure]);
+
+  const handleRetry = () => {
+    window.location.href = VENDEPAY_UP1_CHECKOUT_URL;
+  };
 
   return (
     <main className="min-h-screen w-full bg-gradient-to-b from-[#fdeef2] to-[#fbdde4] px-4 py-10 flex flex-col items-center">
@@ -113,34 +116,25 @@ function Up1Page() {
         </div>
 
         {/* CTA */}
-        {!showCheckout && (
-          <button
-            type="button"
-            onClick={() => setShowCheckout(true)}
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-rose-500/30 transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
+        <button
+          type="button"
+          onClick={handleRetry}
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-rose-500/30 transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
+        >
+          Réessayer
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-4 w-4"
           >
-            Réessayer
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
-            >
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
-          </button>
-        )}
-
-        {/* Checkout inline (Cooud API v2 Elements) */}
-        {showCheckout && (
-          <div className="mt-5 text-left">
-            <CooudCheckout productId={UP1_PRODUCT_ID} showSummary={false} returnPath="/entregavel" />
-          </div>
-        )}
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </button>
 
         <a
           href="/entregavel"
@@ -148,7 +142,6 @@ function Up1Page() {
         >
           Suivre l’état de mon accès
         </a>
-
 
         <div className="mt-6 border-t border-dashed border-neutral-200" />
 
