@@ -1,15 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-type VendepayEvent = {
-  id?: string;
+type VendepayPayload = {
   event?: string;
-  status?: string;
-  type?: string;
-  data?: Record<string, unknown>;
+  id?: string;
+  vendaId?: string;
+  produtoId?: string;
+  checkoutId?: string;
+  emailComprador?: string;
+  nomeComprador?: string;
+  valorPago?: number;
+  valor?: number;
+  moeda?: string | number;
+  status?: number;
   [key: string]: unknown;
 };
 
-const PAID = /paid|approved|succeed|completed|aprovad|pago/i;
+/** Venda aprovada = event "compra.aprovada" ou status 2 (Paga). */
+function isApproved(payload: VendepayPayload, headerEvent: string | null): boolean {
+  const event = String(payload.event ?? headerEvent ?? "").toLowerCase();
+  return event === "compra.aprovada" || Number(payload.status) === 2;
+}
 
 export const Route = createFileRoute("/api/public/vendepay/webhook")({
   server: {
@@ -18,58 +28,74 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
       POST: async ({ request }) => {
         const raw = await request.text();
 
-        // Verificação opcional de segredo (defina VENDEPAY_WEBHOOK_SECRET se a Vendepay enviar token).
+        // A VendePay envia o secret no header x-signature-key.
         const secret = process.env["VENDEPAY_WEBHOOK_SECRET"];
         if (secret) {
-          const received =
-            request.headers.get("x-vendepay-token") ??
-            request.headers.get("x-webhook-token") ??
-            request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
-            new URL(request.url).searchParams.get("token") ??
-            "";
+          const received = request.headers.get("x-signature-key") ?? "";
           if (received !== secret) {
-            console.error("[Vendepay webhook] token inválido");
-            return new Response("invalid token", { status: 401 });
+            console.error("[Vendepay webhook] x-signature-key inválido");
+            return new Response("invalid signature", { status: 401 });
           }
         }
 
-        let event: VendepayEvent = {};
+        let payload: VendepayPayload = {};
         try {
-          event = JSON.parse(raw) as VendepayEvent;
+          payload = JSON.parse(raw) as VendepayPayload;
         } catch {
           return new Response("invalid json", { status: 400 });
         }
 
-        const data = (event.data ?? {}) as Record<string, unknown>;
-        const type = String(event.event ?? event.type ?? data["status"] ?? event.status ?? "");
-        const paid = PAID.test(type) || PAID.test(String(data["status"] ?? ""));
+        const headerEvent = request.headers.get("x-webhook-event");
+        const isTest = request.headers.get("x-webhook-test") === "true";
+        const approved = isApproved(payload, headerEvent);
+        const eventName = String(payload.event ?? headerEvent ?? "unknown");
+        const sessionId =
+          payload.vendaId ?? payload.id ?? payload.checkoutId ?? null;
+        const amount =
+          typeof payload.valorPago === "number"
+            ? payload.valorPago
+            : typeof payload.valor === "number"
+              ? payload.valor
+              : null;
 
-        console.info("[Vendepay webhook] evento recebido", { id: event.id, type, paid });
+        console.info("[Vendepay webhook]", {
+          event: eventName,
+          status: payload.status,
+          approved,
+          isTest,
+          sessionId,
+        });
 
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          const sessionId =
-            typeof data["transaction_id"] === "string"
-              ? (data["transaction_id"] as string)
-              : typeof data["id"] === "string"
-                ? (data["id"] as string)
-                : typeof event.id === "string"
-                  ? event.id
-                  : null;
           await supabaseAdmin.from("payment_events").insert({
             source: "vendepay_webhook",
-            event_type: type || "unknown",
+            event_type: eventName,
             session_id: sessionId,
-            amount: typeof data["amount"] === "number" ? (data["amount"] as number) : null,
-            currency: typeof data["currency"] === "string" ? (data["currency"] as string) : null,
-            message: paid ? "paid" : null,
+            product_id: payload.produtoId ?? null,
+            amount,
+            currency: typeof payload.moeda === "string" ? payload.moeda : null,
+            message: approved ? "paid" : isTest ? "test" : null,
             payload: JSON.parse(raw) as never,
           });
+
+          if (approved && sessionId) {
+            await supabaseAdmin.from("deliverable_purchases").upsert(
+              {
+                session_id: sessionId,
+                product_id: payload.produtoId ?? null,
+                email: payload.emailComprador ?? null,
+                amount,
+                currency: typeof payload.moeda === "string" ? payload.moeda : "EUR",
+              },
+              { onConflict: "session_id" },
+            );
+          }
         } catch (error) {
           console.error("[Vendepay webhook] falha ao registrar evento", error);
         }
 
-        return Response.json({ received: true, paid, redirect_url: "/up1" });
+        return Response.json({ received: true, approved, redirect_url: "/up1" });
       },
     },
   },
