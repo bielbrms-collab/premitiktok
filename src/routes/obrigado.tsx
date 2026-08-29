@@ -158,6 +158,13 @@ function Obrigado() {
           Merci de votre patience. L’équipe TikTok Pay met tout en œuvre pour débloquer votre paiement au plus vite.
         </p>
 
+        {/* Vendepay Upsell Widget */}
+        <div
+          id="vendepay-upsell-container"
+          ref={upsellContainerRef}
+          className="w-full mb-6"
+        />
+
         {/* CTA Button */}
         <button
           onClick={() => navigate({ to: "/obrigado2" })}
@@ -167,5 +174,6 @@ function Obrigado() {
         </button>
       </section>
     </main>
+
   );
 }
