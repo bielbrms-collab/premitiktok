@@ -1,7 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
 import tiktokLogo from "@/assets/tiktok-logo-clean.png.asset.json";
 import { DEFAULT_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
+
 
 export const Route = createFileRoute("/obrigado")({
   head: () => ({
