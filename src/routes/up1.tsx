@@ -39,6 +39,8 @@ export const Route = createFileRoute("/up1")({
 });
 
 function Up1Page() {
+  const upsellContainerRef = useRef<HTMLDivElement>(null);
+
   useTikTokPurchase({ productId: DEFAULT_PRODUCT_ID });
 
   // Registra a compra do front (P1) assim que o pagamento é confirmado,
@@ -51,6 +53,34 @@ function Up1Page() {
     window.localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
     void ensure({ data: { sessionId } }).catch(() => undefined);
   }, [ensure]);
+
+  // Carrega o widget de upsell da Vendepay na thank-you page.
+  useEffect(() => {
+    if (typeof window === "undefined" || !upsellContainerRef.current) return;
+
+    const existing = document.getElementById("vendepay-upsell-widget-script");
+    if (existing) return;
+
+    const script = document.createElement("script");
+    script.id = "vendepay-upsell-widget-script";
+    script.src =
+      "https://widget.vendepay.com/upsell-widget/v1/vendepay-upsell-widget-1.0.16.js?upsellId=ac1814ec-0ef7-4cf4-8844-46b2cee5efd6";
+    script.async = true;
+    script.onload = () => {
+      if (
+        window.VendepayUpsellWidget &&
+        typeof window.VendepayUpsellWidget.showIframe === "function"
+      ) {
+        window.VendepayUpsellWidget.showIframe("vendepay-upsell-container");
+      }
+    };
+
+    document.body.appendChild(script);
+
+    return () => {
+      // Não remove o script para evitar recarregamentos desnecessários.
+    };
+  }, []);
 
   const handleRetry = () => {
     window.location.href = VENDEPAY_UP1_CHECKOUT_URL;
