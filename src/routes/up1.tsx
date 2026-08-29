@@ -1,10 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { DEFAULT_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
 import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
+
+declare global {
+  interface Window {
+    VendepayUpsellWidget?: {
+      showIframe: (containerId: string) => void;
+    };
+  }
+}
 
 const VENDEPAY_UP1_CHECKOUT_URL = "https://checkout.vendepay.com/4babd630-7eb0-4dd2-972e-6f93f677b7bc";
 
