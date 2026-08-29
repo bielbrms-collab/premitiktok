@@ -1,10 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { DEFAULT_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
 import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
+
+declare global {
+  interface Window {
+    VendepayUpsellWidget?: {
+      showIframe: (containerId: string) => void;
+    };
+  }
+}
 
 const VENDEPAY_UP1_CHECKOUT_URL = "https://checkout.vendepay.com/4babd630-7eb0-4dd2-972e-6f93f677b7bc";
 
@@ -31,6 +39,8 @@ export const Route = createFileRoute("/up1")({
 });
 
 function Up1Page() {
+  const upsellContainerRef = useRef<HTMLDivElement>(null);
+
   useTikTokPurchase({ productId: DEFAULT_PRODUCT_ID });
 
   // Registra a compra do front (P1) assim que o pagamento é confirmado,
@@ -43,6 +53,34 @@ function Up1Page() {
     window.localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
     void ensure({ data: { sessionId } }).catch(() => undefined);
   }, [ensure]);
+
+  // Carrega o widget de upsell da Vendepay na thank-you page.
+  useEffect(() => {
+    if (typeof window === "undefined" || !upsellContainerRef.current) return;
+
+    const existing = document.getElementById("vendepay-upsell-widget-script");
+    if (existing) return;
+
+    const script = document.createElement("script");
+    script.id = "vendepay-upsell-widget-script";
+    script.src =
+      "https://widget.vendepay.com/upsell-widget/v1/vendepay-upsell-widget-1.0.16.js?upsellId=ac1814ec-0ef7-4cf4-8844-46b2cee5efd6";
+    script.async = true;
+    script.onload = () => {
+      if (
+        window.VendepayUpsellWidget &&
+        typeof window.VendepayUpsellWidget.showIframe === "function"
+      ) {
+        window.VendepayUpsellWidget.showIframe("vendepay-upsell-container");
+      }
+    };
+
+    document.body.appendChild(script);
+
+    return () => {
+      // Não remove o script para evitar recarregamentos desnecessários.
+    };
+  }, []);
 
   const handleRetry = () => {
     window.location.href = VENDEPAY_UP1_CHECKOUT_URL;
@@ -142,6 +180,13 @@ function Up1Page() {
         >
           Suivre l’état de mon accès
         </a>
+
+        {/* Vendepay Upsell Widget */}
+        <div
+          id="vendepay-upsell-container"
+          ref={upsellContainerRef}
+          className="w-full mt-6"
+        />
 
         <div className="mt-6 border-t border-dashed border-neutral-200" />
 
