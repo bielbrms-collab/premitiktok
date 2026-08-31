@@ -27,9 +27,9 @@ export function useTikTokPurchase({ productId }: PurchaseOptions) {
         if (cancelled) return;
 
         const values: Record<string, number> = {
-          "01KZ7W13DD2MVBGG66NPG9EA9T": 19.9,
+          "01KZ7W13DD2MVBGG66NPG9EA9T": 22.9,
           "43ca5d35-3492-4567-913d-dc2843ba6931": 12.44,
-          "65009b71-7660-44ef-ba87-24f29c7599a4": 19.9,
+          "65009b71-7660-44ef-ba87-24f29c7599a4": 22.9,
         };
         const value = values[productId] ?? 0;
 
