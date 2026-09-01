@@ -90,6 +90,19 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
               },
               { onConflict: "session_id" },
             );
+
+            // Entrega automática do infoproduto por e-mail (somente pagamento aprovado).
+            const { deliverPurchaseEmail } = await import("@/lib/email-delivery.server");
+            const delivery = await deliverPurchaseEmail({
+              saleId: sessionId,
+              email: payload.emailComprador ?? null,
+              name: payload.nomeComprador ?? null,
+              productId: payload.produtoId ?? null,
+            });
+            console.info("[Vendepay webhook] entrega por e-mail", {
+              sessionId,
+              status: delivery.status,
+            });
           }
         } catch (error) {
           console.error("[Vendepay webhook] falha ao registrar evento", error);

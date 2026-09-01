@@ -15,6 +15,7 @@ import { Route as Obrigado4RouteImport } from './routes/obrigado4'
 import { Route as Obrigado3RouteImport } from './routes/obrigado3'
 import { Route as Obrigado2RouteImport } from './routes/obrigado2'
 import { Route as ObrigadoRouteImport } from './routes/obrigado'
+import { Route as EnvioEmailsRouteImport } from './routes/envio-emails'
 import { Route as EntregavelRouteImport } from './routes/entregavel'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as BackRedirectRouteImport } from './routes/back-redirect'
@@ -52,6 +53,11 @@ const Obrigado2Route = Obrigado2RouteImport.update({
 const ObrigadoRoute = ObrigadoRouteImport.update({
   id: '/obrigado',
   path: '/obrigado',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnvioEmailsRoute = EnvioEmailsRouteImport.update({
+  id: '/envio-emails',
+  path: '/envio-emails',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EntregavelRoute = EntregavelRouteImport.update({
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/back-redirect': typeof BackRedirectRoute
   '/checkout': typeof CheckoutRoute
   '/entregavel': typeof EntregavelRoute
+  '/envio-emails': typeof EnvioEmailsRoute
   '/obrigado': typeof ObrigadoRoute
   '/obrigado2': typeof Obrigado2Route
   '/obrigado3': typeof Obrigado3Route
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/back-redirect': typeof BackRedirectRoute
   '/checkout': typeof CheckoutRoute
   '/entregavel': typeof EntregavelRoute
+  '/envio-emails': typeof EnvioEmailsRoute
   '/obrigado': typeof ObrigadoRoute
   '/obrigado2': typeof Obrigado2Route
   '/obrigado3': typeof Obrigado3Route
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/back-redirect': typeof BackRedirectRoute
   '/checkout': typeof CheckoutRoute
   '/entregavel': typeof EntregavelRoute
+  '/envio-emails': typeof EnvioEmailsRoute
   '/obrigado': typeof ObrigadoRoute
   '/obrigado2': typeof Obrigado2Route
   '/obrigado3': typeof Obrigado3Route
@@ -153,6 +162,7 @@ export interface FileRouteTypes {
     | '/back-redirect'
     | '/checkout'
     | '/entregavel'
+    | '/envio-emails'
     | '/obrigado'
     | '/obrigado2'
     | '/obrigado3'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/back-redirect'
     | '/checkout'
     | '/entregavel'
+    | '/envio-emails'
     | '/obrigado'
     | '/obrigado2'
     | '/obrigado3'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/back-redirect'
     | '/checkout'
     | '/entregavel'
+    | '/envio-emails'
     | '/obrigado'
     | '/obrigado2'
     | '/obrigado3'
@@ -202,6 +214,7 @@ export interface RootRouteChildren {
   BackRedirectRoute: typeof BackRedirectRoute
   CheckoutRoute: typeof CheckoutRoute
   EntregavelRoute: typeof EntregavelRoute
+  EnvioEmailsRoute: typeof EnvioEmailsRoute
   ObrigadoRoute: typeof ObrigadoRoute
   Obrigado2Route: typeof Obrigado2Route
   Obrigado3Route: typeof Obrigado3Route
@@ -256,6 +269,13 @@ declare module '@tanstack/react-router' {
       path: '/obrigado'
       fullPath: '/obrigado'
       preLoaderRoute: typeof ObrigadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/envio-emails': {
+      id: '/envio-emails'
+      path: '/envio-emails'
+      fullPath: '/envio-emails'
+      preLoaderRoute: typeof EnvioEmailsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/entregavel': {
@@ -322,6 +342,7 @@ const rootRouteChildren: RootRouteChildren = {
   BackRedirectRoute: BackRedirectRoute,
   CheckoutRoute: CheckoutRoute,
   EntregavelRoute: EntregavelRoute,
+  EnvioEmailsRoute: EnvioEmailsRoute,
   ObrigadoRoute: ObrigadoRoute,
   Obrigado2Route: Obrigado2Route,
   Obrigado3Route: Obrigado3Route,
