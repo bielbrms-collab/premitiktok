@@ -120,6 +120,7 @@ export type Database = {
           is_default: boolean
           name: string
           product_id: string | null
+          reply_to: string | null
           signature: string
           subject: string
           updated_at: string
@@ -140,6 +141,7 @@ export type Database = {
           is_default?: boolean
           name: string
           product_id?: string | null
+          reply_to?: string | null
           signature?: string
           subject?: string
           updated_at?: string
@@ -160,6 +162,7 @@ export type Database = {
           is_default?: boolean
           name?: string
           product_id?: string | null
+          reply_to?: string | null
           signature?: string
           subject?: string
           updated_at?: string

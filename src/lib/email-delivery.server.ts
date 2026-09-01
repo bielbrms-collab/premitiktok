@@ -9,8 +9,23 @@ import {
 
 export type SendResult = { sent: boolean; status: string; error?: string; messageId?: string };
 
-function senderDomain(from: string): string {
-  return from.split("@")[1] ?? "";
+/** Único domínio autenticado (SPF/DKIM/DMARC) do projeto. */
+export const SENDER_DOMAIN = "notify.suportetikt0k.shop";
+export const DEFAULT_FROM_EMAIL = `support@${SENDER_DOMAIN}`;
+export const DEFAULT_FROM_NAME = "Support Financier";
+
+/**
+ * Garante que o envelope use sempre o domínio autenticado.
+ * Enviar de um domínio de terceiros (gmail.com, etc.) quebra DKIM/DMARC
+ * e derruba a entregabilidade — por isso o remetente é normalizado aqui.
+ */
+function resolveSender(tpl: EmailTemplate) {
+  const email = tpl.from_email?.trim().toLowerCase() ?? "";
+  const fromEmail = email.endsWith(`@${SENDER_DOMAIN}`) ? email : DEFAULT_FROM_EMAIL;
+  const fromName = (tpl.from_name ?? "").trim() || DEFAULT_FROM_NAME;
+  const reply = tpl.reply_to?.trim().toLowerCase();
+  const replyTo = reply && reply.endsWith(`@${SENDER_DOMAIN}`) ? reply : fromEmail;
+  return { fromEmail, fromName, replyTo };
 }
 
 export async function sendTemplateEmail(
@@ -22,12 +37,15 @@ export async function sendTemplateEmail(
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) return { sent: false, status: "failed", error: "LOVABLE_API_KEY manquante" };
 
+  const { fromEmail, fromName, replyTo } = resolveSender(tpl);
+
   try {
     const response = await sendLovableEmail(
       {
         to,
-        from: `${tpl.from_name} <${tpl.from_email}>`,
-        sender_domain: senderDomain(tpl.from_email),
+        from: `${fromName} <${fromEmail}>`,
+        reply_to: replyTo,
+        sender_domain: SENDER_DOMAIN,
         subject: renderEmailSubject(tpl, vars),
         html: renderEmailHtml(tpl, vars),
         text: renderEmailText(tpl, vars),

