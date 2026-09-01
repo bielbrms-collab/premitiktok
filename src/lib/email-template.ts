@@ -48,7 +48,7 @@ export const EMAIL_PLACEHOLDERS = ["{{nom}}", "{{email}}", "{{produit}}", "{{com
 
 /** Rodapé transacional: explica o motivo do envio e o canal de resposta. */
 export const TRANSACTIONAL_NOTICE =
-  "Vous recevez cet e-mail de confirmation car une commande a été effectuée avec cette adresse. Pour toute question, répondez directement à ce message.";
+  "Vous recevez cet e-mail car un paiement a été enregistré avec cette adresse. Pour toute question, répondez directement à ce message.";
 
 export function applyVars(text: string, vars: EmailVars): string {
   return text
