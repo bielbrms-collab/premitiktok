@@ -18,13 +18,23 @@ export function useTikTokPurchase({ productId }: PurchaseOptions) {
     (async () => {
       try {
         const params = new URLSearchParams(window.location.search);
-        const checkoutSessionId = params.get("checkout_session_id");
         const redirectStatus = params.get("redirect_status");
-        if (!checkoutSessionId || redirectStatus !== "succeeded") return;
+        if (redirectStatus && redirectStatus !== "succeeded") return;
+
+        // A VendePay usa nomes diferentes para o id da venda no retorno.
+        const checkoutSessionId =
+          params.get("checkout_session_id") ??
+          params.get("session_id") ??
+          params.get("vendaId") ??
+          params.get("saleId") ??
+          params.get("transaction_id") ??
+          params.get("id");
+        if (!checkoutSessionId) return;
 
         const dedupeKey = `ttq_purchase_${checkoutSessionId}`;
         if (sessionStorage.getItem(dedupeKey)) return;
         if (cancelled) return;
+
 
         const values: Record<string, number> = {
           "01KZ7W13DD2MVBGG66NPG9EA9T": 22.9,
