@@ -6,6 +6,8 @@ export type EmailTemplate = {
   subject: string;
   from_name: string;
   from_email: string;
+  /** Endereço usado quando o cliente responde ao e-mail. */
+  reply_to?: string | null;
   heading: string;
   intro: string;
   body_text: string;

@@ -9,6 +9,7 @@ const templateSchema = z.object({
   subject: z.string().min(1).max(300),
   from_name: z.string().min(1).max(120),
   from_email: z.string().email().max(200),
+  reply_to: z.string().email().max(200).nullable().optional(),
   heading: z.string().max(300),
   intro: z.string().max(1000),
   body_text: z.string().max(5000),
