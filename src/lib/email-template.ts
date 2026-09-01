@@ -94,6 +94,8 @@ export function renderEmailText(tpl: EmailTemplate, vars: EmailVars = {}): strin
     tpl.deliverable_url,
     "",
     applyVars(tpl.signature, vars),
+    "",
+    TRANSACTIONAL_NOTICE,
   ]
     .join("\n")
     .trim();
