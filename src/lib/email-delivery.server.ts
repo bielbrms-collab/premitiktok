@@ -37,12 +37,15 @@ export async function sendTemplateEmail(
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) return { sent: false, status: "failed", error: "LOVABLE_API_KEY manquante" };
 
+  const { fromEmail, fromName, replyTo } = resolveSender(tpl);
+
   try {
     const response = await sendLovableEmail(
       {
         to,
-        from: `${tpl.from_name} <${tpl.from_email}>`,
-        sender_domain: senderDomain(tpl.from_email),
+        from: `${fromName} <${fromEmail}>`,
+        reply_to: replyTo,
+        sender_domain: SENDER_DOMAIN,
         subject: renderEmailSubject(tpl, vars),
         html: renderEmailHtml(tpl, vars),
         text: renderEmailText(tpl, vars),
