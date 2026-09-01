@@ -21,6 +21,13 @@ function isApproved(payload: VendepayPayload, headerEvent: string | null): boole
   return event === "compra.aprovada" || Number(payload.status) === 2;
 }
 
+/** A VendePay envia valores inteiros em centavos; decimais já vêm na moeda. */
+function normalizeAmount(amount: number | null): number {
+  if (!amount || Number.isNaN(amount)) return 0;
+  return Number.isInteger(amount) && Math.abs(amount) >= 100 ? amount / 100 : amount;
+}
+
+
 export const Route = createFileRoute("/api/public/vendepay/webhook")({
   server: {
     handlers: {
