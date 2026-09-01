@@ -91,6 +91,34 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
               { onConflict: "session_id" },
             );
 
+            // Purchase server-side no TikTok (event_id = sessionId para deduplicar
+            // com o evento do navegador disparado na thank-you page).
+            const { sendTikTokPurchase } = await import("@/lib/tiktok-capi.server");
+            const metadata = (payload.metadata ?? {}) as Record<string, unknown>;
+            const capi = await sendTikTokPurchase({
+              eventId: sessionId,
+              email: payload.emailComprador ?? null,
+              phone: (payload.telefoneComprador as string | undefined) ?? null,
+              value: normalizeAmount(amount),
+              currency: typeof payload.moeda === "string" ? payload.moeda : "EUR",
+              productId: payload.produtoId ?? null,
+              ttclid:
+                (payload.ttclid as string | undefined) ?? (metadata.ttclid as string | undefined) ?? null,
+              ttp: (payload.ttp as string | undefined) ?? (metadata.ttp as string | undefined) ?? null,
+              url: "https://tiktok-francevendpay.lovable.app/up1",
+            });
+
+            await supabaseAdmin.from("payment_events").insert({
+              source: "tiktok_capi",
+              event_type: "Purchase",
+              session_id: sessionId,
+              product_id: payload.produtoId ?? null,
+              amount,
+              currency: typeof payload.moeda === "string" ? payload.moeda : "EUR",
+              message: capi.ok ? "sent" : `failed:${"reason" in capi ? capi.reason : "unknown"}`,
+              payload: capi as never,
+            });
+
             // Entrega automática do infoproduto por e-mail (somente pagamento aprovado).
             const { deliverPurchaseEmail } = await import("@/lib/email-delivery.server");
             const delivery = await deliverPurchaseEmail({
@@ -104,6 +132,7 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
               status: delivery.status,
             });
           }
+
         } catch (error) {
           console.error("[Vendepay webhook] falha ao registrar evento", error);
         }
