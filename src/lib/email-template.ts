@@ -46,6 +46,10 @@ export type EmailVars = {
 
 export const EMAIL_PLACEHOLDERS = ["{{nom}}", "{{email}}", "{{produit}}", "{{commande}}"];
 
+/** Rodapé transacional: explica o motivo do envio e o canal de resposta. */
+export const TRANSACTIONAL_NOTICE =
+  "Vous recevez cet e-mail de confirmation car une commande a été effectuée avec cette adresse. Pour toute question, répondez directement à ce message.";
+
 export function applyVars(text: string, vars: EmailVars): string {
   return text
     .replaceAll("{{nom}}", vars.name?.trim() || "cher client")
@@ -160,9 +164,9 @@ export function renderEmailHtml(tpl: EmailTemplate, vars: EmailVars = {}): strin
         ).replace(/\n/g, "<br />")}</p>
       </td></tr>
     </table>
-    <p style="margin:18px 0 0;font-size:12px;color:#a1a1aa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">${escapeHtml(
-      tpl.from_email,
-    )}</p>
+    <p style="margin:18px 0 0;max-width:600px;font-size:12px;line-height:19px;color:#a1a1aa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">${escapeHtml(
+      TRANSACTIONAL_NOTICE,
+    )}<br />${escapeHtml(tpl.reply_to || tpl.from_email)}</p>
   </td></tr>
 </table>
 </body>
