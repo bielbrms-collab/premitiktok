@@ -217,6 +217,18 @@ function EnvioEmailsPage() {
                   </Field>
                 </div>
 
+                <Field label="Responder para (reply-to)">
+                  <Input
+                    value={draft.reply_to ?? ""}
+                    placeholder="support@notify.suportetikt0k.shop"
+                    onChange={(e) => set("reply_to", e.target.value || null)}
+                  />
+                </Field>
+                <p className="-mt-1 text-xs text-muted-foreground">
+                  Use sempre endereços @notify.suportetikt0k.shop — é o único domínio autenticado
+                  (SPF/DKIM/DMARC). Outros domínios são substituídos automaticamente no envio.
+                </p>
+
                 <Field label="Título">
                   <Input value={draft.heading} onChange={(e) => set("heading", e.target.value)} />
                 </Field>
