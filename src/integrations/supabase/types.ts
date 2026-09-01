@@ -47,6 +47,125 @@ export type Database = {
         }
         Relationships: []
       }
+      email_deliveries: {
+        Row: {
+          attempts: number
+          created_at: string
+          error_message: string | null
+          id: string
+          product_id: string | null
+          recipient_email: string | null
+          recipient_name: string | null
+          sale_id: string
+          sent_at: string | null
+          status: string
+          subject: string | null
+          template_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          product_id?: string | null
+          recipient_email?: string | null
+          recipient_name?: string | null
+          sale_id: string
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          template_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          product_id?: string | null
+          recipient_email?: string | null
+          recipient_name?: string | null
+          sale_id?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          template_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_deliveries_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "email_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_templates: {
+        Row: {
+          accent_color: string
+          active: boolean
+          body_text: string
+          button_label: string
+          created_at: string
+          deliverable_url: string
+          fallback_note: string
+          from_email: string
+          from_name: string
+          heading: string
+          id: string
+          intro: string
+          is_default: boolean
+          name: string
+          product_id: string | null
+          signature: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          accent_color?: string
+          active?: boolean
+          body_text?: string
+          button_label?: string
+          created_at?: string
+          deliverable_url?: string
+          fallback_note?: string
+          from_email?: string
+          from_name?: string
+          heading?: string
+          id?: string
+          intro?: string
+          is_default?: boolean
+          name: string
+          product_id?: string | null
+          signature?: string
+          subject?: string
+          updated_at?: string
+        }
+        Update: {
+          accent_color?: string
+          active?: boolean
+          body_text?: string
+          button_label?: string
+          created_at?: string
+          deliverable_url?: string
+          fallback_note?: string
+          from_email?: string
+          from_name?: string
+          heading?: string
+          id?: string
+          intro?: string
+          is_default?: boolean
+          name?: string
+          product_id?: string | null
+          signature?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payment_events: {
         Row: {
           amount: number | null
