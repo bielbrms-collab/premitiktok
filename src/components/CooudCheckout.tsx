@@ -146,7 +146,7 @@ export function CooudCheckout({
       {!config && (
         <>
           <label className="mb-1 block text-sm font-semibold text-neutral-700" htmlFor={`cooud-email-${productId}`}>
-            Votre e-mail
+            La tua e-mail
           </label>
           <input
             id={`cooud-email-${productId}`}
