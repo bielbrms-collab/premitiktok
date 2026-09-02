@@ -6,15 +6,15 @@ import { captureTikTokAttribution } from "@/lib/tiktok-attribution";
 export const Route = createFileRoute("/pressel")({
   head: () => ({
     meta: [
-      { title: "Validation de votre activité | TikTok Récompenses" },
+      { title: "Verifica della tua attività | TikTok Ricompense" },
       {
         name: "description",
-        content: "Validez les critères d’activité pour poursuivre le retrait de votre solde.",
+        content: "Convalida i criteri di attività per proseguire con il prelievo del tuo saldo.",
       },
-      { property: "og:title", content: "Validation de votre activité | TikTok Récompenses" },
+      { property: "og:title", content: "Verifica della tua attività | TikTok Ricompense" },
       {
         property: "og:description",
-        content: "Validez les critères d’activité pour poursuivre le retrait de votre solde.",
+        content: "Convalida i criteri di attività per proseguire con il prelievo del tuo saldo.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -25,9 +25,9 @@ export const Route = createFileRoute("/pressel")({
 
 function Pressel() {
   const metrics = [
-    { label: "Vidéos regardées", target: 50 },
-    { label: "Temps passé sur la plateforme", target: 1000 },
-    { label: "Vidéos likées", target: 100 },
+    { label: "Video guardati", target: 50 },
+    { label: "Tempo trascorso sulla piattaforma", target: 1000 },
+    { label: "Video apprezzati", target: 100 },
   ];
 
   const DURATION = 1800;
@@ -83,18 +83,18 @@ function Pressel() {
         />
         {/* Headline */}
         <h1 className="text-2xl sm:text-[26px] font-black leading-tight mb-3">
-          Vous remplissez tous les{" "}
-          <span className="text-rose-500">critères d’activité.</span>
+          Soddisfi tutti i{" "}
+          <span className="text-rose-500">criteri di attività.</span>
         </h1>
         <p className="text-sm text-neutral-600 mb-5">
-          Nous confirmons que votre compte remplit les conditions minimales d’utilisation. Consultez le récapitulatif ci-dessous, puis débloquez votre progression.
+          Confermiamo che il tuo account soddisfa i requisiti minimi di utilizzo. Consulta il riepilogo qui sotto, poi sblocca il tuo avanzamento.
         </p>
 
         {/* Details card */}
         <div className="rounded-2xl border border-neutral-200 bg-neutral-50/70 p-4 mb-5">
           <div className="flex items-center gap-2 text-sm font-semibold text-neutral-700 mb-3">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            Détail de votre activité
+            Dettaglio della tua attività
           </div>
           <div className="space-y-3">
             {metrics.map((m, i) => {
@@ -130,7 +130,7 @@ function Pressel() {
             done ? "opacity-100 text-emerald-600" : "opacity-0"
           }`}
         >
-          C’est bon ! Votre activité a bien été validée.
+          Fatto! La tua attività è stata verificata.
         </p>
 
         {/* CTA */}
@@ -146,11 +146,11 @@ function Pressel() {
               : "opacity-0 scale-95 pointer-events-none"
           }`}
         >
-          Continuar
+          Continua
         </button>
 
         <p className="text-center text-[11px] text-neutral-400 mt-4 leading-snug">
-          Ces données sont générées automatiquement à partir de votre activité récente sur la plateforme.
+          Questi dati vengono generati automaticamente in base alla tua attività recente sulla piattaforma.
         </p>
       </section>
     </main>

