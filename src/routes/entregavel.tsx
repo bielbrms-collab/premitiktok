@@ -10,16 +10,16 @@ export const EMAIL_STORAGE_KEY = "tk_deliverable_email";
 export const Route = createFileRoute("/entregavel")({
   head: () => ({
     meta: [
-      { title: "Suivi de votre accès | TikTok Récompenses" },
+      { title: "Monitoraggio del tuo accesso | TikTok Ricompense" },
       {
         name: "description",
         content:
-          "Consultez le statut, la progression et le calendrier de déblocage de votre accès.",
+          "Consulta lo stato, l'avanzamento e il calendario di sblocco del tuo accesso.",
       },
-      { property: "og:title", content: "Suivi de votre accès | TikTok Récompenses" },
+      { property: "og:title", content: "Monitoraggio del tuo accesso | TikTok Ricompense" },
       {
         property: "og:description",
-        content: "Statut, progression et date prévisionnelle de déblocage de votre accès.",
+        content: "Stato, avanzamento e data prevista di sblocco del tuo accesso.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -86,7 +86,7 @@ function EntregavelPage() {
     e.preventDefault();
     const value = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      setFormError("Saisissez une adresse e-mail valide.");
+      setFormError("Inserisci un indirizzo e-mail valido.");
       return;
     }
     setFormError(null);
@@ -97,7 +97,7 @@ function EntregavelPage() {
       setState(result);
       setStatus("ready");
     } catch {
-      setFormError("Impossible de consulter votre retrait. Merci de réessayer.");
+      setFormError("Impossibile consultare il tuo prelievo. Riprova.");
     } finally {
       setSubmitting(false);
     }
@@ -121,15 +121,15 @@ function EntregavelPage() {
           )}
           {status === "error" && (
             <p className="py-10 text-center text-sm text-neutral-500">
-              Impossible d’afficher votre suivi pour le moment. Actualisez la page dans quelques secondes.
+              Impossibile mostrare il tuo monitoraggio al momento. Aggiorna la pagina tra qualche secondo.
             </p>
           )}
           {status === "ready" && state && <Tracking state={state} />}
         </section>
 
         <p className="mx-auto mt-5 max-w-[420px] text-center text-[12px] leading-relaxed text-neutral-400">
-          Environnement 100 % sécurisé · Votre progression est enregistrée automatiquement et se poursuit
-          même si vous fermez cette page.
+          Ambiente 100% sicuro · Il tuo avanzamento viene registrato automaticamente e continua
+          anche se chiudi questa pagina.
         </p>
       </div>
     </main>
@@ -204,12 +204,12 @@ function EmailGate({
         </div>
       </div>
 
-      <Eyebrow>Suivi de retrait</Eyebrow>
+      <Eyebrow>Monitoraggio prelievo</Eyebrow>
       <h1 className="text-[26px] font-extrabold leading-tight tracking-tight text-[#161823]">
-        Saisissez votre <span className="text-[#FE2C55]">e-mail</span>
+        Inserisci la tua <span className="text-[#FE2C55]">e-mail</span>
       </h1>
       <p className="mx-auto mt-3 max-w-[360px] text-[14.5px] leading-relaxed text-neutral-500">
-        Indiquez l’adresse e-mail utilisée lors de votre commande pour consulter l’état de votre retrait.
+        Indica l'indirizzo e-mail utilizzato al momento dell'ordine per consultare lo stato del tuo prelievo.
       </p>
 
       <form onSubmit={onSubmit} className="mt-6 text-left">
@@ -217,7 +217,7 @@ function EmailGate({
           htmlFor="deliverable-email"
           className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-400"
         >
-          E-mail associé
+          E-mail associata
         </label>
         <div className="flex items-center gap-3 rounded-[14px] border border-[#eceef1] bg-white px-4 shadow-[0_8px_24px_-20px_rgba(22,24,35,0.6)] focus-within:border-[#FE2C55]">
           <svg
@@ -239,7 +239,7 @@ function EmailGate({
             autoComplete="email"
             value={email}
             onChange={(e) => onEmailChange(e.target.value)}
-            placeholder="vous@email.com"
+            placeholder="tu@email.com"
             className="h-14 w-full bg-transparent text-[15px] text-[#161823] outline-none placeholder:text-neutral-300"
           />
         </div>
@@ -250,12 +250,12 @@ function EmailGate({
           disabled={submitting}
           className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-[15px] bg-gradient-to-r from-[#ff3a63] via-[#fe2c55] to-[#e51e46] text-[13.5px] font-extrabold uppercase tracking-wide text-white shadow-[0_16px_30px_-12px_rgba(254,44,85,0.7)] transition active:scale-[0.99] disabled:opacity-60"
         >
-          {submitting ? "Recherche en cours..." : "Continuer avec cet e-mail →"}
+          {submitting ? "Ricerca in corso..." : "Continua con questa e-mail →"}
         </button>
       </form>
 
       <p className="mx-auto mt-4 max-w-[400px] text-[12px] leading-relaxed text-neutral-400">
-        En continuant, vous verrez le statut en temps réel ainsi que la date prévisionnelle du versement.
+        Continuando, vedrai lo stato in tempo reale e la data prevista del versamento.
       </p>
     </div>
   );
@@ -266,10 +266,10 @@ function Tracking({ state }: { state: DeliverableState }) {
 
   return (
     <div>
-      <Eyebrow live>Statut du déblocage</Eyebrow>
+      <Eyebrow live>Stato dello sblocco</Eyebrow>
       {state.email && (
         <div className="mb-4 break-all text-center text-[12.5px] text-neutral-500">
-          Suivi associé à <b className="text-[#161823]">{state.email}</b>
+          Monitoraggio associato a <b className="text-[#161823]">{state.email}</b>
         </div>
       )}
 
@@ -277,20 +277,20 @@ function Tracking({ state }: { state: DeliverableState }) {
         <div className="pointer-events-none absolute -right-8 -top-10 h-36 w-36 rounded-full bg-[radial-gradient(circle,rgba(254,44,85,0.55),transparent_70%)]" />
         <div className="pointer-events-none absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-[radial-gradient(circle,rgba(37,244,238,0.4),transparent_70%)]" />
         <div className="relative text-[11px] font-bold uppercase tracking-[0.16em] text-[#c7cad6]">
-          {state.released ? "Accès débloqué" : "Déblocage en cours"}
+          {state.released ? "Accesso sbloccato" : "Sblocco in corso"}
         </div>
         <div className="relative my-1 text-[34px] font-extrabold leading-none">
-          Jour {state.day}
+          Giorno {state.day}
           <span className="text-[18px] font-bold text-[#c7cad6]">/{state.totalDays}</span>
         </div>
         <div className="relative mt-2 inline-flex items-center gap-2 text-[12.5px] font-bold text-[#25F4EE]">
           <span className="h-2 w-2 animate-pulse rounded-full bg-[#25F4EE]" />
-          {state.released ? "Prêt à être consulté" : "Déblocage en traitement"}
+          {state.released ? "Pronto per essere consultato" : "Sblocco in elaborazione"}
         </div>
       </div>
 
       <div className="mb-2 flex items-center justify-between text-[12.5px] text-neutral-500">
-        <span>Progression du déblocage</span>
+        <span>Avanzamento dello sblocco</span>
         <b className="text-[#161823]">{state.progress}%</b>
       </div>
       <div className="h-2.5 w-full overflow-hidden rounded-full bg-[#f0f1f4]">
@@ -303,7 +303,7 @@ function Tracking({ state }: { state: DeliverableState }) {
       <div className="mt-5 rounded-2xl border border-[#eceef1] bg-[#fbfbfc] px-4 py-4">
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-400">
           <span className="h-2 w-2 animate-pulse rounded-full bg-[#16c784]" />
-          Jour {state.day} sur {state.totalDays}
+          Giorno {state.day} di {state.totalDays}
         </div>
         <p className="mt-2 text-[14.5px] leading-relaxed text-neutral-700">{PHRASES[index]}</p>
       </div>
@@ -315,12 +315,12 @@ function Tracking({ state }: { state: DeliverableState }) {
           rel="noreferrer"
           className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-[15px] bg-gradient-to-r from-[#ff3a63] via-[#fe2c55] to-[#e51e46] text-[15px] font-extrabold uppercase tracking-wide text-white shadow-[0_16px_30px_-12px_rgba(254,44,85,0.7)] transition active:scale-[0.99]"
         >
-          Accéder maintenant →
+          Accedi ora →
         </a>
       )}
 
       <div className="mt-7 text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-400">
-        Chronologie
+        Cronologia
       </div>
 
       <div className="mt-3">
@@ -349,7 +349,7 @@ function Tracking({ state }: { state: DeliverableState }) {
               </div>
               <div className={`pb-5 ${isLast ? "pb-0" : ""}`}>
                 <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-neutral-400">
-                  Jour {i + 1}
+                  Giorno {i + 1}
                 </div>
                 <div
                   className={`text-[14.5px] font-semibold ${

@@ -44,18 +44,18 @@ export type EmailVars = {
   saleId?: string | null;
 };
 
-export const EMAIL_PLACEHOLDERS = ["{{nom}}", "{{email}}", "{{produit}}", "{{commande}}"];
+export const EMAIL_PLACEHOLDERS = ["{{nome}}", "{{email}}", "{{prodotto}}", "{{ordine}}"];
 
 /** Rodapé transacional: explica o motivo do envio e o canal de resposta. */
 export const TRANSACTIONAL_NOTICE =
-  "Vous recevez cet e-mail à la suite de votre inscription. Pour toute question, répondez directement à ce message.";
+  "Ricevi questa email in seguito alla tua registrazione. Per qualsiasi domanda, rispondi direttamente a questo messaggio.";
 
 export function applyVars(text: string, vars: EmailVars): string {
   return text
-    .replaceAll("{{nom}}", vars.name?.trim() || "cher client")
+    .replaceAll("{{nome}}", vars.name?.trim() || "gentile cliente")
     .replaceAll("{{email}}", vars.email ?? "")
-    .replaceAll("{{produit}}", vars.product ?? "")
-    .replaceAll("{{commande}}", vars.saleId ?? "");
+    .replaceAll("{{prodotto}}", vars.product ?? "")
+    .replaceAll("{{ordine}}", vars.saleId ?? "");
 }
 
 function escapeHtml(value: string): string {
@@ -108,7 +108,7 @@ export function renderEmailHtml(tpl: EmailTemplate, vars: EmailVars = {}): strin
   const url = escapeHtml(tpl.deliverable_url);
 
   return `<!doctype html>
-<html lang="fr">
+<html lang="it">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />

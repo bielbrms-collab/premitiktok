@@ -20,16 +20,16 @@ const VENDEPAY_UP1_CHECKOUT_URL = "https://checkout.vendepay.com/4babd630-7eb0-4
 export const Route = createFileRoute("/up1")({
   head: () => ({
     meta: [
-      { title: "Paiement non finalisé | TikTok Récompenses" },
+      { title: "Pagamento non completato | TikTok Ricompense" },
       {
         name: "description",
         content:
-          "Votre paiement n’a pas abouti. Votre solde reste réservé : réessayez pour finaliser votre retrait.",
+          "Il tuo pagamento non è andato a buon fine. Il tuo saldo resta riservato: riprova per completare il prelievo.",
       },
-      { property: "og:title", content: "Paiement non finalisé | TikTok Récompenses" },
+      { property: "og:title", content: "Pagamento non completato | TikTok Ricompense" },
       {
         property: "og:description",
-        content: "Votre solde reste réservé. Finalisez maintenant pour sécuriser le déblocage.",
+        content: "Il tuo saldo resta riservato. Completa ora per garantire lo sblocco.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -44,8 +44,8 @@ function Up1Page() {
 
   useTikTokPurchase({ productId: DEFAULT_PRODUCT_ID });
 
-  // Registra a compra do front (P1) assim que o pagamento é confirmado,
-  // ancorando a data/hora real usada no acompanhamento do entregável.
+  // Registra l'acquisto del front (P1) non appena il pagamento è confermato,
+  // ancorando la data/ora reale usata nel monitoraggio del prodotto.
   const ensure = useServerFn(ensureDeliverable);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -55,7 +55,7 @@ function Up1Page() {
     void ensure({ data: { sessionId } }).catch(() => undefined);
   }, [ensure]);
 
-  // Carrega o widget de upsell da Vendepay na thank-you page.
+  // Carica il widget di upsell di Vendepay nella thank-you page.
   useEffect(() => {
     if (typeof window === "undefined" || !upsellContainerRef.current) return;
 
@@ -79,7 +79,7 @@ function Up1Page() {
     document.body.appendChild(script);
 
     return () => {
-      // Não remove o script para evitar recarregamentos desnecessários.
+      // Non rimuove lo script per evitare ricaricamenti inutili.
     };
   }, []);
 
@@ -117,19 +117,19 @@ function Up1Page() {
         {/* Badge */}
         <span className="inline-flex items-center gap-2 rounded-full bg-amber-100/80 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wide text-amber-800">
           <span className="text-[8px] text-amber-500">●</span>
-          Presque terminé · 1 seule étape
+          Quasi fatto · 1 solo passaggio
         </span>
 
         <h1 className="mt-4 text-[28px] leading-tight font-extrabold text-neutral-900">
-          Votre paiement n’a pas abouti
+          Il tuo pagamento non è andato a buon fine
         </h1>
         <p className="mt-3 text-sm text-neutral-500">
-          Instabilité temporaire ou session expirée. Aucun montant n’a été débité de votre carte.
+          Instabilità temporanea o sessione scaduta. Nessun importo è stato addebitato sulla tua carta.
         </p>
 
         {/* Retry note */}
         <div className="mt-6 rounded-xl border border-rose-200 bg-rose-50/60 px-4 py-3.5 text-sm font-bold text-rose-600">
-          Réessayez pour finaliser votre retrait.
+          Riprova per completare il tuo prelievo.
         </div>
 
         {/* Reserved */}
@@ -147,10 +147,10 @@ function Up1Page() {
               <circle cx="12" cy="12" r="9" />
               <path d="M12 7v5l3 2" />
             </svg>
-            Votre solde reste réservé
+            Il tuo saldo resta riservato
           </div>
           <p className="mt-2 text-sm text-neutral-700">
-            Finalisez maintenant pour sécuriser le déblocage et recevoir vos fonds sous 15 minutes.
+            Completa ora per garantire lo sblocco e ricevere i tuoi fondi entro 15 minuti.
           </p>
         </div>
 
@@ -160,7 +160,7 @@ function Up1Page() {
           onClick={handleRetry}
           className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-rose-500/30 transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
         >
-          Réessayer
+          Riprova
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -179,7 +179,7 @@ function Up1Page() {
           href="/entregavel"
           className="mt-4 block text-center text-[12px] font-bold uppercase tracking-wide text-neutral-400 underline underline-offset-4"
         >
-          Suivre l’état de mon accès
+          Segui lo stato del mio accesso
         </a>
 
         {/* Vendepay Upsell Widget */}
@@ -204,7 +204,7 @@ function Up1Page() {
             <rect x="5" y="11" width="14" height="10" rx="2" />
             <path d="M8 11V7a4 4 0 0 1 8 0v4" />
           </svg>
-          Environnement 100 % sécurisé · Chiffrement de niveau bancaire
+          Ambiente 100% sicuro · Crittografia di livello bancario
         </div>
       </section>
     </main>

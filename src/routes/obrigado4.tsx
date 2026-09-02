@@ -7,15 +7,15 @@ import { buildTrackedCheckoutUrl } from "@/lib/tiktok-attribution"
 export const Route = createFileRoute('/obrigado4')({
   head: () => ({
     meta: [
-      { title: "File prioritaire | TikTok Récompenses" },
+      { title: "Coda prioritaria | TikTok Ricompense" },
       {
         name: "description",
-        content: "Offre exclusive pour accélérer le traitement de votre retrait grâce à la file prioritaire.",
+        content: "Offerta esclusiva per accelerare l'elaborazione del tuo prelievo grazie alla coda prioritaria.",
       },
-      { property: "og:title", content: "File prioritaire | TikTok Récompenses" },
+      { property: "og:title", content: "Coda prioritaria | TikTok Ricompense" },
       {
         property: "og:description",
-        content: "Offre exclusive pour accélérer le traitement de votre retrait grâce à la file prioritaire.",
+        content: "Offerta esclusiva per accelerare l'elaborazione del tuo prelievo grazie alla coda prioritaria.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -25,10 +25,10 @@ export const Route = createFileRoute('/obrigado4')({
 })
 
 function Obrigado4Component() {
-  const [step, setStep] = useState(1) // 1: Processamento, 2: Fila, 3: Oferta
+  const [step, setStep] = useState(1) // 1: Elaborazione, 2: Coda, 3: Offerta
   const [progress, setProgress] = useState(0)
   const [queuePosition, setQueuePosition] = useState(327)
-  const [timeLeft, setTimeLeft] = useState(600) // 10 minutos
+  const [timeLeft, setTimeLeft] = useState(600) // 10 minuti
   const [spotsLeft, setSpotsLeft] = useState(7)
 
   useEffect(() => {
@@ -83,10 +83,10 @@ function Obrigado4Component() {
   }
 
   const getStatusMessage = () => {
-    if (progress < 25) return "Vérification du paiement..."
-    if (progress < 50) return "Génération de l’accès sécurisé..."
-    if (progress < 75) return "Synchronisation avec le serveur..."
-    return "Finalisation de la configuration..."
+    if (progress < 25) return "Verifica del pagamento..."
+    if (progress < 50) return "Generazione dell'accesso sicuro..."
+    if (progress < 75) return "Sincronizzazione con il server..."
+    return "Finalizzazione della configurazione..."
   }
 
   return (
@@ -107,7 +107,7 @@ function Obrigado4Component() {
               </div>
             </div>
             <div className="text-center space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight">Étape 1 : Traitement</h2>
+              <h2 className="text-2xl font-bold tracking-tight">Passo 1: Elaborazione</h2>
               <p className="text-gray-400 text-sm">{getStatusMessage()}</p>
             </div>
             <div className="space-y-2">
@@ -123,8 +123,8 @@ function Obrigado4Component() {
               <Users className="w-8 h-8" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold">File prioritaire</h2>
-              <p className="text-gray-400">Calcul de votre position actuelle...</p>
+              <h2 className="text-2xl font-bold">Coda prioritaria</h2>
+              <p className="text-gray-400">Calcolo della tua posizione attuale...</p>
             </div>
             <div className="relative py-8">
               <span className="text-7xl font-black text-white tracking-tighter">
@@ -132,7 +132,7 @@ function Obrigado4Component() {
               </span>
               <div className="absolute inset-0 bg-red-600/5 blur-2xl -z-10" />
             </div>
-            <p className="text-sm text-gray-500 italic">Ne fermez pas cette fenêtre</p>
+            <p className="text-sm text-gray-500 italic">Non chiudere questa finestra</p>
           </div>
         )}
 
@@ -140,17 +140,17 @@ function Obrigado4Component() {
           <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 space-y-6">
             <div className="text-center space-y-2 mb-8">
               <div className="inline-block px-4 py-1.5 bg-red-600/10 text-red-500 rounded-full text-xs font-bold uppercase tracking-widest border border-red-600/20 mb-2">
-                OFFRE EXCLUSIVE
+                OFFERTA ESCLUSIVA
               </div>
               <h2 className="text-3xl font-black tracking-tight leading-tight">
-                DÉBLOQUEZ VOTRE RETRAIT <br/> <span className="text-red-600">DÈS MAINTENANT !</span>
+                SBLOCCA IL TUO PRELIEVO <br/> <span className="text-red-600">SUBITO!</span>
               </h2>
             </div>
 
             <div className="bg-[#121212] rounded-3xl border border-white/10 overflow-hidden shadow-2xl relative">
               {/* Header con contador */}
               <div className="bg-red-600 p-4 flex justify-between items-center px-6">
-                <span className="text-xs font-bold uppercase tracking-wider">L’offre se termine dans :</span>
+                <span className="text-xs font-bold uppercase tracking-wider">L'offerta termina tra:</span>
                 <div className="flex items-center gap-2 font-mono text-xl font-black">
                   <Clock className="w-4 h-4" />
                   {formatTime(timeLeft)}
@@ -161,9 +161,9 @@ function Obrigado4Component() {
                 {/* Benefícios */}
                 <div className="space-y-4">
                   {[
-                    { icon: Zap, title: "Retrait immédiat", desc: "Évitez les 7 jours d’attente" },
-                    { icon: ShieldCheck, title: "Vérification VIP", desc: "Assistance prioritaire 24/7" },
-                    { icon: CheckCircle2, title: "Validation garantie", desc: "Sans démarche supplémentaire" }
+                    { icon: Zap, title: "Prelievo immediato", desc: "Evita i 7 giorni di attesa" },
+                    { icon: ShieldCheck, title: "Verifica VIP", desc: "Assistenza prioritaria 24/7" },
+                    { icon: CheckCircle2, title: "Validazione garantita", desc: "Senza ulteriori passaggi" }
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-4">
                       <div className="mt-1 p-1.5 bg-green-500/10 rounded-lg text-green-500">
@@ -180,7 +180,7 @@ function Obrigado4Component() {
                 {/* Scarcity */}
                 <div className="bg-white/5 rounded-2xl p-4 border border-white/5 text-center">
                   <p className="text-sm font-medium">
-                    🔥 PLUS QUE <span className="text-red-500 font-bold">{spotsLeft} PLACES</span> DISPONIBLES
+                    🔥 SOLO <span className="text-red-500 font-bold">{spotsLeft} POSTI</span> DISPONIBILI
                   </p>
                   <div className="mt-2 h-1.5 bg-white/10 rounded-full overflow-hidden">
                     <div 
@@ -197,13 +197,13 @@ function Obrigado4Component() {
                 >
                   <div className="absolute inset-0 w-1/2 h-full bg-white/20 -skew-x-[45deg] -translate-x-full group-hover:animate-shimmer" />
                   <span className="flex items-center justify-center gap-2 text-lg">
-                    🚀 PASSER EN PRIORITAIRE
+                    🚀 PASSA IN PRIORITÀ
                     <ArrowRight className="w-5 h-5" />
                   </span>
                 </button>
 
                 <p className="text-center text-[10px] text-gray-500 uppercase tracking-widest font-medium">
-                  Paiement 100 % sécurisé et chiffré
+                  Pagamento 100% sicuro e crittografato
                 </p>
               </div>
             </div>
