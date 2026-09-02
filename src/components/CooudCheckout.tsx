@@ -58,7 +58,7 @@ export function CooudCheckout({
 
   async function prepareCheckout() {
     if (!email.trim() || loading) {
-      if (!email.trim()) setError("Saisissez votre e-mail pour recevoir votre accès.");
+      if (!email.trim()) setError("Inserisci la tua e-mail per ricevere l’accesso.");
       return;
     }
 
@@ -85,7 +85,7 @@ export function CooudCheckout({
           `Le serveur a renvoyé une réponse invalide (HTTP ${response.status}). Merci de réessayer dans quelques instants.`,
         );
       }
-      if (!response.ok) throw new Error(errorMessage(data, "Impossible de créer la session de paiement."));
+      if (!response.ok) throw new Error(errorMessage(data, "Impossibile creare la sessione di pagamento."));
 
       const cooud = (await loadCooudElements()) as CooudElements;
       const container = containerRef.current;
@@ -109,7 +109,7 @@ export function CooudCheckout({
         },
         onError: (cooudError) => {
           setError(
-            `${cooudError.message ?? "Le paiement n’a pas pu être traité."}${cooudError.code ? ` (${cooudError.code})` : ""}`,
+            `${cooudError.message ?? "Impossibile elaborare il pagamento."}${cooudError.code ? ` (${cooudError.code})` : ""}`,
           );
           // Registra a recusa no backend para o relatório por oferta.
           void fetch("/api/public/cooud/payment-event", {
@@ -166,7 +166,7 @@ export function CooudCheckout({
             disabled={loading}
             className="mb-4 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-4 font-bold text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 disabled:opacity-50"
           >
-            {loading ? "Préparation du paiement…" : "Passer au paiement"}
+            {loading ? "Preparazione del pagamento…" : "Vai al pagamento"}
           </button>
         </>
       )}
