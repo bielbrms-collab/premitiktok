@@ -78,7 +78,7 @@ export const ensureDeliverable = createServerFn({ method: "POST" })
         .select("session_id, email, purchased_at, amount, currency")
         .eq("session_id", data.sessionId)
         .single();
-      if (retry.error || !retry.data) throw new Error("Impossible d’enregistrer votre commande.");
+      if (retry.error || !retry.data) throw new Error("Impossibile registrare la tua richiesta.");
       return buildState(retry.data);
     }
 

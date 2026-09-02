@@ -82,7 +82,7 @@ export function CooudCheckout({
         data = JSON.parse(raw) as CheckoutBootstrap;
       } catch {
         throw new Error(
-          `Le serveur a renvoyé une réponse invalide (HTTP ${response.status}). Merci de réessayer dans quelques instants.`,
+          `Il server ha restituito una risposta non valida (HTTP ${response.status}). Riprova tra qualche istante.`,
         );
       }
       if (!response.ok) throw new Error(errorMessage(data, "Impossibile creare la sessione di pagamento."));
