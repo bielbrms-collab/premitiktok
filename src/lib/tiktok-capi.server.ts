@@ -85,13 +85,13 @@ export async function sendTikTokPurchase(input: TikTokPurchaseInput) {
       console.error(`[TikTok CAPI] falha HTTP ${response.status}: ${text}`);
       return { ok: false, reason: "http_error" as const, status: response.status, body: text };
     }
-    const parsed = JSON.parse(text) as { code?: number; message?: string };
+    const parsed = JSON.parse(text) as { code?: number; message?: string; request_id?: string };
     if (parsed.code !== 0) {
       console.error("[TikTok CAPI] erro da API", parsed);
       return { ok: false, reason: "api_error" as const, body: text };
     }
     console.info("[TikTok CAPI] Purchase enviado", { eventId: input.eventId, value: input.value });
-    return { ok: true as const };
+    return { ok: true as const, requestId: parsed.request_id ?? null };
   } catch (error) {
     console.error("[TikTok CAPI] exceção ao enviar evento", error);
     return { ok: false, reason: "exception" as const };

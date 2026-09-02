@@ -5,6 +5,7 @@ import { DEFAULT_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
 import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
+import { buildTrackedCheckoutUrl } from "@/lib/tiktok-attribution";
 
 declare global {
   interface Window {
@@ -83,7 +84,7 @@ function Up1Page() {
   }, []);
 
   const handleRetry = () => {
-    window.location.href = VENDEPAY_UP1_CHECKOUT_URL;
+    window.location.href = buildTrackedCheckoutUrl(VENDEPAY_UP1_CHECKOUT_URL);
   };
 
   return (

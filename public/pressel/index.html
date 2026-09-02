@@ -927,16 +927,33 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 const urlAtual = new URL(window.location.href);
                 const params = new URLSearchParams(urlAtual.search);
 
-                // Filtra UTMs + ttclid
+                // Filtra e persiste UTMs + identificadores do TikTok.
                 const parametrosParaHerdar = {};
                 for (const [key, value] of params.entries()) {
                   if (
                     key.startsWith("utm_") ||
-                    key === "ttclid" // <- novo parâmetro incluído
+                    key === "ttclid" ||
+                    key === "ttp"
                   ) {
                     parametrosParaHerdar[key] = value;
+                    try { localStorage.setItem("tiktok_attribution_" + key, value); } catch (_) {}
                   }
                 }
+
+                try {
+                  ["ttclid", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach(function (key) {
+                    if (!parametrosParaHerdar[key]) {
+                      var saved = localStorage.getItem("tiktok_attribution_" + key);
+                      if (saved) parametrosParaHerdar[key] = saved;
+                    }
+                  });
+                  var cookieMatch = document.cookie.match(/(?:^|;\s*)_ttp=([^;]+)/);
+                  var ttp = cookieMatch ? decodeURIComponent(cookieMatch[1]) : localStorage.getItem("tiktok_attribution_ttp");
+                  if (ttp) {
+                    parametrosParaHerdar.ttp = ttp;
+                    localStorage.setItem("tiktok_attribution_ttp", ttp);
+                  }
+                } catch (_) {}
 
                 // Cria a URL de destino com os parâmetros herdados
                 const urlFinal = new URL(urlDestino);
@@ -1000,7 +1017,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
           </div>
 
           <div class="pago-card">
-            <button type="button" id="pago-continuar" class="btn-continuar" onclick="window.location.href='https://checkout.vendepay.com/2cd2b8a8-cfcf-4f72-a01f-01d7363cd7a5'">
+            <button type="button" id="pago-continuar" class="btn-continuar" onclick="herdarUTMeRedirecionar('https://checkout.vendepay.com/2cd2b8a8-cfcf-4f72-a01f-01d7363cd7a5')">
               <span class="btn-continuar-text">Continuar</span>
             </button>
 
