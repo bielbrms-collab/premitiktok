@@ -166,6 +166,10 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
 
         } catch (error) {
           console.error("[Vendepay webhook] falha ao registrar evento", error);
+          return Response.json(
+            { received: false, error: "processing_failed" },
+            { status: 500 },
+          );
         }
 
         return Response.json({ received: true, approved, redirect_url: "/up1" });
