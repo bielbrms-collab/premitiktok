@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Shield, Lock, CreditCard, ArrowRight } from "lucide-react";
+import { buildTrackedCheckoutUrl } from "@/lib/tiktok-attribution";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -48,7 +49,7 @@ function Checkout() {
     if (!formData.fullName.trim() || !formData.email.trim() || !formData.cardNumber.trim()) {
       return;
     }
-    window.location.href = VENDEPAY_CHECKOUT_URL;
+    window.location.href = buildTrackedCheckoutUrl(VENDEPAY_CHECKOUT_URL);
   };
 
   return (

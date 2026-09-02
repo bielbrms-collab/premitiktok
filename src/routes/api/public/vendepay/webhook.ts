@@ -15,10 +15,30 @@ type VendepayPayload = {
   [key: string]: unknown;
 };
 
+function objectValue(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
+function firstString(...values: unknown[]) {
+  return values.find((value): value is string => typeof value === "string" && value.trim().length > 0) ?? null;
+}
+
+function firstNumber(...values: unknown[]) {
+  for (const value of values) {
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string" && value.trim() && Number.isFinite(Number(value))) return Number(value);
+  }
+  return null;
+}
+
 /** Venda aprovada = event "compra.aprovada" ou status 2 (Paga). */
 function isApproved(payload: VendepayPayload, headerEvent: string | null): boolean {
-  const event = String(payload.event ?? headerEvent ?? "").toLowerCase();
-  return event === "compra.aprovada" || Number(payload.status) === 2;
+  const data = objectValue(payload.data);
+  const event = String(payload.event ?? payload.type ?? data.event ?? data.type ?? headerEvent ?? "").toLowerCase();
+  const status = String(payload.status ?? data.status ?? "").toLowerCase();
+  return event === "compra.aprovada" || /approved|aprovad|paid|paga|succeed/.test(event) || status === "2" || /approved|aprovad|paid|paga|succeed/.test(status);
 }
 
 /** A VendePay envia valores inteiros em centavos; decimais já vêm na moeda. */
@@ -53,17 +73,21 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
         }
 
         const headerEvent = request.headers.get("x-webhook-event");
+        const data = objectValue(payload.data);
+        const customer = objectValue(payload.customer ?? data.customer ?? data.comprador);
+        const metadata = objectValue(payload.metadata ?? data.metadata);
         const isTest = request.headers.get("x-webhook-test") === "true";
         const approved = isApproved(payload, headerEvent);
-        const eventName = String(payload.event ?? headerEvent ?? "unknown");
-        const sessionId =
-          payload.vendaId ?? payload.id ?? payload.checkoutId ?? null;
-        const amount =
-          typeof payload.valorPago === "number"
-            ? payload.valorPago
-            : typeof payload.valor === "number"
-              ? payload.valor
-              : null;
+        const eventName = String(payload.event ?? payload.type ?? data.event ?? data.type ?? headerEvent ?? "unknown");
+        const sessionId = firstString(payload.vendaId, payload.id, payload.checkoutId, data.vendaId, data.id, data.checkoutId, data.session_id);
+        const productId = firstString(payload.produtoId, data.produtoId, data.product_id, metadata.productId, metadata.product_id);
+        const email = firstString(payload.emailComprador, data.emailComprador, data.email, customer.email);
+        const name = firstString(payload.nomeComprador, data.nomeComprador, data.name, customer.name);
+        const phone = firstString(payload.telefoneComprador, data.telefoneComprador, data.phone, customer.phone);
+        const currency = firstString(payload.moeda, data.moeda, data.currency) ?? "EUR";
+        const amount = firstNumber(payload.valorPago, payload.valor, data.valorPago, data.valor, data.amount);
+        const ttclid = firstString(payload.ttclid, data.ttclid, metadata.ttclid);
+        const ttp = firstString(payload.ttp, data.ttp, metadata.ttp, metadata._ttp);
 
         console.info("[Vendepay webhook]", {
           event: eventName,
@@ -79,10 +103,10 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
             source: "vendepay_webhook",
             event_type: eventName,
             session_id: sessionId,
-            product_id: payload.produtoId ?? null,
+            product_id: productId,
             amount,
-            currency: typeof payload.moeda === "string" ? payload.moeda : null,
-            message: approved ? "paid" : isTest ? "test" : null,
+            currency,
+            message: approved ? `paid;ttclid=${ttclid ? "yes" : "no"};ttp=${ttp ? "yes" : "no"}` : isTest ? "test" : null,
             payload: JSON.parse(raw) as never,
           });
 
@@ -90,10 +114,10 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
             await supabaseAdmin.from("deliverable_purchases").upsert(
               {
                 session_id: sessionId,
-                product_id: payload.produtoId ?? null,
-                email: payload.emailComprador ?? null,
+                product_id: productId,
+                email,
                 amount,
-                currency: typeof payload.moeda === "string" ? payload.moeda : "EUR",
+                currency,
               },
               { onConflict: "session_id" },
             );
@@ -101,28 +125,28 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
             // Purchase server-side no TikTok (event_id = sessionId para deduplicar
             // com o evento do navegador disparado na thank-you page).
             const { sendTikTokPurchase } = await import("@/lib/tiktok-capi.server");
-            const metadata = (payload.metadata ?? {}) as Record<string, unknown>;
             const capi = await sendTikTokPurchase({
               eventId: sessionId,
-              email: payload.emailComprador ?? null,
-              phone: (payload.telefoneComprador as string | undefined) ?? null,
+              email,
+              phone,
               value: normalizeAmount(amount),
-              currency: typeof payload.moeda === "string" ? payload.moeda : "EUR",
-              productId: payload.produtoId ?? null,
-              ttclid:
-                (payload.ttclid as string | undefined) ?? (metadata.ttclid as string | undefined) ?? null,
-              ttp: (payload.ttp as string | undefined) ?? (metadata.ttp as string | undefined) ?? null,
-              url: "https://tiktok-francevendpay.lovable.app/up1",
+              currency,
+              productId,
+              ttclid,
+              ttp,
+              url: firstString(metadata.success_url, metadata.url) ?? "https://tiktok-francevendpay.lovable.app/up1",
             });
 
             await supabaseAdmin.from("payment_events").insert({
               source: "tiktok_capi",
               event_type: "Purchase",
               session_id: sessionId,
-              product_id: payload.produtoId ?? null,
+              product_id: productId,
               amount,
-              currency: typeof payload.moeda === "string" ? payload.moeda : "EUR",
-              message: capi.ok ? "sent" : `failed:${"reason" in capi ? capi.reason : "unknown"}`,
+              currency,
+              message: capi.ok
+                ? `sent;ttclid=${ttclid ? "yes" : "no"};ttp=${ttp ? "yes" : "no"}`
+                : `failed:${"reason" in capi ? capi.reason : "unknown"};ttclid=${ttclid ? "yes" : "no"};ttp=${ttp ? "yes" : "no"}`,
               payload: capi as never,
             });
 
@@ -130,9 +154,9 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
             const { deliverPurchaseEmail } = await import("@/lib/email-delivery.server");
             const delivery = await deliverPurchaseEmail({
               saleId: sessionId,
-              email: payload.emailComprador ?? null,
-              name: payload.nomeComprador ?? null,
-              productId: payload.produtoId ?? null,
+              email,
+              name,
+              productId,
             });
             console.info("[Vendepay webhook] entrega por e-mail", {
               sessionId,
@@ -142,6 +166,10 @@ export const Route = createFileRoute("/api/public/vendepay/webhook")({
 
         } catch (error) {
           console.error("[Vendepay webhook] falha ao registrar evento", error);
+          return Response.json(
+            { received: false, error: "processing_failed" },
+            { status: 500 },
+          );
         }
 
         return Response.json({ received: true, approved, redirect_url: "/up1" });

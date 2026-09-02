@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import tiktokLogo from "@/assets/tiktok-logo-clean.png.asset.json";
+import { captureTikTokAttribution } from "@/lib/tiktok-attribution";
 
 export const Route = createFileRoute("/pressel")({
   head: () => ({
@@ -35,6 +36,7 @@ function Pressel() {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
+    captureTikTokAttribution();
     const rafs: number[] = [];
     const timeouts: ReturnType<typeof setTimeout>[] = [];
     const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
