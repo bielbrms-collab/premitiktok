@@ -156,7 +156,7 @@ export function CooudCheckout({
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            placeholder="vous@email.com"
+            placeholder="tuonome@email.com"
             className="mb-4 w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-200"
             disabled={loading}
           />
