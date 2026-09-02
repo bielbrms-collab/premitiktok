@@ -35,7 +35,7 @@ export async function sendTemplateEmail(
   opts: { idempotencyKey?: string; label?: string } = {},
 ): Promise<SendResult> {
   const apiKey = process.env["LOVABLE_API_KEY"];
-  if (!apiKey) return { sent: false, status: "failed", error: "LOVABLE_API_KEY manquante" };
+  if (!apiKey) return { sent: false, status: "failed", error: "LOVABLE_API_KEY mancante" };
 
   const { fromEmail, fromName, replyTo } = resolveSender(tpl);
 
@@ -60,7 +60,7 @@ export async function sendTemplateEmail(
     return result;
   } catch (error) {
     if (error instanceof EmailAPIError && error.code === "recipient_suppressed") {
-      return { sent: false, status: "suppressed", error: "Destinataire supprimé (bounce/désinscription)" };
+      return { sent: false, status: "suppressed", error: "Destinatario non raggiungibile (bounce/disiscrizione)" };
     }
     return {
       sent: false,
@@ -121,12 +121,12 @@ export async function deliverPurchaseEmail(input: DeliverInput): Promise<SendRes
   };
 
   if (!tpl) {
-    await record({ status: "failed", error_message: "Aucun modèle actif" });
-    return { sent: false, status: "failed", error: "Aucun modèle actif" };
+    await record({ status: "failed", error_message: "Nessun modello attivo" });
+    return { sent: false, status: "failed", error: "Nessun modello attivo" };
   }
   if (!input.email) {
-    await record({ status: "failed", template_id: tpl.id, error_message: "E-mail acheteur manquant" });
-    return { sent: false, status: "failed", error: "E-mail acheteur manquant" };
+    await record({ status: "failed", template_id: tpl.id, error_message: "Email del cliente mancante" });
+    return { sent: false, status: "failed", error: "Email del cliente mancante" };
   }
 
   const vars: EmailVars = {

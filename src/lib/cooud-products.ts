@@ -19,14 +19,14 @@ export const PRODUCTS: Record<string, ProductConfig> = {
     currency: "EUR",
   },
   "43ca5d35-3492-4567-913d-dc2843ba6931": {
-    name: "Frais de déblocage réduits",
+    name: "Costi di sblocco ridotti",
     cooudLabel: "How to learn Spanish",
     stage: "back_redirect",
     amount: 1244,
     currency: "EUR",
   },
   "65009b71-7660-44ef-ba87-24f29c7599a4": {
-    name: "Nouvelle tentative de déblocage",
+    name: "Nuovo tentativo di sblocco",
     cooudLabel: "How to learn Germany",
     stage: "upsell",
     amount: 990,
