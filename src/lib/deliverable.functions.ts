@@ -116,7 +116,7 @@ export const lookupDeliverableByEmail = createServerFn({ method: "POST" })
         .select("session_id, email, purchased_at, amount, currency")
         .eq("session_id", sessionId)
         .single();
-      if (retry.error || !retry.data) throw new Error("Impossible de consulter votre retrait.");
+      if (retry.error || !retry.data) throw new Error("Impossibile consultare il tuo prelievo.");
       return buildState(retry.data);
     }
 
