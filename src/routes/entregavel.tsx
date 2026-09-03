@@ -314,7 +314,7 @@ function Tracking({ state }: { state: DeliverableState }) {
 
       <div className="mt-4 rounded-xl border border-[#eceef1] bg-white px-4 py-3 text-center shadow-[0_8px_24px_-20px_rgba(22,24,35,0.2)]">
         <p className="text-[11.5px] font-medium leading-relaxed tracking-wide text-neutral-500">
-          Equipe Suporte TikTok agradece sua solicitação
+          Il team di supporto TikTok ringrazia per la tua richiesta
         </p>
       </div>
 
