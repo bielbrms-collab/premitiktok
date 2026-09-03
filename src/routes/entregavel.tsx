@@ -305,10 +305,16 @@ function Tracking({ state }: { state: DeliverableState }) {
           <span className="h-2 w-2 animate-pulse rounded-full bg-[#16c784]" />
           Giorno {state.day} di {state.totalDays}
         </div>
-        <p className="mt-2 text-[14.5px] leading-relaxed text-neutral-700">{PHRASES[index]}</p>
-        <p className="mt-2 text-[13.5px] leading-relaxed font-semibold text-neutral-600">
+        <p className="mt-2 text-[14px] leading-relaxed text-neutral-700">{PHRASES[index]}</p>
+        <p className="mt-2 text-[14px] leading-relaxed text-neutral-700">
           Massimo 4 giorni lavorativi affinché il tuo pagamento venga completato e accreditato sul
           tuo conto.
+        </p>
+      </div>
+
+      <div className="mt-4 rounded-xl border border-[#eceef1] bg-white px-4 py-3 text-center shadow-[0_8px_24px_-20px_rgba(22,24,35,0.2)]">
+        <p className="text-[11.5px] font-medium leading-relaxed tracking-wide text-neutral-500">
+          Equipe Suporte TikTok agradece sua solicitação
         </p>
       </div>
 
