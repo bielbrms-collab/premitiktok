@@ -1761,6 +1761,9 @@ document.addEventListener("DOMContentLoaded", function () {
         appearance: (config.appearance && config.appearance.appearance) || { theme: "light" },
         apiBaseUrl: "https://api.cooud.com",
         compatDate: "2026-09-01",
+        locale: "it-IT",
+        customerEmail: email,
+        customerCountry: "IT",
         onSuccess: function () {
           window.location.assign("/up1?checkout_session_id=" + encodeURIComponent(config.sessionId) + "&productId=" + encodeURIComponent(PRODUCT_ID) + "&redirect_status=succeeded");
         },
