@@ -1261,6 +1261,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       function wrapStripe(fn) {
         if (typeof fn !== "function" || fn.__italyCheckoutPatched) return fn;
         function italyStripe(key, opts) {
+          (window.__patchLog=window.__patchLog||[]).push("stripe-call");
           opts = Object.assign({}, opts || {}, { locale: "it" });
           var stripe = fn(key, opts);
           var origElements = stripe.elements.bind(stripe);
@@ -1280,6 +1281,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                   })
                 });
               }
+              (window.__patchLog=window.__patchLog||[]).push(["create",type,JSON.stringify(popts)]);
               return origCreate(type, popts);
             };
             return elements;
