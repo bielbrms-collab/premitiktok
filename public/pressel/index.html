@@ -1284,36 +1284,50 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       new MutationObserver(apply).observe(container, { childList: true, subtree: true, characterData: true });
     }
 
+    function findEmail() {
+      var re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
+      var candidates = [];
+      var ids = ["confirmation-email", "correo", "cooud-email"];
+      for (var i = 0; i < ids.length; i++) {
+        var el = document.getElementById(ids[i]);
+        if (el && el.value) candidates.push(el.value);
+      }
+      var pago = document.getElementById("pago-correo");
+      if (pago && pago.textContent) candidates.push(pago.textContent);
+      try {
+        var stored = JSON.parse(localStorage.getItem("userPixData") || "null");
+        if (stored && stored.correo) candidates.push(stored.correo);
+      } catch (e) {}
+      if (window.__formData && window.__formData.correo) candidates.push(window.__formData.correo);
+      for (var j = 0; j < candidates.length; j++) {
+        var m = String(candidates[j]).trim().match(re);
+        if (m) return m[0];
+      }
+      return "";
+    }
+
     function init() {
-      var emailInput = document.getElementById("cooud-email");
-      var startBtn = document.getElementById("cooud-start");
+      var card = document.getElementById("cooud-card");
       var elementsBox = document.getElementById("cooud-elements");
       var errorBox = document.getElementById("cooud-error");
-      if (!emailInput || !startBtn || !elementsBox) return;
-
-      var prefill = document.getElementById("pago-correo");
-      if (prefill && prefill.textContent && prefill.textContent.indexOf("@") > -1) {
-        emailInput.value = prefill.textContent.trim();
-      }
+      var loadingBox = document.getElementById("cooud-loading");
+      if (!card || !elementsBox) return;
 
       function showError(message) {
+        if (!errorBox) return;
         errorBox.textContent = message;
         errorBox.style.display = message ? "block" : "none";
       }
+      function hideLoading() { if (loadingBox) loadingBox.style.display = "none"; }
 
-      var busy = false;
-      startBtn.addEventListener("click", function () {
-        var email = (emailInput.value || "").trim();
-        if (busy) return;
-        if (!email || email.indexOf("@") < 1) {
-          showError("Inserisci un indirizzo e-mail valido per continuare.");
-          return;
-        }
-        busy = true;
+      var started = false;
+
+      function start() {
+        if (started) return;
+        var email = findEmail();
+        if (!email) return;
+        started = true;
         showError("");
-        startBtn.disabled = true;
-        var label = startBtn.querySelector(".btn-continuar-text");
-        if (label) label.textContent = "Preparazione del pagamento\u2026";
 
         fetch("/api/public/cooud/checkout", {
           method: "POST",
@@ -1339,9 +1353,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
           })
           .then(function (data) {
             return loadElements().then(function (cooud) {
+              hideLoading();
               elementsBox.style.display = "block";
-              startBtn.style.display = "none";
-              emailInput.setAttribute("readonly", "readonly");
               cooud.mount({
                 container: elementsBox,
                 sessionId: data.sessionId,
@@ -1375,17 +1388,34 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 }
               });
               italianize(elementsBox);
+              try {
+                if (window.ttq && window.ttq.track) {
+                  window.ttq.track("InitiateCheckout", { content_id: PRODUCT_ID, content_type: "product", quantity: 1, value: 22.9, currency: "EUR" });
+                }
+              } catch (e) {}
             });
           })
           .catch(function (err) {
+            started = false;
+            hideLoading();
             showError((err && err.message) || "Impossibile avviare il pagamento.");
-            startBtn.disabled = false;
-            startBtn.style.display = "";
-            if (label) label.textContent = "Vai al pagamento";
-          })
-          .finally(function () { busy = false; });
-      });
+          });
+      }
+
+      // Dispara automaticamente assim que o cartão de pagamento fica visível.
+      function visible() {
+        var rect = card.getBoundingClientRect();
+        return card.offsetParent !== null && rect.height > 0;
+      }
+      var attempts = 0;
+      var timer = setInterval(function () {
+        attempts++;
+        if (started || attempts > 240) { clearInterval(timer); return; }
+        if (visible() && findEmail()) start();
+      }, 250);
+      if (visible() && findEmail()) start();
     }
+
 
     document.readyState === "loading"
       ? document.addEventListener("DOMContentLoaded", init)
