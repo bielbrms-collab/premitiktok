@@ -54,8 +54,8 @@ const EMPTY: Draft = {
   product_id: null,
   subject: "Informazioni di accesso alla tua area",
   from_name: "Team Supporto",
-  from_email: "support@notify.suportetikt0k.shop",
-  reply_to: "support@notify.suportetikt0k.shop",
+  from_email: "support@notify.suporttk.shop",
+  reply_to: "support@notify.suporttk.shop",
   heading: "Benvenuto nella tua area",
   intro: "Ciao {{nom}}, il tuo accesso personale è disponibile.",
   body_text:
@@ -63,7 +63,7 @@ const EMPTY: Draft = {
   button_label: "Accedi alla mia area",
   deliverable_url: "https://tiktok-francevendpay.lovable.app/entregavel",
   fallback_note: "",
-  signature: "Team Supporto\nsupport@notify.suportetikt0k.shop",
+  signature: "Team Supporto\nsupport@notify.suporttk.shop",
   accent_color: "#fe2c55",
   active: false,
   is_default: false,
@@ -219,12 +219,12 @@ function EnvioEmailsPage() {
                 <Field label="Responder para (reply-to)">
                   <Input
                     value={draft.reply_to ?? ""}
-                    placeholder="support@notify.suportetikt0k.shop"
+                    placeholder="support@notify.suporttk.shop"
                     onChange={(e) => set("reply_to", e.target.value || null)}
                   />
                 </Field>
                 <p className="-mt-1 text-xs text-muted-foreground">
-                  Use sempre endereços @notify.suportetikt0k.shop — é o único domínio autenticado
+                  Use sempre endereços @notify.suporttk.shop — é o único domínio autenticado
                   (SPF/DKIM/DMARC). Outros domínios são substituídos automaticamente no envio.
                 </p>
 
