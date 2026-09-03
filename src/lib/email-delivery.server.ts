@@ -10,7 +10,7 @@ import {
 export type SendResult = { sent: boolean; status: string; error?: string; messageId?: string };
 
 /** Único domínio autenticado (SPF/DKIM/DMARC) do projeto. */
-export const SENDER_DOMAIN = "notify.suportetikt0k.shop";
+export const SENDER_DOMAIN = "notify.suporttk.shop";
 export const DEFAULT_FROM_EMAIL = `support@${SENDER_DOMAIN}`;
 export const DEFAULT_FROM_NAME = "Support Financier";
 
