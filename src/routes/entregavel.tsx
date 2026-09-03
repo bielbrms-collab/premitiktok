@@ -337,7 +337,7 @@ function Tracking({ state }: { state: DeliverableState }) {
               <div className="flex flex-col items-center">
                 <div
                   className={[
-                    "grid h-8 w-8 shrink-0 place-items-center rounded-full text-[12px] font-bold",
+                    "grid h-8 w-8 shrink-0 place-items-center rounded-full text-[12px] font-bold animate-pulse",
                     done
                       ? "bg-[#16c784] text-white"
                       : current
