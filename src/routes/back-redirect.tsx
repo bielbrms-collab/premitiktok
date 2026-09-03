@@ -145,7 +145,7 @@ function BackRedirect() {
             initialEmail={buyerEmail || undefined}
             autoStart={Boolean(buyerEmail)}
             showSummary={false}
-            returnPath="/obrigado"
+            returnPath="/up1"
             className="w-full !p-0 !shadow-none"
           />
         )}
