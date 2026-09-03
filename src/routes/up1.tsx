@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { DEFAULT_PRODUCT_ID } from "@/lib/checkout-config";
+import { DEFAULT_PRODUCT_ID, UP1_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
 import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
-import { buildTrackedCheckoutUrl } from "@/lib/tiktok-attribution";
+import { CooudCheckout } from "@/components/CooudCheckout";
+import { getStoredBuyerEmail } from "@/lib/buyer-email";
 
 declare global {
   interface Window {
@@ -41,6 +42,8 @@ export const Route = createFileRoute("/up1")({
 
 function Up1Page() {
   const upsellContainerRef = useRef<HTMLDivElement>(null);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [buyerEmail, setBuyerEmail] = useState("");
 
   useTikTokPurchase({ productId: DEFAULT_PRODUCT_ID });
 
