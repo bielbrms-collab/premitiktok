@@ -30,7 +30,7 @@ export type TikTokPurchaseInput = {
 
 export async function sendTikTokPurchase(input: TikTokPurchaseInput) {
   const token = process.env["TIKTOK_ACCESS_TOKEN"];
-  const pixelId = process.env["TIKTOK_PIXEL_ID"] ?? "D4N12F3C77UCJ0N6NBQ0";
+  const pixelId = process.env["TIKTOK_PIXEL_ID"] ?? "DACEIIJC77UES974F4Q0";
   if (!token) {
     console.warn("[TikTok CAPI] TIKTOK_ACCESS_TOKEN ausente — evento não enviado");
     return { ok: false, reason: "missing_token" as const };
