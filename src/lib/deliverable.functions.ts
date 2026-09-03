@@ -8,20 +8,11 @@ const inputSchema = z.object({
   productId: z.string().max(100).optional(),
 });
 
-function madridDayKey(date: Date) {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Europe/Madrid",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
-}
+// Ogni step dura esattamente 24 ore a partire dall'orario di acquisto (fuso Europe/Rome).
+const DAY_MS = 24 * 60 * 60 * 1000;
 
-function daysBetweenMadrid(from: Date, to: Date) {
-  const [fy, fm, fd] = madridDayKey(from).split("-").map(Number);
-  const [ty, tm, td] = madridDayKey(to).split("-").map(Number);
-  const diff = Date.UTC(ty!, tm! - 1, td!) - Date.UTC(fy!, fm! - 1, fd!);
-  return Math.floor(diff / 86400000);
+function elapsedDays(from: Date, to: Date) {
+  return Math.floor((to.getTime() - from.getTime()) / DAY_MS);
 }
 
 function buildState(row: {
@@ -32,7 +23,7 @@ function buildState(row: {
   currency: string | null;
 }): DeliverableState {
   const purchasedAt = new Date(row.purchased_at);
-  let index = daysBetweenMadrid(purchasedAt, new Date());
+  let index = elapsedDays(purchasedAt, new Date());
   if (index < 0) index = 0;
   if (index > TOTAL_DAYS - 1) index = TOTAL_DAYS - 1;
   const day = index + 1;
