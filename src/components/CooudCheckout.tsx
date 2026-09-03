@@ -7,6 +7,10 @@ export interface CooudCheckoutProps {
   className?: string;
   showSummary?: boolean;
   returnPath?: string;
+  /** E-mail vindo do front; quando definido, o campo de e-mail some. */
+  initialEmail?: string;
+  /** Inicia a sessão de pagamento automaticamente (requer initialEmail). */
+  autoStart?: boolean;
 }
 
 type CheckoutBootstrap = {
