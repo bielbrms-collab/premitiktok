@@ -29,6 +29,9 @@ type CooudElements = {
     appearance?: { theme?: "auto" | "light" | "dark" };
     apiBaseUrl: string;
     compatDate: string;
+    locale: string;
+    customerEmail: string;
+    customerCountry: string;
     onSuccess: () => void;
     onError: (error: { code?: string; message?: string }) => void;
   }) => () => void;
@@ -100,6 +103,9 @@ export function CooudCheckout({
         appearance: data.appearance?.appearance ?? { theme: "light" },
         apiBaseUrl: "https://api.cooud.com",
         compatDate: "2026-09-01",
+        locale: "it-IT",
+        customerEmail: email.trim(),
+        customerCountry: "IT",
         onSuccess: () => {
           const successUrl = new URL(returnPath, window.location.origin);
           successUrl.searchParams.set("checkout_session_id", data.sessionId);
