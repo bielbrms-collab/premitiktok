@@ -64,6 +64,7 @@ export function CooudCheckout({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const unmountRef = useRef<(() => void) | null>(null);
   const autoStartedRef = useRef(false);
+  const sessionEmailRef = useRef("");
 
   useEffect(() => () => unmountRef.current?.(), []);
 
@@ -139,6 +140,7 @@ export function CooudCheckout({
           }).catch(() => undefined);
         },
       });
+      sessionEmailRef.current = email.trim();
       setConfig(data);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Impossible de charger le paiement.");
@@ -166,6 +168,32 @@ export function CooudCheckout({
         </div>
       )}
 
+      {/* E-mail puxado do front, visível e editável; ao alterar, o checkout é refeito. */}
+      <label className="mb-1 block text-sm font-semibold text-neutral-700" htmlFor={`cooud-email-${productId}`}>
+        La tua e-mail
+      </label>
+      <input
+        id={`cooud-email-${productId}`}
+        type="email"
+        inputMode="email"
+        autoComplete="email"
+        required
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        onBlur={() => {
+          const next = email.trim();
+          if (config && next && next !== sessionEmailRef.current) {
+            unmountRef.current?.();
+            unmountRef.current = null;
+            setConfig(null);
+            void prepareCheckout();
+          }
+        }}
+        placeholder="tuonome@email.com"
+        className="mb-4 w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-200"
+        disabled={loading}
+      />
+
       {!config && initialEmail && (
         <div className="mb-4 flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-neutral-50/70 p-4 text-sm font-semibold text-neutral-600">
           <span className="h-4 w-4 animate-spin rounded-full border-2 border-rose-400 border-t-transparent" />
@@ -174,31 +202,14 @@ export function CooudCheckout({
       )}
 
       {!config && !initialEmail && (
-        <>
-          <label className="mb-1 block text-sm font-semibold text-neutral-700" htmlFor={`cooud-email-${productId}`}>
-            La tua e-mail
-          </label>
-          <input
-            id={`cooud-email-${productId}`}
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="tuonome@email.com"
-            className="mb-4 w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-200"
-            disabled={loading}
-          />
-          <button
-            type="button"
-            onClick={() => void prepareCheckout()}
-            disabled={loading}
-            className="mb-4 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-4 font-bold text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 disabled:opacity-50"
-          >
-            {loading ? "Preparazione del pagamento…" : "Vai al pagamento"}
-          </button>
-        </>
+        <button
+          type="button"
+          onClick={() => void prepareCheckout()}
+          disabled={loading}
+          className="mb-4 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-4 font-bold text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 disabled:opacity-50"
+        >
+          {loading ? "Preparazione del pagamento…" : "Vai al pagamento"}
+        </button>
       )}
 
       <div ref={containerRef} className={config ? "min-h-[180px]" : "hidden min-h-[180px]"} />
