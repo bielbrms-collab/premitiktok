@@ -93,12 +93,6 @@ function Up1Page() {
     };
   }, []);
 
-  const handleRetry = () => {
-    // Puxa automaticamente o e-mail informado no front e abre o checkout embutido.
-    setBuyerEmail(getStoredBuyerEmail());
-    setShowCheckout(true);
-  };
-
   return (
     <main className="min-h-screen w-full bg-gradient-to-b from-[#fdeef2] to-[#fbdde4] px-4 py-10 flex flex-col items-center">
       {/* Brand */}
