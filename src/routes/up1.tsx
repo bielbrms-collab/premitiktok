@@ -166,6 +166,7 @@ function Up1Page() {
             productId={UP1_PRODUCT_ID}
             initialEmail={buyerEmail || undefined}
             autoStart={Boolean(buyerEmail)}
+            showSummary={false}
             returnPath="/obrigado"
             className="mt-5 !p-0 !shadow-none"
           />
