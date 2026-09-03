@@ -64,6 +64,7 @@ export function CooudCheckout({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const unmountRef = useRef<(() => void) | null>(null);
   const autoStartedRef = useRef(false);
+  const sessionEmailRef = useRef("");
 
   useEffect(() => () => unmountRef.current?.(), []);
 
@@ -139,6 +140,7 @@ export function CooudCheckout({
           }).catch(() => undefined);
         },
       });
+      sessionEmailRef.current = email.trim();
       setConfig(data);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Impossible de charger le paiement.");
