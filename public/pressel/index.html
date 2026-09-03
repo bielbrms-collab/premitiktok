@@ -1245,4 +1245,152 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <!-- Back-redirect: implementado em js/main.js (apenas na tela #nine) -->
 
 
+
+<script>
+  (function () {
+    var PRODUCT_ID = "01KZ7W13DD2MVBGG66NPG9EA9T";
+    var RETURN_PATH = "/up1";
+    var AMOUNT_LABEL = "22,90 \u20AC";
+    var scriptPromise = null;
+
+    function loadElements() {
+      if (scriptPromise) return scriptPromise;
+      scriptPromise = new Promise(function (resolve, reject) {
+        if (window.__CooudElements__) return resolve(window.__CooudElements__);
+        var s = document.createElement("script");
+        s.src = "https://cdn.cooud.com/cdn/elements/v1.js";
+        s.async = true;
+        s.onload = function () {
+          window.__CooudElements__
+            ? resolve(window.__CooudElements__)
+            : reject(new Error("Il modulo di pagamento non si \u00E8 inizializzato."));
+        };
+        s.onerror = function () { reject(new Error("Impossibile caricare il modulo di pagamento.")); };
+        document.head.appendChild(s);
+      });
+      return scriptPromise;
+    }
+
+    function italianize(container) {
+      function apply() {
+        var btn = container.querySelector("button[type=submit]");
+        if (!btn) return;
+        var txt = (btn.textContent || "").trim();
+        if (txt === "Pay") btn.textContent = "Paga " + AMOUNT_LABEL;
+        else if (txt === "Loading payment...") btn.textContent = "Caricamento del pagamento\u2026";
+        else if (txt === "Processing...") btn.textContent = "Elaborazione in corso\u2026";
+      }
+      apply();
+      new MutationObserver(apply).observe(container, { childList: true, subtree: true, characterData: true });
+    }
+
+    function init() {
+      var emailInput = document.getElementById("cooud-email");
+      var startBtn = document.getElementById("cooud-start");
+      var elementsBox = document.getElementById("cooud-elements");
+      var errorBox = document.getElementById("cooud-error");
+      if (!emailInput || !startBtn || !elementsBox) return;
+
+      var prefill = document.getElementById("pago-correo");
+      if (prefill && prefill.textContent && prefill.textContent.indexOf("@") > -1) {
+        emailInput.value = prefill.textContent.trim();
+      }
+
+      function showError(message) {
+        errorBox.textContent = message;
+        errorBox.style.display = message ? "block" : "none";
+      }
+
+      var busy = false;
+      startBtn.addEventListener("click", function () {
+        var email = (emailInput.value || "").trim();
+        if (busy) return;
+        if (!email || email.indexOf("@") < 1) {
+          showError("Inserisci un indirizzo e-mail valido per continuare.");
+          return;
+        }
+        busy = true;
+        showError("");
+        startBtn.disabled = true;
+        var label = startBtn.querySelector(".btn-continuar-text");
+        if (label) label.textContent = "Preparazione del pagamento\u2026";
+
+        fetch("/api/public/cooud/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            productId: PRODUCT_ID,
+            buyerEmail: email,
+            quantity: 1,
+            origin: window.location.origin,
+            returnPath: RETURN_PATH
+          })
+        })
+          .then(function (response) {
+            return response.text().then(function (raw) {
+              var data = {};
+              try { data = JSON.parse(raw); } catch (e) {}
+              if (!response.ok) {
+                var detail = (data.details && data.details.message) || data.message;
+                throw new Error(detail || "Impossibile avviare il pagamento. Riprova tra qualche istante.");
+              }
+              return data;
+            });
+          })
+          .then(function (data) {
+            return loadElements().then(function (cooud) {
+              elementsBox.style.display = "block";
+              startBtn.style.display = "none";
+              emailInput.setAttribute("readonly", "readonly");
+              cooud.mount({
+                container: elementsBox,
+                sessionId: data.sessionId,
+                elementToken: data.elementToken,
+                sessionSecret: data.sessionSecret,
+                appearance: { theme: "light" },
+                apiBaseUrl: "https://api.cooud.com",
+                compatDate: "2026-09-01",
+                locale: "it-IT",
+                customerEmail: email,
+                customerCountry: "IT",
+                onSuccess: function () {
+                  var url = new URL(RETURN_PATH, window.location.origin);
+                  url.searchParams.set("checkout_session_id", data.sessionId);
+                  url.searchParams.set("productId", PRODUCT_ID);
+                  url.searchParams.set("redirect_status", "succeeded");
+                  window.location.assign(url.toString());
+                },
+                onError: function (err) {
+                  showError((err && err.message) || "Impossibile elaborare il pagamento. Verifica i dati della carta.");
+                  fetch("/api/public/cooud/payment-event", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      productId: PRODUCT_ID,
+                      sessionId: data.sessionId,
+                      code: err && err.code,
+                      message: err && err.message
+                    })
+                  }).catch(function () {});
+                }
+              });
+              italianize(elementsBox);
+            });
+          })
+          .catch(function (err) {
+            showError((err && err.message) || "Impossibile avviare il pagamento.");
+            startBtn.disabled = false;
+            startBtn.style.display = "";
+            if (label) label.textContent = "Vai al pagamento";
+          })
+          .finally(function () { busy = false; });
+      });
+    }
+
+    document.readyState === "loading"
+      ? document.addEventListener("DOMContentLoaded", init)
+      : init();
+  })();
+</script>
+
 </body></html>
