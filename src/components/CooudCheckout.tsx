@@ -204,7 +204,7 @@ export function CooudCheckout({
       <div ref={containerRef} className={config ? "min-h-[180px]" : "hidden min-h-[180px]"} />
       {error && <p className="mt-3 text-sm font-medium text-rose-600" role="alert">{error}</p>}
       <p className="mt-4 text-center text-[11px] leading-snug text-neutral-400">
-        Paiement sécurisé traité par Cooud. Vos données bancaires ne transitent jamais par nos serveurs.
+        Pagamento sicuro elaborato da Cooud. I dati della tua carta non passano mai dai nostri server.
       </p>
     </section>
   );
