@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import tiktokLogo from "@/assets/tiktok-logo-clean.png.asset.json";
-import { buildTrackedCheckoutUrl } from "@/lib/tiktok-attribution";
-
-const VENDEPAY_BACK_REDIRECT_URL = "https://checkout.vendepay.com/ccef6ae4-dd83-44ef-a06e-478eb843f7f2";
+import { BACK_REDIRECT_PRODUCT_ID } from "@/lib/checkout-config";
+import { CooudCheckout } from "@/components/CooudCheckout";
+import { getStoredBuyerEmail } from "@/lib/buyer-email";
 
 export const Route = createFileRoute("/back-redirect")({
   head: () => ({
@@ -37,9 +37,13 @@ function BackRedirect() {
   const [step, setStep] = useState(0);
   const [showOffer, setShowOffer] = useState(false);
   const [seconds, setSeconds] = useState(300);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [buyerEmail, setBuyerEmail] = useState("");
 
   const handleCta = () => {
-    window.location.href = buildTrackedCheckoutUrl(VENDEPAY_BACK_REDIRECT_URL);
+    // Puxa o e-mail do front e abre o checkout da Cooud embutido (sem redirecionar).
+    setBuyerEmail(getStoredBuyerEmail());
+    setShowCheckout(true);
   };
 
   useEffect(() => {
@@ -124,13 +128,27 @@ function BackRedirect() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={handleCta}
-          className="w-full rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-6 text-xl font-black uppercase tracking-tighter text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
-        >
-          Approfitta della mia riduzione + bonus
-        </button>
+        {!showCheckout && (
+          <button
+            type="button"
+            onClick={handleCta}
+            className="w-full rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-6 text-xl font-black uppercase tracking-tighter text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
+          >
+            Approfitta della mia riduzione + bonus
+          </button>
+        )}
+
+        {/* Checkout Cooud embutido — e-mail puxado do front, pagamento em euro */}
+        {showCheckout && (
+          <CooudCheckout
+            productId={BACK_REDIRECT_PRODUCT_ID}
+            initialEmail={buyerEmail || undefined}
+            autoStart={Boolean(buyerEmail)}
+            showSummary={false}
+            returnPath="/obrigado"
+            className="w-full !p-0 !shadow-none"
+          />
+        )}
       </section>
     </main>
   );
