@@ -128,13 +128,27 @@ function BackRedirect() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={handleCta}
-          className="w-full rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-6 text-xl font-black uppercase tracking-tighter text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
-        >
-          Approfitta della mia riduzione + bonus
-        </button>
+        {!showCheckout && (
+          <button
+            type="button"
+            onClick={handleCta}
+            className="w-full rounded-full bg-gradient-to-r from-rose-500 to-rose-600 py-6 text-xl font-black uppercase tracking-tighter text-white shadow-lg transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
+          >
+            Approfitta della mia riduzione + bonus
+          </button>
+        )}
+
+        {/* Checkout Cooud embutido — e-mail puxado do front, pagamento em euro */}
+        {showCheckout && (
+          <CooudCheckout
+            productId={BACK_REDIRECT_PRODUCT_ID}
+            initialEmail={buyerEmail || undefined}
+            autoStart={Boolean(buyerEmail)}
+            showSummary={false}
+            returnPath="/obrigado"
+            className="w-full !p-0 !shadow-none"
+          />
+        )}
       </section>
     </main>
   );
