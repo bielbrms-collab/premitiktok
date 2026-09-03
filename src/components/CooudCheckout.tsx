@@ -147,6 +147,14 @@ export function CooudCheckout({
     }
   }
 
+  // Quando o e-mail já vem do front, inicia o pagamento sem pedir nada.
+  useEffect(() => {
+    if (!autoStart || !initialEmail || autoStartedRef.current) return;
+    autoStartedRef.current = true;
+    void prepareCheckout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStart, initialEmail]);
+
   return (
     <section className={`rounded-3xl bg-white p-5 text-left shadow-xl sm:p-6 ${className ?? ""}`}>
       {showSummary && config && (
