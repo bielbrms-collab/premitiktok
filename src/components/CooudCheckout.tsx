@@ -54,13 +54,16 @@ export function CooudCheckout({
   className,
   showSummary = true,
   returnPath = "/obrigado",
+  initialEmail,
+  autoStart = false,
 }: CooudCheckoutProps) {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(initialEmail ?? "");
   const [config, setConfig] = useState<CheckoutBootstrap | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const unmountRef = useRef<(() => void) | null>(null);
+  const autoStartedRef = useRef(false);
 
   useEffect(() => () => unmountRef.current?.(), []);
 
