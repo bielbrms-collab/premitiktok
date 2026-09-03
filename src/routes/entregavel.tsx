@@ -306,6 +306,10 @@ function Tracking({ state }: { state: DeliverableState }) {
           Giorno {state.day} di {state.totalDays}
         </div>
         <p className="mt-2 text-[14.5px] leading-relaxed text-neutral-700">{PHRASES[index]}</p>
+        <p className="mt-2 text-[13.5px] leading-relaxed font-semibold text-neutral-600">
+          Massimo 4 giorni lavorativi affinché il tuo pagamento venga completato e accreditato sul
+          tuo conto.
+        </p>
       </div>
 
       {state.released && (
@@ -333,7 +337,7 @@ function Tracking({ state }: { state: DeliverableState }) {
               <div className="flex flex-col items-center">
                 <div
                   className={[
-                    "grid h-8 w-8 shrink-0 place-items-center rounded-full text-[12px] font-bold",
+                    "grid h-8 w-8 shrink-0 place-items-center rounded-full text-[12px] font-bold animate-pulse",
                     done
                       ? "bg-[#16c784] text-white"
                       : current
