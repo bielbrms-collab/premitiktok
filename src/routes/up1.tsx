@@ -87,7 +87,9 @@ function Up1Page() {
   }, []);
 
   const handleRetry = () => {
-    window.location.href = buildTrackedCheckoutUrl(VENDEPAY_UP1_CHECKOUT_URL);
+    // Puxa automaticamente o e-mail informado no front e abre o checkout embutido.
+    setBuyerEmail(getStoredBuyerEmail());
+    setShowCheckout(true);
   };
 
   return (
