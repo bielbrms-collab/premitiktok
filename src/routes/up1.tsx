@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { DEFAULT_PRODUCT_ID } from "@/lib/checkout-config";
+import { DEFAULT_PRODUCT_ID, UP1_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
 import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
-import { buildTrackedCheckoutUrl } from "@/lib/tiktok-attribution";
+import { CooudCheckout } from "@/components/CooudCheckout";
+import { getStoredBuyerEmail } from "@/lib/buyer-email";
 
 declare global {
   interface Window {
@@ -15,7 +16,7 @@ declare global {
   }
 }
 
-const VENDEPAY_UP1_CHECKOUT_URL = "https://checkout.vendepay.com/4babd630-7eb0-4dd2-972e-6f93f677b7bc";
+
 
 export const Route = createFileRoute("/up1")({
   head: () => ({
@@ -41,6 +42,8 @@ export const Route = createFileRoute("/up1")({
 
 function Up1Page() {
   const upsellContainerRef = useRef<HTMLDivElement>(null);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [buyerEmail, setBuyerEmail] = useState("");
 
   useTikTokPurchase({ productId: DEFAULT_PRODUCT_ID });
 
@@ -84,7 +87,9 @@ function Up1Page() {
   }, []);
 
   const handleRetry = () => {
-    window.location.href = buildTrackedCheckoutUrl(VENDEPAY_UP1_CHECKOUT_URL);
+    // Puxa automaticamente o e-mail informado no front e abre o checkout embutido.
+    setBuyerEmail(getStoredBuyerEmail());
+    setShowCheckout(true);
   };
 
   return (
@@ -155,25 +160,38 @@ function Up1Page() {
         </div>
 
         {/* CTA */}
-        <button
-          type="button"
-          onClick={handleRetry}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-rose-500/30 transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
-        >
-          Riprova
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-4 w-4"
+        {!showCheckout && (
+          <button
+            type="button"
+            onClick={handleRetry}
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-rose-500/30 transition-all hover:from-rose-600 hover:to-rose-700 active:scale-[0.99]"
           >
-            <line x1="5" y1="12" x2="19" y2="12" />
-            <polyline points="12 5 19 12 12 19" />
-          </svg>
-        </button>
+            Riprova
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-4 w-4"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </button>
+        )}
+
+        {/* Checkout Cooud embutido (mesma API do front) */}
+        {showCheckout && (
+          <CooudCheckout
+            productId={UP1_PRODUCT_ID}
+            initialEmail={buyerEmail || undefined}
+            autoStart={Boolean(buyerEmail)}
+            returnPath="/obrigado"
+            className="mt-5 !p-0 !shadow-none"
+          />
+        )}
 
         <a
           href="/entregavel"

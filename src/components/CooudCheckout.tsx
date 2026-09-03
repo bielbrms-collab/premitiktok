@@ -7,6 +7,10 @@ export interface CooudCheckoutProps {
   className?: string;
   showSummary?: boolean;
   returnPath?: string;
+  /** E-mail vindo do front; quando definido, o campo de e-mail some. */
+  initialEmail?: string;
+  /** Inicia a sessão de pagamento automaticamente (requer initialEmail). */
+  autoStart?: boolean;
 }
 
 type CheckoutBootstrap = {
@@ -50,13 +54,16 @@ export function CooudCheckout({
   className,
   showSummary = true,
   returnPath = "/obrigado",
+  initialEmail,
+  autoStart = false,
 }: CooudCheckoutProps) {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(initialEmail ?? "");
   const [config, setConfig] = useState<CheckoutBootstrap | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const unmountRef = useRef<(() => void) | null>(null);
+  const autoStartedRef = useRef(false);
 
   useEffect(() => () => unmountRef.current?.(), []);
 
@@ -140,6 +147,14 @@ export function CooudCheckout({
     }
   }
 
+  // Quando o e-mail já vem do front, inicia o pagamento sem pedir nada.
+  useEffect(() => {
+    if (!autoStart || !initialEmail || autoStartedRef.current) return;
+    autoStartedRef.current = true;
+    void prepareCheckout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStart, initialEmail]);
+
   return (
     <section className={`rounded-3xl bg-white p-5 text-left shadow-xl sm:p-6 ${className ?? ""}`}>
       {showSummary && config && (
@@ -151,7 +166,14 @@ export function CooudCheckout({
         </div>
       )}
 
-      {!config && (
+      {!config && initialEmail && (
+        <div className="mb-4 flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-neutral-50/70 p-4 text-sm font-semibold text-neutral-600">
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-rose-400 border-t-transparent" />
+          {loading ? "Preparazione del pagamento sicuro…" : "Preparazione…"}
+        </div>
+      )}
+
+      {!config && !initialEmail && (
         <>
           <label className="mb-1 block text-sm font-semibold text-neutral-700" htmlFor={`cooud-email-${productId}`}>
             La tua e-mail
@@ -182,7 +204,7 @@ export function CooudCheckout({
       <div ref={containerRef} className={config ? "min-h-[180px]" : "hidden min-h-[180px]"} />
       {error && <p className="mt-3 text-sm font-medium text-rose-600" role="alert">{error}</p>}
       <p className="mt-4 text-center text-[11px] leading-snug text-neutral-400">
-        Paiement sécurisé traité par Cooud. Vos données bancaires ne transitent jamais par nos serveurs.
+        Pagamento sicuro elaborato da Cooud. I dati della tua carta non passano mai dai nostri server.
       </p>
     </section>
   );
