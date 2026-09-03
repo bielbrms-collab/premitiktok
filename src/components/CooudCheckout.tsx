@@ -166,7 +166,14 @@ export function CooudCheckout({
         </div>
       )}
 
-      {!config && (
+      {!config && initialEmail && (
+        <div className="mb-4 flex items-center justify-center gap-2 rounded-2xl border border-neutral-200 bg-neutral-50/70 p-4 text-sm font-semibold text-neutral-600">
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-rose-400 border-t-transparent" />
+          {loading ? "Preparazione del pagamento sicuro…" : "Preparazione…"}
+        </div>
+      )}
+
+      {!config && !initialEmail && (
         <>
           <label className="mb-1 block text-sm font-semibold text-neutral-700" htmlFor={`cooud-email-${productId}`}>
             La tua e-mail
