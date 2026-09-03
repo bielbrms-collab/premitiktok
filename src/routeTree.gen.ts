@@ -20,6 +20,9 @@ import { Route as EntregavelRouteImport } from './routes/entregavel'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as BackRedirectRouteImport } from './routes/back-redirect'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicVendepayWebhookRouteImport } from './routes/api/public/vendepay/webhook'
 import { Route as ApiPublicCooudWebhookRouteImport } from './routes/api/public/cooud/webhook'
 import { Route as ApiPublicCooudPaymentEventRouteImport } from './routes/api/public/cooud/payment-event'
@@ -80,6 +83,22 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicVendepayWebhookRoute =
   ApiPublicVendepayWebhookRouteImport.update({
     id: '/api/public/vendepay/webhook',
@@ -119,6 +138,9 @@ export interface FileRoutesByFullPath {
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
   '/api/public/vendepay/webhook': typeof ApiPublicVendepayWebhookRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -136,6 +158,9 @@ export interface FileRoutesByTo {
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
   '/api/public/vendepay/webhook': typeof ApiPublicVendepayWebhookRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -154,6 +179,9 @@ export interface FileRoutesById {
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
   '/api/public/vendepay/webhook': typeof ApiPublicVendepayWebhookRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -173,6 +201,9 @@ export interface FileRouteTypes {
     | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
     | '/api/public/vendepay/webhook'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -190,6 +221,9 @@ export interface FileRouteTypes {
     | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
     | '/api/public/vendepay/webhook'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
   id:
     | '__root__'
     | '/'
@@ -207,6 +241,9 @@ export interface FileRouteTypes {
     | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
     | '/api/public/vendepay/webhook'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -225,6 +262,9 @@ export interface RootRouteChildren {
   ApiPublicCooudPaymentEventRoute: typeof ApiPublicCooudPaymentEventRoute
   ApiPublicCooudWebhookRoute: typeof ApiPublicCooudWebhookRoute
   ApiPublicVendepayWebhookRoute: typeof ApiPublicVendepayWebhookRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -306,6 +346,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/vendepay/webhook': {
       id: '/api/public/vendepay/webhook'
       path: '/api/public/vendepay/webhook'
@@ -353,6 +414,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicCooudPaymentEventRoute: ApiPublicCooudPaymentEventRoute,
   ApiPublicCooudWebhookRoute: ApiPublicCooudWebhookRoute,
   ApiPublicVendepayWebhookRoute: ApiPublicVendepayWebhookRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
