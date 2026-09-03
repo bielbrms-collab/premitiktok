@@ -99,7 +99,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://api.cooud.com" },
       { rel: "preconnect", href: "https://cdn.cooud.com" },
     ],
-    scripts: [{ children: TIKTOK_PIXEL_SNIPPET }],
+    scripts: [
+      { children: TIKTOK_PIXEL_SNIPPET },
+      { src: "https://cdn.cooud.com/pixel/DACEIIJC77UES974F4Q0.js", async: true },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
