@@ -23,7 +23,7 @@ function buildState(row: {
   currency: string | null;
 }): DeliverableState {
   const purchasedAt = new Date(row.purchased_at);
-  let index = daysBetweenMadrid(purchasedAt, new Date());
+  let index = elapsedDays(purchasedAt, new Date());
   if (index < 0) index = 0;
   if (index > TOTAL_DAYS - 1) index = TOTAL_DAYS - 1;
   const day = index + 1;
