@@ -1253,6 +1253,47 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     var AMOUNT_LABEL = "22,90 \u20AC";
     var scriptPromise = null;
 
+    // Força o Payment Element do Stripe para italiano e Itália como país padrão,
+    // independente do idioma do navegador do visitante.
+    (function patchStripeForItaly() {
+      var realStripe;
+      try {
+        Object.defineProperty(window, "Stripe", {
+          configurable: true,
+          get: function () { return realStripe; },
+          set: function (fn) {
+            realStripe = function (key, opts) {
+              var stripe = fn(key, opts);
+              var origElements = stripe.elements.bind(stripe);
+              stripe.elements = function (eopts) {
+                eopts = eopts || {};
+                if (!eopts.locale) eopts.locale = "it";
+                var elements = origElements(eopts);
+                var origCreate = elements.create.bind(elements);
+                elements.create = function (type, popts) {
+                  if (type === "payment") {
+                    popts = popts || {};
+                    var dv = popts.defaultValues || {};
+                    var bd = dv.billingDetails || {};
+                    var addr = bd.address || {};
+                    popts.defaultValues = Object.assign({}, dv, {
+                      billingDetails: Object.assign({}, bd, {
+                        address: Object.assign({}, addr, { country: "IT" })
+                      })
+                    });
+                  }
+                  return origCreate(type, popts);
+                };
+                return elements;
+              };
+              return stripe;
+            };
+            Object.keys(fn).forEach(function (k) { realStripe[k] = fn[k]; });
+          }
+        });
+      } catch (e) {}
+    })();
+
     function loadElements() {
       if (scriptPromise) return scriptPromise;
       scriptPromise = new Promise(function (resolve, reject) {
