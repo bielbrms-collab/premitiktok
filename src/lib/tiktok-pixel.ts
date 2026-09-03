@@ -2,7 +2,7 @@
  * TikTok Pixel — carregado em todas as páginas da oferta.
  * O snippet abaixo é o oficial da TikTok, injetado inline no <head>.
  */
-export const TIKTOK_PIXEL_ID = "D4N12F3C77UCJ0N6NBQ0";
+export const TIKTOK_PIXEL_ID = "DACEIIJC77UES974F4Q0";
 
 export const TIKTOK_PIXEL_SNIPPET = `
 !function (w, d, t) {
