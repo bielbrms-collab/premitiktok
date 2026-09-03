@@ -68,7 +68,7 @@ function Checkout() {
           </p>
           <p className="mb-1 text-4xl font-black tracking-tight">1.395,72 €</p>
           <p className="text-sm text-neutral-400">
-            Spese rimborsabili: <span className="font-medium text-white">22,90 €</span>
+            Spese rimborsabili: <span className="font-medium text-white">32,90 €</span>
           </p>
         </div>
 
@@ -117,7 +117,7 @@ function Checkout() {
             <div className="flex items-center justify-between pt-1">
               <span className="text-sm text-neutral-500">Spese di sicurezza</span>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-neutral-900">22,90 €</span>
+                <span className="text-sm font-bold text-neutral-900">32,90 €</span>
                 <span className="rounded-md bg-rose-500 px-2 py-0.5 text-[10px] font-bold uppercase text-white">
                   Rimborsabile
                 </span>
