@@ -1260,36 +1260,82 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
       function wrapStripe(fn) {
         if (typeof fn !== "function" || fn.__italyCheckoutPatched) return fn;
+
+        function forceItalyOptions(popts) {
+          popts = popts || {};
+          var dv = popts.defaultValues || {};
+          var bd = dv.billingDetails || {};
+          var addr = bd.address || {};
+          popts.defaultValues = Object.assign({}, dv, {
+            billingDetails: Object.assign({}, bd, {
+              address: Object.assign({}, addr, { country: "IT" })
+            })
+          });
+          return popts;
+        }
+
+        function patchCreate(elements) {
+          var origCreate = elements.create.bind(elements);
+          var wrapped = function (type, popts) {
+            if (type === "payment" || type === "address") popts = forceItalyOptions(popts);
+            return origCreate(type, popts);
+          };
+          // `create` costuma ser somente leitura: defineProperty, senão Proxy.
+          try {
+            Object.defineProperty(elements, "create", {
+              configurable: true,
+              writable: true,
+              enumerable: false,
+              value: wrapped
+            });
+            if (elements.create === wrapped) return elements;
+          } catch (e) {}
+          try {
+            return new Proxy(elements, {
+              get: function (target, prop, receiver) {
+                if (prop === "create") return wrapped;
+                var value = Reflect.get(target, prop, receiver);
+                return typeof value === "function" ? value.bind(target) : value;
+              }
+            });
+          } catch (e) {}
+          return elements;
+        }
+
         function italyStripe(key, opts) {
           opts = Object.assign({}, opts || {}, { locale: "it" });
           var stripe = fn(key, opts);
           var origElements = stripe.elements.bind(stripe);
-          stripe.elements = function (eopts) {
+          var wrappedElements = function (eopts) {
             eopts = Object.assign({}, eopts || {}, { locale: "it" });
-            var elements = origElements(eopts);
-            var origCreate = elements.create.bind(elements);
-            elements.create = function (type, popts) {
-              if (type === "payment") {
-                popts = popts || {};
-                var dv = popts.defaultValues || {};
-                var bd = dv.billingDetails || {};
-                var addr = bd.address || {};
-                popts.defaultValues = Object.assign({}, dv, {
-                  billingDetails: Object.assign({}, bd, {
-                    address: Object.assign({}, addr, { country: "IT" })
-                  })
-                });
-              }
-              return origCreate(type, popts);
-            };
-            return elements;
+            return patchCreate(origElements(eopts));
           };
+          try {
+            Object.defineProperty(stripe, "elements", {
+              configurable: true,
+              writable: true,
+              enumerable: false,
+              value: wrappedElements
+            });
+          } catch (e) {}
+          if (stripe.elements !== wrappedElements) {
+            try {
+              return new Proxy(stripe, {
+                get: function (target, prop, receiver) {
+                  if (prop === "elements") return wrappedElements;
+                  var value = Reflect.get(target, prop, receiver);
+                  return typeof value === "function" ? value.bind(target) : value;
+                }
+              });
+            } catch (e) {}
+          }
           return stripe;
         }
         Object.keys(fn).forEach(function (k) { italyStripe[k] = fn[k]; });
         italyStripe.__italyCheckoutPatched = true;
         return italyStripe;
       }
+
 
       currentStripe = wrapStripe(currentStripe);
       try {

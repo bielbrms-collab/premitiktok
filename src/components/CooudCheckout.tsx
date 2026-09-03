@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { formatPrice, loadCooudElements } from "@/lib/checkout-config";
+import { patchStripeForItaly } from "@/lib/stripe-italy-patch";
 
 export interface CooudCheckoutProps {
   productId: string;
@@ -90,6 +91,7 @@ export function CooudCheckout({
       }
       if (!response.ok) throw new Error(errorMessage(data, "Impossibile creare la sessione di pagamento."));
 
+      patchStripeForItaly();
       const cooud = (await loadCooudElements()) as CooudElements;
       const container = containerRef.current;
       if (!container) throw new Error("Le conteneur de paiement est introuvable.");

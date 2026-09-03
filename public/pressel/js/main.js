@@ -1685,8 +1685,73 @@ document.addEventListener("DOMContentLoaded", function () {
   var cooudStarted = false;
   var unmountCooud = null;
 
+
+  // Força italiano e Itália como país padrão no Payment Element do Stripe.
+  function patchStripeForItaly() {
+    if (window.__italyStripeHookInstalled) return;
+    window.__italyStripeHookInstalled = true;
+    function forceItaly(popts) {
+      popts = popts || {};
+      var dv = popts.defaultValues || {};
+      var bd = dv.billingDetails || {};
+      var addr = bd.address || {};
+      popts.defaultValues = Object.assign({}, dv, {
+        billingDetails: Object.assign({}, bd, {
+          address: Object.assign({}, addr, { country: "IT" })
+        })
+      });
+      return popts;
+    }
+    function swap(target, prop, replacement) {
+      try {
+        Object.defineProperty(target, prop, {
+          configurable: true, writable: true, enumerable: false, value: replacement
+        });
+        if (target[prop] === replacement) return target;
+      } catch (e) {}
+      try {
+        return new Proxy(target, {
+          get: function (obj, key, receiver) {
+            if (key === prop) return replacement;
+            var value = Reflect.get(obj, key, receiver);
+            return typeof value === "function" ? value.bind(obj) : value;
+          }
+        });
+      } catch (e) {}
+      return target;
+    }
+    function wrap(fn) {
+      if (typeof fn !== "function" || fn.__italyCheckoutPatched) return fn;
+      function italyStripe(key, opts) {
+        var stripe = fn(key, Object.assign({}, opts || {}, { locale: "it" }));
+        var origElements = stripe.elements.bind(stripe);
+        var elementsFn = function (eopts) {
+          var elements = origElements(Object.assign({}, eopts || {}, { locale: "it" }));
+          var origCreate = elements.create.bind(elements);
+          var createFn = function (type, popts) {
+            return origCreate(type, (type === "payment" || type === "address") ? forceItaly(popts) : popts);
+          };
+          return swap(elements, "create", createFn);
+        };
+        return swap(stripe, "elements", elementsFn);
+      }
+      Object.keys(fn).forEach(function (k) { try { italyStripe[k] = fn[k]; } catch (e) {} });
+      italyStripe.__italyCheckoutPatched = true;
+      return italyStripe;
+    }
+    var current = wrap(window.Stripe);
+    try {
+      Object.defineProperty(window, "Stripe", {
+        configurable: true,
+        get: function () { return current; },
+        set: function (fn) { current = wrap(fn); }
+      });
+    } catch (e) {}
+  }
+
   function loadCooudElements() {
     if (window.__CooudElements__) return Promise.resolve(window.__CooudElements__);
+    patchStripeForItaly();
     return new Promise(function (resolve, reject) {
       var existing = document.querySelector("script[data-cooud-elements]");
       if (existing) {
