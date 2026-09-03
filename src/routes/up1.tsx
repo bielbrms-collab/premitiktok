@@ -45,6 +45,13 @@ function Up1Page() {
   const [showCheckout, setShowCheckout] = useState(false);
   const [buyerEmail, setBuyerEmail] = useState("");
 
+  // Assim que a pessoa chega do front, puxa o e-mail salvo e abre
+  // automaticamente o checkout da Cooud (mesma API do front).
+  useEffect(() => {
+    setBuyerEmail(getStoredBuyerEmail());
+    setShowCheckout(true);
+  }, []);
+
   useTikTokPurchase({ productId: DEFAULT_PRODUCT_ID });
 
   // Registra l'acquisto del front (P1) non appena il pagamento è confermato,
