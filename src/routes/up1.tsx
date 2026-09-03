@@ -167,7 +167,7 @@ function Up1Page() {
             initialEmail={buyerEmail || undefined}
             autoStart={Boolean(buyerEmail)}
             showSummary={false}
-            returnPath="/obrigado"
+            returnPath="/entregavel"
             className="mt-5 !p-0 !shadow-none"
           />
         )}
