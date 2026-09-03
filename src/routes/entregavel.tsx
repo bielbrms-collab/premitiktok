@@ -306,6 +306,10 @@ function Tracking({ state }: { state: DeliverableState }) {
           Giorno {state.day} di {state.totalDays}
         </div>
         <p className="mt-2 text-[14.5px] leading-relaxed text-neutral-700">{PHRASES[index]}</p>
+        <p className="mt-2 text-[13.5px] leading-relaxed font-semibold text-neutral-600">
+          Massimo 4 giorni lavorativi affinché il tuo pagamento venga completato e accreditato sul
+          tuo conto.
+        </p>
       </div>
 
       {state.released && (
