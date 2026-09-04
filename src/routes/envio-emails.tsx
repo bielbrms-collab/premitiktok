@@ -59,7 +59,7 @@ const EMPTY: Draft = {
   heading: "Il tuo accesso personale è pronto",
   intro: "Ciao {{nome}}, puoi consultare la tua area personale dal link qui sotto.",
   body_text:
-    "Questo messaggio conferma l'accesso richiesto tramite il nostro sito.\n\nConserva questa email per ritrovare facilmente la tua area personale.\n\nPer qualsiasi domanda, rispondi direttamente a questo messaggio.",
+    "La tua pratica è stata presa in carico dal nostro team e risulta ora in lavorazione.\n\nNella tua area personale puoi consultare lo stato aggiornato della richiesta, con un nuovo aggiornamento ogni 24 ore.\n\nTempo stimato: massimo 4 giorni lavorativi affinché il pagamento venga completato e accreditato sul tuo conto.\n\nSe hai bisogno di assistenza, rispondi direttamente a questa email: siamo qui per aiutarti.",
   button_label: "Accedi alla mia area",
   deliverable_url: "https://premitiktok.lovable.app/entregavel",
   fallback_note: "",
