@@ -115,7 +115,8 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
               obj && typeof obj === "object"
                 ? ((obj as Record<string, unknown>)[key] as string | undefined)
                 : undefined;
-            const customer = data["customer"] ?? data["buyer"] ?? data["billing_details"];
+            const customer =
+              data["user"] ?? data["customer"] ?? data["buyer"] ?? data["billing_details"];
             const email =
               pick("customer_email", "buyer_email", "email", "receipt_email") ??
               (typeof nested(customer, "email") === "string" ? nested(customer, "email")!.trim() : null);
@@ -123,8 +124,17 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
               pick("customer_name", "buyer_name", "name") ??
               (typeof nested(customer, "name") === "string" ? nested(customer, "name")!.trim() : null);
 
-            const amount = typeof data["amount"] === "number" ? (data["amount"] as number) : null;
-            const currency = typeof data["currency"] === "string" ? (data["currency"] as string) : "EUR";
+            const rawAmount =
+              typeof data["amount"] === "number"
+                ? (data["amount"] as number)
+                : typeof data["total_amount"] === "number"
+                  ? (data["total_amount"] as number)
+                  : null;
+            const amount = rawAmount;
+            const currency =
+              typeof data["currency"] === "string"
+                ? (data["currency"] as string).toUpperCase()
+                : "EUR";
             const match = Object.entries(PRODUCTS).find(
               ([, p]) => p.amount === amount && p.currency === currency,
             );
