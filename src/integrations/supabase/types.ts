@@ -53,6 +53,8 @@ export type Database = {
           created_at: string
           error_message: string | null
           id: string
+          last_opened_at: string | null
+          open_count: number
           product_id: string | null
           recipient_email: string | null
           recipient_name: string | null
@@ -68,6 +70,8 @@ export type Database = {
           created_at?: string
           error_message?: string | null
           id?: string
+          last_opened_at?: string | null
+          open_count?: number
           product_id?: string | null
           recipient_email?: string | null
           recipient_name?: string | null
@@ -83,6 +87,8 @@ export type Database = {
           created_at?: string
           error_message?: string | null
           id?: string
+          last_opened_at?: string | null
+          open_count?: number
           product_id?: string | null
           recipient_email?: string | null
           recipient_name?: string | null

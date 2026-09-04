@@ -35,6 +35,8 @@ export type EmailDelivery = {
   attempts: number;
   sent_at: string | null;
   created_at: string;
+  open_count?: number | null;
+  last_opened_at?: string | null;
 };
 
 export type EmailVars = {
@@ -103,7 +105,11 @@ export function renderEmailText(tpl: EmailTemplate, vars: EmailVars = {}): strin
 }
 
 /** HTML compatível com clients de e-mail (tabelas, estilos inline, responsivo). */
-export function renderEmailHtml(tpl: EmailTemplate, vars: EmailVars = {}): string {
+export function renderEmailHtml(
+  tpl: EmailTemplate,
+  vars: EmailVars = {},
+  opts: { trackingUrl?: string } = {},
+): string {
   const accent = /^#[0-9a-fA-F]{3,8}$/.test(tpl.accent_color) ? tpl.accent_color : "#334155";
   const url = escapeHtml(tpl.deliverable_url);
 
@@ -158,6 +164,11 @@ export function renderEmailHtml(tpl: EmailTemplate, vars: EmailVars = {}): strin
     )}<br />${escapeHtml(tpl.reply_to || tpl.from_email)}</p>
   </td></tr>
 </table>
+${
+  opts.trackingUrl
+    ? `<img src="${escapeHtml(opts.trackingUrl)}" width="1" height="1" alt="" style="display:block;width:1px;height:1px;border:0;opacity:0;" />`
+    : ""
+}
 </body>
 </html>`;
 }

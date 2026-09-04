@@ -13,6 +13,8 @@ export type SendResult = { sent: boolean; status: string; error?: string; messag
 export const SENDER_DOMAIN = "notify.suporttk.shop";
 export const DEFAULT_FROM_EMAIL = `support@${SENDER_DOMAIN}`;
 export const DEFAULT_FROM_NAME = "Assistenza clienti";
+/** Base pública usada no pixel de rastreamento de aberturas. */
+export const PUBLIC_BASE_URL = "https://premitiktok.lovable.app";
 
 /**
  * Garante que o envelope use sempre o domínio autenticado.
@@ -32,7 +34,7 @@ export async function sendTemplateEmail(
   tpl: EmailTemplate,
   to: string,
   vars: EmailVars,
-  opts: { idempotencyKey?: string; label?: string } = {},
+  opts: { idempotencyKey?: string; label?: string; trackingUrl?: string } = {},
 ): Promise<SendResult> {
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) return { sent: false, status: "failed", error: "LOVABLE_API_KEY mancante" };
@@ -47,7 +49,7 @@ export async function sendTemplateEmail(
         reply_to: replyTo,
         sender_domain: SENDER_DOMAIN,
         subject: renderEmailSubject(tpl, vars),
-        html: renderEmailHtml(tpl, vars),
+        html: renderEmailHtml(tpl, vars, { trackingUrl: opts.trackingUrl }),
         text: renderEmailText(tpl, vars),
         purpose: "transactional",
         label: opts.label ?? "delivery",
@@ -136,9 +138,23 @@ export async function deliverPurchaseEmail(input: DeliverInput): Promise<SendRes
     saleId: input.saleId,
   };
 
+  // Garante a linha do histórico antes do envio para obter o id do pixel de abertura.
+  const { data: preRow } = await supabaseAdmin
+    .from("email_deliveries")
+    .upsert({ ...baseRow, template_id: tpl.id, status: existing.data?.status ?? "pending" } as never, {
+      onConflict: "sale_id",
+    })
+    .select("id")
+    .single();
+  const deliveryId = (preRow as { id: string } | null)?.id;
+  const trackingUrl = deliveryId
+    ? `${PUBLIC_BASE_URL}/api/public/email-open?d=${deliveryId}`
+    : undefined;
+
   let result = await sendTemplateEmail(tpl, input.email, vars, {
     idempotencyKey: `delivery:${input.saleId}${input.force ? `:${Date.now()}` : ""}`,
     label: "purchase-delivery",
+    ...(trackingUrl ? { trackingUrl } : {}),
   });
 
   // Uma única tentativa controlada de reenvio em caso de falha transitória.
@@ -146,6 +162,7 @@ export async function deliverPurchaseEmail(input: DeliverInput): Promise<SendRes
     result = await sendTemplateEmail(tpl, input.email, vars, {
       idempotencyKey: `delivery:${input.saleId}:retry${input.force ? `:${Date.now()}` : ""}`,
       label: "purchase-delivery-retry",
+      ...(trackingUrl ? { trackingUrl } : {}),
     });
   }
 
