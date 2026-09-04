@@ -376,6 +376,7 @@ function EnvioEmailsPage() {
                     <th className="p-3">Venda</th>
                     <th className="p-3">Status</th>
                     <th className="p-3">Erro</th>
+                    <th className="p-3">Aberturas</th>
                     <th className="p-3" />
                   </tr>
                 </thead>
@@ -401,6 +402,34 @@ function EnvioEmailsPage() {
                       </td>
                       <td className="max-w-[220px] truncate p-3 text-xs text-muted-foreground">
                         {d.error_message ?? ""}
+                      </td>
+                      <td className="p-3 whitespace-nowrap">
+                        {(() => {
+                          const opens = d.open_count ?? 0;
+                          const last = d.last_opened_at
+                            ? new Date(d.last_opened_at).toLocaleString("pt-BR")
+                            : null;
+                          return (
+                            <span
+                              title={
+                                opens > 0 && last
+                                  ? `Última abertura: ${last}`
+                                  : "Não visualizado"
+                              }
+                              className={
+                                opens > 0
+                                  ? "inline-flex items-center gap-1.5 font-semibold text-emerald-600"
+                                  : "inline-flex items-center gap-1.5 text-muted-foreground"
+                              }
+                            >
+                              <Eye className="h-4 w-4" />
+                              {opens}
+                              {opens === 0 && (
+                                <span className="text-xs">Não visualizado</span>
+                              )}
+                            </span>
+                          );
+                        })()}
                       </td>
                       <td className="p-3">
                         <Button
