@@ -71,19 +71,53 @@ export const sendTestEmail = createServerFn({ method: "POST" })
     z.object({ to: z.string().email().max(200), template: templateSchema }).parse(input),
   )
   .handler(async ({ data }) => {
-    const { sendTemplateEmail } = await import("@/lib/email-delivery.server");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { sendTemplateEmail, PUBLIC_BASE_URL } = await import(
+      "@/lib/email-delivery.server"
+    );
+    const { renderEmailSubject } = await import("@/lib/email-template");
     const tpl = {
       ...data.template,
       id: data.template.id ?? "preview",
       product_id: data.template.product_id ?? null,
     } as EmailTemplate;
 
-    const result = await sendTemplateEmail(
-      tpl,
-      data.to,
-      { name: "Test", email: data.to, product: tpl.name, saleId: "TEST-0001" },
-      { idempotencyKey: `test:${data.to}:${Date.now()}`, label: "delivery-test" },
-    );
+    // Registra o teste no histórico para que as aberturas sejam rastreadas.
+    const saleId = `TEST-${crypto.randomUUID()}`;
+    const vars = { name: "Test", email: data.to, product: tpl.name, saleId };
+    const { data: row } = await supabaseAdmin
+      .from("email_deliveries")
+      .insert({
+        sale_id: saleId,
+        template_id: data.template.id ?? null,
+        recipient_email: data.to,
+        recipient_name: "Test",
+        subject: renderEmailSubject(tpl, vars),
+        status: "pending",
+      } as never)
+      .select("id")
+      .single();
+    const deliveryId = (row as { id: string } | null)?.id;
+    const trackingUrl = deliveryId
+      ? `${PUBLIC_BASE_URL}/api/public/email-open?d=${deliveryId}`
+      : undefined;
+
+    const result = await sendTemplateEmail(tpl, data.to, vars, {
+      idempotencyKey: `test:${data.to}:${Date.now()}`,
+      label: "delivery-test",
+      ...(trackingUrl ? { trackingUrl } : {}),
+    });
+
+    if (deliveryId) {
+      await supabaseAdmin
+        .from("email_deliveries")
+        .update({
+          status: result.status,
+          error_message: result.error ?? null,
+          sent_at: result.sent ? new Date().toISOString() : null,
+        } as never)
+        .eq("id", deliveryId);
+    }
     return result;
   });
 
