@@ -162,6 +162,11 @@ export function renderEmailHtml(
     )}<br />${escapeHtml(tpl.reply_to || tpl.from_email)}</p>
   </td></tr>
 </table>
+${
+  opts.trackingUrl
+    ? `<img src="${escapeHtml(opts.trackingUrl)}" width="1" height="1" alt="" style="display:block;width:1px;height:1px;border:0;opacity:0;" />`
+    : ""
+}
 </body>
 </html>`;
 }
