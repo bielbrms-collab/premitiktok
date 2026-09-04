@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { PRODUCTS } from "@/lib/cooud-products";
 
 type CooudEvent = {
   id?: string;
@@ -97,6 +98,54 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
           });
         } catch (error) {
           console.error("[Cooud webhook] falha ao registrar evento", error);
+        }
+
+        // Compra aprovada: dispara o e-mail de entrega para o comprador.
+        if (paid) {
+          try {
+            const data = (event.data ?? {}) as Record<string, unknown>;
+            const pick = (...keys: string[]) => {
+              for (const key of keys) {
+                const value = data[key];
+                if (typeof value === "string" && value.trim()) return value.trim();
+              }
+              return null;
+            };
+            const nested = (obj: unknown, key: string) =>
+              obj && typeof obj === "object"
+                ? ((obj as Record<string, unknown>)[key] as string | undefined)
+                : undefined;
+            const customer = data["customer"] ?? data["buyer"] ?? data["billing_details"];
+            const email =
+              pick("customer_email", "buyer_email", "email", "receipt_email") ??
+              (typeof nested(customer, "email") === "string" ? nested(customer, "email")!.trim() : null);
+            const name =
+              pick("customer_name", "buyer_name", "name") ??
+              (typeof nested(customer, "name") === "string" ? nested(customer, "name")!.trim() : null);
+
+            const amount = typeof data["amount"] === "number" ? (data["amount"] as number) : null;
+            const currency = typeof data["currency"] === "string" ? (data["currency"] as string) : "EUR";
+            const match = Object.entries(PRODUCTS).find(
+              ([, p]) => p.amount === amount && p.currency === currency,
+            );
+
+            const saleId =
+              event.id ??
+              pick("checkout_session_id", "session_id", "payment_id", "charge_id", "id") ??
+              `cooud:${Date.now()}`;
+
+            const { deliverPurchaseEmail } = await import("@/lib/email-delivery.server");
+            const result = await deliverPurchaseEmail({
+              saleId: `cooud:${saleId}`,
+              email,
+              name,
+              productId: match?.[0] ?? null,
+              productName: match?.[1]?.name ?? null,
+            });
+            console.info("[Cooud webhook] e-mail de entrega", { saleId, email, ...result });
+          } catch (error) {
+            console.error("[Cooud webhook] falha ao enviar e-mail de entrega", error);
+          }
         }
 
         return Response.json({ received: true, paid });
