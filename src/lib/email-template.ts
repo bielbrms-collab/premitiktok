@@ -103,7 +103,11 @@ export function renderEmailText(tpl: EmailTemplate, vars: EmailVars = {}): strin
 }
 
 /** HTML compatível com clients de e-mail (tabelas, estilos inline, responsivo). */
-export function renderEmailHtml(tpl: EmailTemplate, vars: EmailVars = {}): string {
+export function renderEmailHtml(
+  tpl: EmailTemplate,
+  vars: EmailVars = {},
+  opts: { trackingUrl?: string } = {},
+): string {
   const accent = /^#[0-9a-fA-F]{3,8}$/.test(tpl.accent_color) ? tpl.accent_color : "#334155";
   const url = escapeHtml(tpl.deliverable_url);
 
