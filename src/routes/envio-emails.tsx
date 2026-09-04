@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
+import { Eye } from "lucide-react";
 import {
   listEmailTemplates,
   saveEmailTemplate,
