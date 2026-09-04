@@ -13,6 +13,8 @@ export type SendResult = { sent: boolean; status: string; error?: string; messag
 export const SENDER_DOMAIN = "notify.suporttk.shop";
 export const DEFAULT_FROM_EMAIL = `support@${SENDER_DOMAIN}`;
 export const DEFAULT_FROM_NAME = "Assistenza clienti";
+/** Base pública usada no pixel de rastreamento de aberturas. */
+export const PUBLIC_BASE_URL = "https://premitiktok.lovable.app";
 
 /**
  * Garante que o envelope use sempre o domínio autenticado.
@@ -32,7 +34,7 @@ export async function sendTemplateEmail(
   tpl: EmailTemplate,
   to: string,
   vars: EmailVars,
-  opts: { idempotencyKey?: string; label?: string } = {},
+  opts: { idempotencyKey?: string; label?: string; trackingUrl?: string } = {},
 ): Promise<SendResult> {
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) return { sent: false, status: "failed", error: "LOVABLE_API_KEY mancante" };
@@ -47,7 +49,7 @@ export async function sendTemplateEmail(
         reply_to: replyTo,
         sender_domain: SENDER_DOMAIN,
         subject: renderEmailSubject(tpl, vars),
-        html: renderEmailHtml(tpl, vars),
+        html: renderEmailHtml(tpl, vars, { trackingUrl: opts.trackingUrl }),
         text: renderEmailText(tpl, vars),
         purpose: "transactional",
         label: opts.label ?? "delivery",

@@ -20,6 +20,7 @@ import { Route as EntregavelRouteImport } from './routes/entregavel'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as BackRedirectRouteImport } from './routes/back-redirect'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicEmailOpenRouteImport } from './routes/api/public/email-open'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
@@ -83,6 +84,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicEmailOpenRoute = ApiPublicEmailOpenRouteImport.update({
+  id: '/api/public/email-open',
+  path: '/api/public/email-open',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/obrigado4': typeof Obrigado4Route
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
+  '/api/public/email-open': typeof ApiPublicEmailOpenRoute
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/obrigado4': typeof Obrigado4Route
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
+  '/api/public/email-open': typeof ApiPublicEmailOpenRoute
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
@@ -175,6 +183,7 @@ export interface FileRoutesById {
   '/obrigado4': typeof Obrigado4Route
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
+  '/api/public/email-open': typeof ApiPublicEmailOpenRoute
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
   '/api/public/cooud/webhook': typeof ApiPublicCooudWebhookRoute
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/obrigado4'
     | '/pressel'
     | '/up1'
+    | '/api/public/email-open'
     | '/api/public/cooud/checkout'
     | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/obrigado4'
     | '/pressel'
     | '/up1'
+    | '/api/public/email-open'
     | '/api/public/cooud/checkout'
     | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/obrigado4'
     | '/pressel'
     | '/up1'
+    | '/api/public/email-open'
     | '/api/public/cooud/checkout'
     | '/api/public/cooud/payment-event'
     | '/api/public/cooud/webhook'
@@ -258,6 +270,7 @@ export interface RootRouteChildren {
   Obrigado4Route: typeof Obrigado4Route
   PresselRoute: typeof PresselRoute
   Up1Route: typeof Up1Route
+  ApiPublicEmailOpenRoute: typeof ApiPublicEmailOpenRoute
   ApiPublicCooudCheckoutRoute: typeof ApiPublicCooudCheckoutRoute
   ApiPublicCooudPaymentEventRoute: typeof ApiPublicCooudPaymentEventRoute
   ApiPublicCooudWebhookRoute: typeof ApiPublicCooudWebhookRoute
@@ -346,6 +359,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/email-open': {
+      id: '/api/public/email-open'
+      path: '/api/public/email-open'
+      fullPath: '/api/public/email-open'
+      preLoaderRoute: typeof ApiPublicEmailOpenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
@@ -410,6 +430,7 @@ const rootRouteChildren: RootRouteChildren = {
   Obrigado4Route: Obrigado4Route,
   PresselRoute: PresselRoute,
   Up1Route: Up1Route,
+  ApiPublicEmailOpenRoute: ApiPublicEmailOpenRoute,
   ApiPublicCooudCheckoutRoute: ApiPublicCooudCheckoutRoute,
   ApiPublicCooudPaymentEventRoute: ApiPublicCooudPaymentEventRoute,
   ApiPublicCooudWebhookRoute: ApiPublicCooudWebhookRoute,
