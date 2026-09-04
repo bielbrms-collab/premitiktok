@@ -12,7 +12,7 @@ export type SendResult = { sent: boolean; status: string; error?: string; messag
 /** Único domínio autenticado (SPF/DKIM/DMARC) do projeto. */
 export const SENDER_DOMAIN = "notify.suporttk.shop";
 export const DEFAULT_FROM_EMAIL = `support@${SENDER_DOMAIN}`;
-export const DEFAULT_FROM_NAME = "Support Financier";
+export const DEFAULT_FROM_NAME = "Assistenza clienti";
 
 /**
  * Garante que o envelope use sempre o domínio autenticado.
