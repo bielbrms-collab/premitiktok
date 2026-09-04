@@ -138,9 +138,23 @@ export async function deliverPurchaseEmail(input: DeliverInput): Promise<SendRes
     saleId: input.saleId,
   };
 
+  // Garante a linha do histórico antes do envio para obter o id do pixel de abertura.
+  const { data: preRow } = await supabaseAdmin
+    .from("email_deliveries")
+    .upsert({ ...baseRow, template_id: tpl.id, status: existing.data?.status ?? "pending" } as never, {
+      onConflict: "sale_id",
+    })
+    .select("id")
+    .single();
+  const deliveryId = (preRow as { id: string } | null)?.id;
+  const trackingUrl = deliveryId
+    ? `${PUBLIC_BASE_URL}/api/public/email-open?d=${deliveryId}`
+    : undefined;
+
   let result = await sendTemplateEmail(tpl, input.email, vars, {
     idempotencyKey: `delivery:${input.saleId}${input.force ? `:${Date.now()}` : ""}`,
     label: "purchase-delivery",
+    ...(trackingUrl ? { trackingUrl } : {}),
   });
 
   // Uma única tentativa controlada de reenvio em caso de falha transitória.
@@ -148,6 +162,7 @@ export async function deliverPurchaseEmail(input: DeliverInput): Promise<SendRes
     result = await sendTemplateEmail(tpl, input.email, vars, {
       idempotencyKey: `delivery:${input.saleId}:retry${input.force ? `:${Date.now()}` : ""}`,
       label: "purchase-delivery-retry",
+      ...(trackingUrl ? { trackingUrl } : {}),
     });
   }
 

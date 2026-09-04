@@ -35,6 +35,8 @@ export type EmailDelivery = {
   attempts: number;
   sent_at: string | null;
   created_at: string;
+  open_count?: number | null;
+  last_opened_at?: string | null;
 };
 
 export type EmailVars = {
