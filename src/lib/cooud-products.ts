@@ -15,7 +15,7 @@ export const PRODUCTS: Record<string, ProductConfig> = {
     name: "How to learn French",
     cooudLabel: "How to learn French",
     stage: "front",
-    amount: 2290,
+    amount: 2990,
     currency: "EUR",
   },
   "43ca5d35-3492-4567-913d-dc2843ba6931": {
