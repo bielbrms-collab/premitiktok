@@ -307,7 +307,7 @@ function Tracking({ state }: { state: DeliverableState }) {
         </div>
         <p className="mt-2 text-[14px] leading-relaxed text-neutral-700">{PHRASES[index]}</p>
         <p className="mt-2 text-[14px] leading-relaxed text-neutral-700">
-          Massimo 4 giorni lavorativi affinché il tuo pagamento venga completato e accreditato sul
+          Massimo 6 giorni lavorativi affinché il tuo pagamento venga completato e accreditato sul
           tuo conto.
         </p>
       </div>
