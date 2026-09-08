@@ -6,7 +6,7 @@ export const STEP_TITLES = [
   "Convalida d’identità",
   "Preparazione del pagamento",
   "Elaborazione del pagamento",
-  "Pagamento completato,
+  "Pagamento completato",
 ];
 
 export const PHRASES = [
