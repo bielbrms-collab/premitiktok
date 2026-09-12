@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { DEFAULT_PRODUCT_ID, UP1_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
@@ -7,14 +7,6 @@ import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
 import { CooudCheckout } from "@/components/CooudCheckout";
 import { getStoredBuyerEmail } from "@/lib/buyer-email";
-
-declare global {
-  interface Window {
-    VendepayUpsellWidget?: {
-      showIframe: (containerId: string) => void;
-    };
-  }
-}
 
 
 
