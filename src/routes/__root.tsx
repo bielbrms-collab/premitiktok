@@ -139,7 +139,7 @@ function RootComponent() {
         <Link to="/">Home</Link>
         <Link to="/pressel">Pressel</Link>
         <Link to="/back-redirect">Back Redirect</Link>
-        <Link to="/checkout">Checkout</Link>
+        
         <Link to="/obrigado">Grazie</Link>
         <Link to="/obrigado2">Grazie 2</Link>
         <Link to="/obrigado3">Grazie 3</Link>
