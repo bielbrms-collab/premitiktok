@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { DEFAULT_PRODUCT_ID, UP1_PRODUCT_ID } from "@/lib/checkout-config";
 import { useTikTokPurchase } from "@/lib/purchase-tracking";
@@ -7,14 +7,6 @@ import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
 import { CooudCheckout } from "@/components/CooudCheckout";
 import { getStoredBuyerEmail } from "@/lib/buyer-email";
-
-declare global {
-  interface Window {
-    VendepayUpsellWidget?: {
-      showIframe: (containerId: string) => void;
-    };
-  }
-}
 
 
 
@@ -41,7 +33,6 @@ export const Route = createFileRoute("/up1")({
 });
 
 function Up1Page() {
-  const upsellContainerRef = useRef<HTMLDivElement>(null);
   const [showCheckout, setShowCheckout] = useState(false);
   const [buyerEmail, setBuyerEmail] = useState("");
 
@@ -64,34 +55,6 @@ function Up1Page() {
     window.localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
     void ensure({ data: { sessionId } }).catch(() => undefined);
   }, [ensure]);
-
-  // Carica il widget di upsell di Vendepay nella thank-you page.
-  useEffect(() => {
-    if (typeof window === "undefined" || !upsellContainerRef.current) return;
-
-    const existing = document.getElementById("vendepay-upsell-widget-script");
-    if (existing) return;
-
-    const script = document.createElement("script");
-    script.id = "vendepay-upsell-widget-script";
-    script.src =
-      "https://widget.vendepay.com/upsell-widget/v1/vendepay-upsell-widget-1.0.16.js?upsellId=ac1814ec-0ef7-4cf4-8844-46b2cee5efd6";
-    script.async = true;
-    script.onload = () => {
-      if (
-        window.VendepayUpsellWidget &&
-        typeof window.VendepayUpsellWidget.showIframe === "function"
-      ) {
-        window.VendepayUpsellWidget.showIframe("vendepay-upsell-container");
-      }
-    };
-
-    document.body.appendChild(script);
-
-    return () => {
-      // Non rimuove lo script per evitare ricaricamenti inutili.
-    };
-  }, []);
 
   return (
     <main className="min-h-screen w-full bg-gradient-to-b from-[#fdeef2] to-[#fbdde4] px-4 py-10 flex flex-col items-center">
@@ -178,13 +141,6 @@ function Up1Page() {
         >
           Segui lo stato del mio accesso
         </a>
-
-        {/* Vendepay Upsell Widget */}
-        <div
-          id="vendepay-upsell-container"
-          ref={upsellContainerRef}
-          className="w-full mt-6"
-        />
 
         <div className="mt-6 border-t border-dashed border-neutral-200" />
 
