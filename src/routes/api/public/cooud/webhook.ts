@@ -139,9 +139,13 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
               ([, p]) => p.amount === amount && p.currency === currency,
             );
 
+            // Prefere o id da sessão de checkout (estável entre reenvios do
+            // webhook) para que a mesma compra nunca gere e-mail duplicado,
+            // mesmo se a Cooud reenviar o evento com um id novo.
             const saleId =
+              pick("checkout_session_id", "session_id", "payment_id", "charge_id") ??
+              pick("id") ??
               event.id ??
-              pick("checkout_session_id", "session_id", "payment_id", "charge_id", "id") ??
               `cooud:${Date.now()}`;
 
             const { deliverPurchaseEmail } = await import("@/lib/email-delivery.server");
