@@ -154,7 +154,7 @@ function EnvioEmailsPage() {
       <header className="mx-auto mb-6 max-w-7xl">
         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Envio de E-mails</h1>
         <p className="text-sm text-muted-foreground">
-          Entrega automática do infoproduto após a aprovação do pagamento na Vendepay.
+          Entrega automática do infoproduto após a aprovação do pagamento na Cooud.
         </p>
       </header>
 

@@ -21,13 +21,10 @@ export function useTikTokPurchase({ productId }: PurchaseOptions) {
         const redirectStatus = params.get("redirect_status");
         if (redirectStatus && redirectStatus !== "succeeded") return;
 
-        // A VendePay usa nomes diferentes para o id da venda no retorno.
+        // A Cooud retorna o id da sessão de checkout na URL de retorno.
         const checkoutSessionId =
           params.get("checkout_session_id") ??
           params.get("session_id") ??
-          params.get("vendaId") ??
-          params.get("saleId") ??
-          params.get("transaction_id") ??
           params.get("id");
         if (!checkoutSessionId) return;
 

@@ -142,13 +142,6 @@ function Up1Page() {
           Segui lo stato del mio accesso
         </a>
 
-        {/* Vendepay Upsell Widget */}
-        <div
-          id="vendepay-upsell-container"
-          ref={upsellContainerRef}
-          className="w-full mt-6"
-        />
-
         <div className="mt-6 border-t border-dashed border-neutral-200" />
 
         <div className="mt-4 flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-wide text-neutral-400">
