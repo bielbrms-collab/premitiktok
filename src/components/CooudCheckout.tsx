@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { formatPrice, loadCooudElements } from "@/lib/checkout-config";
 import { patchStripeForItaly } from "@/lib/stripe-italy-patch";
+import { trackPurchase } from "@/lib/purchase-tracking";
 
 export interface CooudCheckoutProps {
   productId: string;
@@ -117,6 +118,9 @@ export function CooudCheckout({
         customerEmail: email.trim(),
         customerCountry: "IT",
         onSuccess: () => {
+          // Dispara o Purchase no TikTok imediatamente, antes do redirect,
+          // para não depender do comprador chegar na página de retorno.
+          trackPurchase(data.sessionId, productId);
           const successUrl = new URL(returnPath, window.location.origin);
           successUrl.searchParams.set("checkout_session_id", data.sessionId);
           successUrl.searchParams.set("productId", productId);

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { ensureDeliverable, lookupDeliverableByEmail } from "@/lib/deliverable.functions";
 import { PHRASES, STEP_TITLES, type DeliverableState } from "@/lib/deliverable-content";
+import { useTikTokPurchase } from "@/lib/purchase-tracking";
+import { UP1_PRODUCT_ID } from "@/lib/checkout-config";
 
 export const SESSION_STORAGE_KEY = "tk_deliverable_session";
 export const EMAIL_STORAGE_KEY = "tk_deliverable_email";
@@ -39,6 +41,9 @@ function readSessionId(): string | null {
 }
 
 function EntregavelPage() {
+  // Rede de segurança: registra o Purchase do upsell caso o evento não tenha
+  // sido disparado no próprio checkout (dedupe por sessão evita duplicidade).
+  useTikTokPurchase({ productId: UP1_PRODUCT_ID });
   const ensure = useServerFn(ensureDeliverable);
   const lookupByEmail = useServerFn(lookupDeliverableByEmail);
   const [state, setState] = useState<DeliverableState | null>(null);

@@ -1,66 +1,69 @@
 import { useEffect } from "react";
 import { ttqTrack } from "./tiktok-pixel";
+import { PRODUCTS } from "./cooud-products";
 
 type PurchaseOptions = {
   productId: string;
 };
 
+function productValue(productId: string) {
+  const product = PRODUCTS[productId];
+  return product ? product.amount / 100 : 0;
+}
+
 /**
- * Dispara o evento Purchase do TikTok APENAS após confirmação real do pagamento.
- * O callback da Cooud só redireciona após onSuccess.
- * Usa checkout_session_id como event_id para deduplicação.
- * - Deduplica no navegador via sessionStorage.
+ * Dispara o evento Purchase do TikTok de forma idempotente.
+ * Deduplicado por sessão de checkout via sessionStorage + event_id.
+ */
+export function trackPurchase(checkoutSessionId: string, productId: string) {
+  if (typeof window === "undefined") return;
+  try {
+    const dedupeKey = `ttq_purchase_${checkoutSessionId}`;
+    if (sessionStorage.getItem(dedupeKey)) return;
+    sessionStorage.setItem(dedupeKey, "1");
+
+    const product = PRODUCTS[productId];
+    const value = productValue(productId);
+
+    ttqTrack(
+      "Purchase",
+      {
+        content_id: productId,
+        content_type: "product",
+        content_name: product?.name ?? "Produto",
+        quantity: 1,
+        price: value,
+        value,
+        currency: (product?.currency ?? "EUR").toUpperCase(),
+      },
+      checkoutSessionId,
+    );
+  } catch (err) {
+    console.error("TikTok Purchase tracking failed", err);
+  }
+}
+
+/**
+ * Dispara o Purchase quando o comprador volta para uma página de retorno
+ * com os parâmetros da Cooud na URL. Usa o productId da URL quando presente.
  */
 export function useTikTokPurchase({ productId }: PurchaseOptions) {
   useEffect(() => {
-    let cancelled = false;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const redirectStatus = params.get("redirect_status");
+      if (redirectStatus && redirectStatus !== "succeeded") return;
 
-    (async () => {
-      try {
-        const params = new URLSearchParams(window.location.search);
-        const redirectStatus = params.get("redirect_status");
-        if (redirectStatus && redirectStatus !== "succeeded") return;
+      const checkoutSessionId =
+        params.get("checkout_session_id") ??
+        params.get("session_id") ??
+        params.get("id");
+      if (!checkoutSessionId) return;
 
-        // A Cooud retorna o id da sessão de checkout na URL de retorno.
-        const checkoutSessionId =
-          params.get("checkout_session_id") ??
-          params.get("session_id") ??
-          params.get("id");
-        if (!checkoutSessionId) return;
-
-        const dedupeKey = `ttq_purchase_${checkoutSessionId}`;
-        if (sessionStorage.getItem(dedupeKey)) return;
-        if (cancelled) return;
-
-
-        const values: Record<string, number> = {
-          "01KZ7W13DD2MVBGG66NPG9EA9T": 22.9,
-          "43ca5d35-3492-4567-913d-dc2843ba6931": 12.44,
-          "65009b71-7660-44ef-ba87-24f29c7599a4": 22.9,
-        };
-        const value = values[productId] ?? 0;
-
-        sessionStorage.setItem(dedupeKey, "1");
-        ttqTrack(
-          "Purchase",
-          {
-            content_id: productId,
-            content_type: "product",
-            content_name: "Produto",
-            quantity: 1,
-            price: value,
-            value,
-            currency: "EUR",
-          },
-          checkoutSessionId,
-        );
-      } catch (err) {
-        console.error("TikTok Purchase tracking failed", err);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
+      const urlProductId = params.get("productId");
+      trackPurchase(checkoutSessionId, urlProductId && PRODUCTS[urlProductId] ? urlProductId : productId);
+    } catch (err) {
+      console.error("TikTok Purchase tracking failed", err);
+    }
   }, [productId]);
 }
