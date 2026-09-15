@@ -1,7 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import tiktokLogo from "@/assets/tiktok-logo-clean.png.asset.json";
-import { DEFAULT_PRODUCT_ID } from "@/lib/checkout-config";
-import { useTikTokPurchase } from "@/lib/purchase-tracking";
 
 export const Route = createFileRoute("/obrigado")({
   head: () => ({
@@ -26,13 +24,8 @@ export const Route = createFileRoute("/obrigado")({
 function Obrigado() {
   const navigate = useNavigate();
 
-  // Produto realmente comprado (o checkout envia ?productId=).
-  const productId =
-    (typeof window !== "undefined" &&
-      new URLSearchParams(window.location.search).get("productId")) ||
-    DEFAULT_PRODUCT_ID;
-
-  useTikTokPurchase({ productId });
+  // O Purchase é enviado ao TikTok pelo servidor (webhook da Cooud),
+  // deduplicado pelo ID do pedido — nada a disparar no navegador.
 
   return (
 

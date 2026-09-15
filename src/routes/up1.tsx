@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { DEFAULT_PRODUCT_ID, UP1_PRODUCT_ID } from "@/lib/checkout-config";
-import { useTikTokPurchase } from "@/lib/purchase-tracking";
+import { UP1_PRODUCT_ID } from "@/lib/checkout-config";
 import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
 import { CooudCheckout } from "@/components/CooudCheckout";
@@ -43,7 +42,7 @@ function Up1Page() {
     setShowCheckout(true);
   }, []);
 
-  useTikTokPurchase({ productId: DEFAULT_PRODUCT_ID });
+  // O Purchase do front é enviado ao TikTok pelo servidor (webhook da Cooud).
 
   // Registra l'acquisto del front (P1) non appena il pagamento è confermato,
   // ancorando la data/ora reale usata nel monitoraggio del prodotto.

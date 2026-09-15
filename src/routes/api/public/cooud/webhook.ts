@@ -160,6 +160,63 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
           } catch (error) {
             console.error("[Cooud webhook] falha ao enviar e-mail de entrega", error);
           }
+
+          // Fonte única do Purchase no TikTok: o servidor. O ID do pedido é
+          // estável entre reenvios do webhook, então a mesma compra nunca é
+          // contada duas vezes (event_id deduplica na própria TikTok).
+          try {
+            const data = (event.data ?? {}) as Record<string, unknown>;
+            const orderId =
+              typeof data["id"] === "string" ? (data["id"] as string) : (event.id ?? null);
+            const totalAmount =
+              typeof data["total_amount"] === "number"
+                ? (data["total_amount"] as number)
+                : typeof data["amount"] === "number"
+                  ? (data["amount"] as number)
+                  : null;
+            const currency =
+              typeof data["currency"] === "string"
+                ? (data["currency"] as string).toUpperCase()
+                : "EUR";
+            const customer =
+              data["user"] ?? data["customer"] ?? data["buyer"] ?? data["billing_details"];
+            const buyerEmail =
+              customer && typeof customer === "object"
+                ? ((customer as Record<string, unknown>)["email"] as string | undefined) ?? null
+                : null;
+            const match = Object.entries(PRODUCTS).find(
+              ([, p]) => p.amount === totalAmount && p.currency === currency,
+            );
+
+            if (orderId && typeof totalAmount === "number") {
+              const { sendTikTokPurchase } = await import("@/lib/tiktok-capi.server");
+              const result = await sendTikTokPurchase({
+                eventId: `cooud-order-${orderId}`,
+                email: buyerEmail,
+                value: totalAmount / 100,
+                currency,
+                productId: match?.[0] ?? null,
+                url: "https://premitiktok.lovable.app/",
+              });
+
+              const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+              await supabaseAdmin.from("payment_events").insert({
+                source: "tiktok_capi",
+                event_type: "purchase",
+                product_id: match?.[0] ?? null,
+                session_id: orderId,
+                amount: totalAmount,
+                currency,
+                code: result.ok ? "ok" : result.reason,
+                message: result.ok
+                  ? "Purchase enviado ao TikTok"
+                  : "Falha ao enviar Purchase ao TikTok",
+              });
+              console.info("[Cooud webhook] TikTok CAPI", { orderId, ...result });
+            }
+          } catch (error) {
+            console.error("[Cooud webhook] falha ao enviar Purchase ao TikTok", error);
+          }
         }
 
         return Response.json({ received: true, paid });
