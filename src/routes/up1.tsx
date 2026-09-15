@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { DEFAULT_PRODUCT_ID, UP1_PRODUCT_ID } from "@/lib/checkout-config";
+import { UP1_PRODUCT_ID } from "@/lib/checkout-config";
 import { ensureDeliverable } from "@/lib/deliverable.functions";
 import { SESSION_STORAGE_KEY } from "@/routes/entregavel";
 import { CooudCheckout } from "@/components/CooudCheckout";
