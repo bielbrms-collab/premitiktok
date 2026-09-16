@@ -269,10 +269,12 @@ function Tracking({ state }: { state: DeliverableState }) {
     <div>
       <Eyebrow live>Stato dello sblocco</Eyebrow>
       {state.email && (
-        <div className="mb-4 break-all text-center text-[12.5px] text-neutral-500">
+        <div className="mb-2 break-all text-center text-[12.5px] text-neutral-500">
           Monitoraggio associato a <b className="text-[#161823]">{state.email}</b>
         </div>
       )}
+
+      <NextUpdate purchasedAt={state.purchasedAt} />
 
       <div className="relative mb-5 mt-1 overflow-hidden rounded-[18px] bg-gradient-to-br from-[#161823] to-[#2a2d3d] px-5 py-5 text-center text-white">
         <div className="pointer-events-none absolute -right-8 -top-10 h-36 w-36 rounded-full bg-[radial-gradient(circle,rgba(254,44,85,0.55),transparent_70%)]" />
