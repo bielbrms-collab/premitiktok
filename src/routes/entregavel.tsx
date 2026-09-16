@@ -262,6 +262,46 @@ function EmailGate({
   );
 }
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+function NextUpdate({ purchasedAt }: { purchasedAt: string }) {
+  const [label, setLabel] = useState<string | null>(null);
+
+  useEffect(() => {
+    const purchase = new Date(purchasedAt).getTime();
+    const compute = () => {
+      const now = Date.now();
+      const cycles = Math.max(0, Math.floor((now - purchase) / DAY_MS) + 1);
+      const next = new Date(purchase + cycles * DAY_MS);
+      setLabel(
+        new Intl.DateTimeFormat("it-IT", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Europe/Rome",
+        }).format(next),
+      );
+    };
+    compute();
+    const id = window.setInterval(compute, 30000);
+    return () => window.clearInterval(id);
+  }, [purchasedAt]);
+
+  return (
+    <div className="mb-4 text-center">
+      <div className="flex items-center justify-center gap-2 text-[12.5px] text-neutral-500">
+        <span className="relative flex h-[7px] w-[7px]">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#16c784] opacity-75" />
+          <span className="relative inline-flex h-[7px] w-[7px] animate-pulse rounded-full bg-[#16c784]" />
+        </span>
+        Aggiornamento automatico ogni 24 ore
+      </div>
+      <div className="mt-1 text-[12.5px] text-neutral-500">
+        Prossimo aggiornamento: <b className="text-[#161823]">{label ?? "--:--"}</b>
+      </div>
+    </div>
+  );
+}
+
 function Tracking({ state }: { state: DeliverableState }) {
   const index = state.day - 1;
 
