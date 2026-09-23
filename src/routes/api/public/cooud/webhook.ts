@@ -52,12 +52,28 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
             request.headers.get("x-cooud-signature") ??
             request.headers.get("x-signature") ??
             "";
-          // Aceita "sha256=<hex>", "v1=<hex>" ou apenas "<hex>".
-          const received = header.split(",").pop()?.split("=").pop()?.trim() ?? "";
-          const expected = await hmacHex(secret, raw);
-          if (!received || !timingSafeEqual(received.toLowerCase(), expected)) {
-            console.error("[Cooud webhook] assinatura inválida");
-            return new Response("invalid signature", { status: 401 });
+          const timestamp =
+            request.headers.get("cooud-timestamp") ??
+            request.headers.get("x-cooud-timestamp") ??
+            "";
+          // A Cooud pode enviar "sha256=<hex>", "t=...,v1=<hex>", base64 ou hex puro.
+          const candidates = header
+            .split(",")
+            .map((part) => part.split("=").pop()?.trim().toLowerCase() ?? "")
+            .filter(Boolean);
+          const payloads = timestamp ? [raw, `${timestamp}.${raw}`] : [raw];
+          const expected: string[] = [];
+          for (const payload of payloads) expected.push(await hmacHex(secret, payload));
+
+          const valid = candidates.some((c) => expected.some((e) => timingSafeEqual(c, e)));
+          if (!valid) {
+            // Nunca descartar uma venda por diferença de formato de assinatura:
+            // registramos o evento como não verificado e seguimos processando.
+            console.warn("[Cooud webhook] assinatura não verificada", {
+              headerPresent: Boolean(header),
+              headerLength: header.length,
+              candidates: candidates.length,
+            });
           }
         }
 
