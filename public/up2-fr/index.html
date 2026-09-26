@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff1f3">
+  <title>Demande de retrait confirmée</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #14b981;
+      --green-dark: #087d4f;
+      --pink: #ec3b92;
+      --red: #f20d13;
+      --ink: #111827;
+      --muted: #747b89;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 10%, rgba(255, 225, 207, .9), transparent 28%),
+        radial-gradient(circle at 90% 86%, rgba(249, 211, 228, .82), transparent 30%),
+        linear-gradient(135deg, #fff7ef 0%, #fde9ec 52%, #fceaf3 100%);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .background-shape {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(70px);
+      opacity: .5;
+      pointer-events: none;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+
+    .background-shape.one {
+      width: 260px;
+      height: 260px;
+      top: -80px;
+      left: -70px;
+      background: #ffd6c4;
+    }
+
+    .background-shape.two {
+      width: 300px;
+      height: 300px;
+      right: -110px;
+      bottom: -100px;
+      background: #f8bfd8;
+      animation-delay: -5s;
+    }
+
+    @keyframes drift {
+      to { transform: translate(26px, -18px) scale(1.08); }
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 32px 18px;
+    }
+
+    .card {
+      width: min(100%, 620px);
+      padding: 48px 54px 40px;
+      text-align: center;
+      background: rgba(255, 255, 255, .94);
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 34px;
+      box-shadow: 0 28px 75px -28px rgba(70, 37, 52, .32);
+      backdrop-filter: blur(16px);
+      animation: card-in .7s cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    @keyframes card-in {
+      from { opacity: 0; transform: translateY(18px) scale(.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .language {
+      display: inline-block;
+      margin-bottom: 24px;
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .check {
+      position: relative;
+      width: 104px;
+      height: 104px;
+      margin: 0 auto 28px;
+      filter: drop-shadow(0 14px 24px rgba(20, 185, 129, .32));
+      animation: check-in .65s .18s cubic-bezier(.34, 1.56, .64, 1) both;
+    }
+
+    .check::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 50%;
+      background: var(--green);
+      animation: halo 2.2s 1.2s infinite;
+    }
+
+    .check svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    @keyframes check-in {
+      from { opacity: 0; transform: scale(.2) rotate(-25deg); }
+      to { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    @keyframes halo {
+      from { opacity: .32; transform: scale(1); }
+      to { opacity: 0; transform: scale(1.55); }
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      padding: 10px 18px;
+      border: 8px solid #e2f8eb;
+      border-radius: 999px;
+      color: var(--green-dark);
+      background: #c9f4d9;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .status svg {
+      width: 18px;
+      height: 18px;
+      flex: none;
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      color: var(--pink);
+      font-size: clamp(34px, 7vw, 48px);
+      line-height: 1.05;
+      letter-spacing: -.045em;
+      font-weight: 900;
+    }
+
+    .lead {
+      margin-bottom: 22px;
+      font-size: clamp(20px, 4vw, 25px);
+      line-height: 1.3;
+      font-weight: 800;
+    }
+
+    .description {
+      max-width: 470px;
+      margin: 0 auto 24px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .amount {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: 100%;
+      margin-bottom: 24px;
+      padding: 16px 18px;
+      border: 1px solid #d8f3e4;
+      border-radius: 16px;
+      color: #526071;
+      background: #f2fcf6;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .amount strong {
+      color: var(--green-dark);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .cta {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 64px;
+      padding: 16px 24px;
+      overflow: hidden;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, #ff171c 0%, #d90006 100%);
+      box-shadow: 0 15px 30px -12px rgba(242, 13, 19, .68);
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+      animation: pulse 2.5s infinite;
+    }
+
+    .cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, .38) 50%, transparent 75%);
+      transform: translateX(-130%);
+      animation: shine 3.5s infinite;
+    }
+
+    .cta span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 35px -12px rgba(242, 13, 19, .78);
+    }
+
+    .cta:active {
+      transform: scale(.98);
+    }
+
+
+
+    [data-cooud-flow-root] { display:flex; flex-direction:column; align-items:center; gap:10px; width:100% !important; margin-inline:auto; }
+    button[data-cooud-flow-primary] { position:relative !important; display:flex !important; align-items:center !important; justify-content:center !important; width:100% !important; min-height:64px !important; padding:16px 24px !important; overflow:hidden !important; border:0 !important; border-radius:999px !important; color:#fff !important; background:linear-gradient(135deg,#ff171c 0%,#d90006 100%) !important; box-shadow:0 15px 30px -12px rgba(242,13,19,.68) !important; font-family:inherit !important; font-size:18px !important; font-weight:800 !important; cursor:pointer !important; transition:transform .2s ease,box-shadow .2s ease !important; animation:pulse 2.5s infinite !important; }
+    button[data-cooud-flow-primary]::before { content:""; position:absolute; inset:0; background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.38) 50%,transparent 75%); transform:translateX(-130%); animation:shine 3.5s infinite; }
+    button[data-cooud-flow-primary] span { position:relative; z-index:1; }
+    button[data-cooud-flow-primary]:hover { transform:translateY(-2px) !important; box-shadow:0 18px 35px -12px rgba(242,13,19,.78) !important; }
+    button[data-cooud-flow-primary]:active { transform:scale(.98) !important; }
+    button[data-cooud-flow-dismiss] { display:flex !important; align-items:center !important; justify-content:center !important; width:auto !important; min-height:40px !important; padding:8px 18px !important; border:0 !important; border-radius:10px !important; color:#6b7280 !important; background:transparent !important; font-family:inherit !important; font-size:14px !important; font-weight:500 !important; cursor:pointer !important; transition:color .2s ease,background .2s ease !important; }
+    button[data-cooud-flow-dismiss]:hover { color:#374151 !important; background:#f5f3f4 !important; }
+
+    @keyframes shine {
+      0%, 25% { transform: translateX(-130%); }
+      65%, 100% { transform: translateX(130%); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 15px 30px -12px rgba(242, 13, 19, .68); }
+      50% { box-shadow: 0 15px 36px -8px rgba(242, 13, 19, .38); }
+    }
+
+    .badges {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 30px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      color: #566172;
+      background: #f3f1f2;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .note {
+      margin-top: 16px;
+      color: #a0a5af;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 560px) {
+      main { padding: 18px 12px; }
+      .card { padding: 34px 20px 28px; border-radius: 27px; }
+      .check { width: 88px; height: 88px; margin-bottom: 24px; }
+      .status { border-width: 6px; padding: 8px 12px; font-size: 13px; }
+      .description { font-size: 14px; }
+      .amount { padding: 14px; }
+      .amount strong { font-size: 18px; }
+      .cta { min-height: 58px; font-size: 16px; }
+      .badges { gap: 7px; margin-top: 25px; }
+      .badge { padding: 8px 10px; font-size: 10.5px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-shape one" aria-hidden="true"></div>
+  <div class="background-shape two" aria-hidden="true"></div>
+
+  <main>
+    <section class="card" aria-labelledby="page-title">
+      <span class="language"> </span>
+
+      <div class="check" aria-hidden="true">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="48" fill="#14b981"/>
+          <path d="M27 51.5 43 67.5 74 34.5" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div class="status">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m5 12 4 4L19 6"/>
+        </svg>
+        Demande de retrait confirmée
+      </div>
+
+      <h1 id="page-title">Félicitations !</h1>
+      <p class="lead">Vous recevrez le montant dans quelques instants.</p>
+      <p class="description">Cliquez sur le bouton ci-dessous pour demander le remboursement de vos frais.</p>
+
+      <!-- =====================================================================
+      CTRL+F: [TROCAR-ONECLICK-UPSELL-02] — DÉBUT DU SCRIPT À REMPLACER
+      Lors du prochain remplacement, remplacez uniquement le contenu entre les marqueurs DÉBUT et FIN.
+      Ces commentaires ne modifient ni l'apparence ni le fonctionnement de la page.
+      ===================================================================== -->
+<div style="display:flex;flex-direction:column;gap:12px;width:fit-content;font-family:inherit;" data-cooud-flow-root>
+  <script type="application/json">{"steps":[{"title":"UP 2 UN","priceText":"25,58 €","primary":{"id":"01KYQBAA4YVRDC0N4YX9REX8YP","redirect":"https://tt-fra.site/tt/up2.2/","label":"RECEVOIR MA FRAIS DE 27,97€","style":"display: flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 600; padding: 12px 20px; font-size: 15px; border-radius: 8px; background-color: #ff0000; color: #ffffff; border: none; width: 100%; cursor: pointer;"},"fallback":null,"dismiss":{"primary":{"label":"ㅤ","style":"display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 8px; background-color: #ffffff; color: #ffffff; border: none;  cursor: pointer;"},"fallback":{"label":"ㅤ","style":"display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 8px; background-color: #ffffff; color: #ffffff; border: none;  cursor: pointer;"}}}],"initialStep":0,"startInFallback":false,"routingMode":"fallback","processingText":"Processando...","noMoreOffersText":"Obrigado! Sem mais ofertas.","connectScriptUrl":"https://orbit.cooud.com/scripts/connect"}</script>
+  <button
+    type="button"
+    data-cooud-flow-primary
+    data-connect-action="take"
+    data-connect-id="01KYQBAA4YVRDC0N4YX9REX8YP"
+    data-connect-redirect="https://tt-fra.site/tt/up2.2/"
+    style="display: flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 600; padding: 12px 20px; font-size: 15px; border-radius: 8px; background-color: #ff0000; color: #ffffff; border: none; width: 100%; cursor: pointer;"
+  >
+    RECEVOIR MA FRAIS DE 27,97€
+  </button>
+  <button
+    type="button"
+    data-cooud-flow-dismiss
+    data-connect-action="dismiss"
+    style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 8px; background-color: #ffffff; color: #ffffff; border: none;  cursor: pointer;"
+  >
+    ㅤ
+  </button>
+</div>
+<script src="https://js.stripe.com/v3/" async defer></script>
+<script src="https://orbit.cooud.com/scripts/flow" async defer></script>
+      <!-- =====================================================================
+      CTRL+F: [TROCAR-ONECLICK-UPSELL-02] — FIN DU SCRIPT À REMPLACER
+      ===================================================================== -->
+
+      <div class="badges" aria-label="Garanties de sécurité">
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="10" width="18" height="11" rx="2"/>
+            <path d="M7 10V7a5 5 0 0 1 10 0v3"/>
+          </svg>
+          Paiement sécurisé
+        </span>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+          Vérifié
+        </span>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v5l3 2"/>
+          </svg>
+          Temps réel
+        </span>
+      </div>
+
+      <p class="note">Processus protégé par une connexion sécurisée.</p>
+    </section>
+  </main>
+<script src="cooud-upsell.js"></script>
+<script src="https://js.stripe.com/v3/" async defer></script>
+  <script src="https://orbit.cooud.com/scripts/flow" async defer></script>
+  
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "x8i711xrm5");
+</script>
+
+</body>
+</html>
