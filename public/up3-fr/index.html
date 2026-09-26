@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Offre exclusive</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:#f3f2f4;
+    color:#111827;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:22px 16px 32px;
+    display:flex;
+    justify-content:center;
+  }
+
+  .page{
+    width:100%;
+    max-width:412px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  /* ── titre supérieur ── */
+  .page-title{
+    text-align:center;
+    font-size:18px;
+    font-weight:700;
+    color:#111827;
+    letter-spacing:-.2px;
+    margin-top:2px;
+    opacity:0;
+    animation:fade-up .5s .05s forwards;
+  }
+
+  /* ── carte principale sombre ── */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    border-radius:18px;
+    padding:30px 24px 28px;
+    text-align:center;
+    background:
+      radial-gradient(120% 130% at 88% 18%, #5a1417 0%, rgba(90,20,23,0) 55%),
+      linear-gradient(125deg,#161616 0%,#1d1416 55%,#2a1416 100%);
+    box-shadow:0 16px 38px -14px rgba(40,8,10,.5);
+    opacity:0;
+    animation:fade-up .55s .12s forwards;
+  }
+  .hero::before{
+    content:'';
+    position:absolute;
+    top:-40%;right:-20%;
+    width:60%;height:120%;
+    background:radial-gradient(circle,rgba(220,40,50,.35),transparent 70%);
+    pointer-events:none;
+  }
+  .hero-pill{
+    display:inline-block;
+    background:linear-gradient(135deg,#f43f5e,#dc2626);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.6px;
+    padding:6px 14px;
+    border-radius:999px;
+    text-transform:uppercase;
+    margin-bottom:18px;
+    box-shadow:0 4px 14px -2px rgba(220,38,38,.6);
+    position:relative;
+  }
+  .hero-gift{
+    font-size:40px;
+    line-height:1;
+    margin-bottom:14px;
+    position:relative;
+    animation:gift-bob 2.6s ease-in-out infinite;
+  }
+  @keyframes gift-bob{
+    0%,100%{transform:translateY(0) rotate(-3deg)}
+    50%    {transform:translateY(-6px) rotate(3deg)}
+  }
+  .hero-title{
+    color:#fff;
+    font-size:23px;
+    font-weight:800;
+    line-height:1.18;
+    letter-spacing:-.4px;
+    margin-bottom:8px;
+    position:relative;
+  }
+  .hero-sub{
+    color:#b8b3b6;
+    font-size:14px;
+    line-height:1.45;
+    position:relative;
+  }
+
+  /* ── cartes blanches ── */
+  .card{
+    background:#fff;
+    border-radius:16px;
+    padding:22px 20px;
+    box-shadow:0 6px 20px -10px rgba(17,24,39,.12);
+    opacity:0;
+    animation:fade-up .55s forwards;
+  }
+  .card.includes-card{animation-delay:.2s}
+  .card.cta-card{animation-delay:.28s;text-align:center;padding:26px 20px 22px}
+
+  .card-label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1.2px;
+    color:#9ca3af;
+    text-transform:uppercase;
+    margin-bottom:16px;
+  }
+
+  /* ── liste des éléments inclus ── */
+  .includes{list-style:none;display:flex;flex-direction:column;gap:15px}
+  .includes li{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    font-size:14.5px;
+    line-height:1.4;
+    color:#374151;
+  }
+  .includes li strong{color:#111827;font-weight:700}
+  .check{
+    flex:0 0 auto;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#f43f5e,#e11d48);
+    display:flex;align-items:center;justify-content:center;
+    margin-top:1px;
+    box-shadow:0 3px 8px -2px rgba(225,29,72,.5);
+  }
+  .check svg{width:12px;height:12px;stroke:#fff;stroke-width:3.5}
+
+  /* ── carte CTA ── */
+  .cta-title{
+    font-size:21px;
+    font-weight:800;
+    color:#111827;
+    letter-spacing:-.3px;
+    margin-bottom:7px;
+  }
+  .cta-sub{
+    font-size:14px;
+    color:#9ca3af;
+    line-height:1.45;
+    margin-bottom:20px;
+  }
+
+  /* ── PERSONNALISATION DU BOUTON PRINCIPAL (VERT À HAUTE CONVERSION) ── */
+  button[data-cooud-flow-primary] {
+    position: relative !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    padding: 17px 24px !important;
+    font-family: inherit !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    letter-spacing: .2px !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #12a23f 0%, #0a8a32 55%, #077a2a 100%) !important;
+    background-size: 180% 180% !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    cursor: pointer !important;
+    box-shadow: 0 10px 24px -8px rgba(10,138,50,.55) !important;
+    animation: cta-bg 8s 1s infinite, cta-pulse 2.6s 1.4s infinite !important;
+    transition: transform .2s, box-shadow .25s !important;
+  }
+  button[data-cooud-flow-primary]:hover {
+    transform: scale(1.02) !important;
+    box-shadow: 0 16px 36px -10px rgba(10,138,50,.6) !important;
+  }
+  button[data-cooud-flow-primary]:active {
+    transform: scale(.975) !important;
+  }
+  
+  /* Effet de brillance parcourant le bouton */
+  button[data-cooud-flow-primary]::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.32) 50%, transparent 70%) !important;
+    transform: translateX(-130%) !important;
+    animation: cta-shimmer 3.6s 2.5s infinite !important;
+  }
+
+  @keyframes cta-bg {
+    0%,100%{background-position:0% 50%}
+    50%    {background-position:100% 50%}
+  }
+  @keyframes cta-pulse {
+    0%,100%{box-shadow:0 10px 24px -8px rgba(10,138,50,.55), 0 0 0 0 rgba(10,138,50,.5)}
+    70%    {box-shadow:0 12px 28px -8px rgba(10,138,50,.5), 0 0 0 16px rgba(10,138,50,0)}
+  }
+  @keyframes cta-shimmer {
+    0%{transform:translateX(-130%)}
+    55%,100%{transform:translateX(130%)}
+  }
+
+  /* Lien de refus discret */
+  button[data-cooud-flow-dismiss] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    padding: 8px 20px !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    color: #9ca3af !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: color .2s !important;
+    margin-top: 8px !important;
+  }
+  button[data-cooud-flow-dismiss]:hover {
+    color: #4b5563 !important;
+  }
+
+  /* Centrage du widget Flow */
+  div[data-cooud-flow-root] {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .secure{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin-top:16px;
+    font-size:12.5px;
+    color:#9ca3af;
+    font-weight:500;
+  }
+  .secure svg{width:13px;height:13px;stroke:#9ca3af;stroke-width:2}
+
+  .footer{
+    text-align:center;
+    font-size:12px;
+    color:#9ca3af;
+    margin-top:2px;
+    opacity:0;
+    animation:fade-up .55s .4s forwards;
+  }
+
+  @keyframes fade-up{
+    from{opacity:0;transform:translateY(14px)}
+    to  {opacity:1;transform:translateY(0)}
+  }
+
+  @media(max-width:380px){
+    .hero-title{font-size:21px}
+    .cta-title{font-size:19px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important}
+  }
+</style>
+</head>
+<body>
+
+  <div class="page">
+
+    <h1 class="page-title">Offre exclusive</h1>
+
+    <div class="hero">
+      <span class="hero-pill">Aujourd’hui seulement</span>
+      <div class="hero-gift">🎁</div>
+      <h2 class="hero-title">Votre bonus supplémentaire est prêt !</h2>
+      <p class="hero-sub">Une récompense exclusive pour des utilisateurs comme vous.</p>
+    </div>
+
+    <div class="card includes-card">
+      <div class="card-label">Qu’est-ce qui est inclus ?</div>
+      <ul class="includes">
+        <li>
+          <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <span><strong>Un bonus TikTok exclusif</strong> sera crédité immédiatement sur votre compte.</span>
+        </li>
+        <li>
+          <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <span><strong>Activation immédiate</strong> après confirmation du paiement.</span>
+        </li>
+        <li>
+          <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <span><strong>Sans frais supplémentaires</strong> — paiement sécurisé et chiffré.</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card cta-card">
+      <h3 class="cta-title">Voulez-vous le recevoir aujourd’hui ?</h3>
+      <p class="cta-sub">Confirmez maintenant pour activer immédiatement votre bonus.</p>
+
+      <!-- NOUVEAU WIDGET COOUD FLOW INTÉGRÉ EXCLUSIVEMENT POUR L’UPSELL 3 -->
+      <!-- =====================================================================
+      🔎 CTRL+F: [TROCAR-ONECLICK-UPSELL-03] — DÉBUT DU SCRIPT À REMPLACER
+      Lors du prochain remplacement, remplacez uniquement le contenu entre les marqueurs DÉBUT et FIN.
+      Ces commentaires ne modifient ni l’apparence ni le fonctionnement de la page.
+      ===================================================================== -->
+<div style="display:flex;flex-direction:column;gap:12px;width:fit-content;font-family:inherit;" data-cooud-flow-root>
+  <script type="application/json">{"steps":[{"title":"UP 3 UN","priceText":"33,77 €","primary":{"id":"01KYQBBXWJM8G2VJY9NJWASFCX","redirect":"https://tt-fra.site/tt/up3.2/","label":"OUI, JE LE VEUX","style":"display: flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 600; padding: 12px 20px; font-size: 15px; border-radius: 8px; background-color: #098b1f; color: #ffffff; border: none; width: 100%; cursor: pointer;"},"fallback":null,"dismiss":{"primary":{"label":"ㅤ","style":"display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 8px; background-color: #ffffff; color: #ffffff; border: none;  cursor: pointer;"},"fallback":{"label":"ㅤ","style":"display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 8px; background-color: #ffffff; color: #ffffff; border: none;  cursor: pointer;"}}}],"initialStep":0,"startInFallback":false,"routingMode":"fallback","processingText":"Processando...","noMoreOffersText":"Obrigado! Sem mais ofertas.","connectScriptUrl":"https://orbit.cooud.com/scripts/connect"}</script>
+  <button
+    type="button"
+    data-cooud-flow-primary
+    data-connect-action="take"
+    data-connect-id="01KYQBBXWJM8G2VJY9NJWASFCX"
+    data-connect-redirect="https://tt-fra.site/tt/up3.2/"
+    style="display: flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 600; padding: 12px 20px; font-size: 15px; border-radius: 8px; background-color: #098b1f; color: #ffffff; border: none; width: 100%; cursor: pointer;"
+  >
+    OUI, JE LE VEUX
+  </button>
+  <button
+    type="button"
+    data-cooud-flow-dismiss
+    data-connect-action="dismiss"
+    style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 8px; background-color: #ffffff; color: #ffffff; border: none;  cursor: pointer;"
+  >
+    ㅤ
+  </button>
+</div>
+<script src="https://js.stripe.com/v3/" async defer></script>
+<script src="https://orbit.cooud.com/scripts/flow" async defer></script>
+      <!-- =====================================================================
+      🔎 CTRL+F: [TROCAR-ONECLICK-UPSELL-03] — FIN DU SCRIPT À REMPLACER
+      ===================================================================== -->
+
+      <p class="secure">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        Paiement 100 % sécurisé · Chiffré par Stripe
+      </p>
+    </div>
+
+    <p class="footer">Processus 100 % sécurisé · Protocole TT-2026-TIJ5AM</p>
+
+  </div>
+
+<!-- Scripts unifiés obligatoires Cooud -->
+<script src="cooud-upsell.js"></script>
+<script src="https://js.stripe.com/v3/" async defer></script>
+<script src="https://orbit.cooud.com/scripts/flow" async defer></script>
+
+<!-- Scripts de suivi (Utmify) -->
+<script>
+  window.pixelId = "693ee4017ea1bd14bd69ff9b";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+<script
+  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+  data-utmify-prevent-xcod-sck
+  data-utmify-prevent-subids
+  async
+  defer
+></script>
+
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "x8i711xrm5");
+</script>
+
+</body>
+</html>
