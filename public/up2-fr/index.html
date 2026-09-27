@@ -261,8 +261,8 @@
     button[data-cooud-flow-primary] span { position:relative; z-index:1; }
     button[data-cooud-flow-primary]:hover { transform:translateY(-2px) !important; box-shadow:0 18px 35px -12px rgba(242,13,19,.78) !important; }
     button[data-cooud-flow-primary]:active { transform:scale(.98) !important; }
-    button[data-cooud-flow-dismiss] { display:flex !important; align-items:center !important; justify-content:center !important; width:auto !important; min-height:40px !important; padding:8px 18px !important; border:0 !important; border-radius:10px !important; color:#6b7280 !important; background:transparent !important; font-family:inherit !important; font-size:14px !important; font-weight:500 !important; cursor:pointer !important; transition:color .2s ease,background .2s ease !important; }
-    button[data-cooud-flow-dismiss]:hover { color:#374151 !important; background:#f5f3f4 !important; }
+    button[data-cooud-flow-dismiss] { display:inline-flex !important; align-items:center !important; justify-content:center !important; width:auto !important; min-height:40px !important; padding:8px 18px !important; border:0 !important; border-radius:10px !important; color:transparent !important; background:transparent !important; font-family:inherit !important; font-size:14px !important; font-weight:500 !important; cursor:pointer !important; }
+    button[data-cooud-flow-dismiss]:hover { color:transparent !important; background:transparent !important; }
 
     @keyframes shine {
       0%, 25% { transform: translateX(-130%); }
@@ -359,20 +359,28 @@
       Lors du prochain remplacement, remplacez uniquement le contenu entre les marqueurs DÉBUT et FIN.
       Ces commentaires ne modifient ni l'apparence ni le fonctionnement de la page.
       ===================================================================== -->
-<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%;font-family:inherit;" data-cooud-flow-root>
-  <script type="application/json">{"steps":[{"title":"01","priceText":"21,90 €","primary":{"id":"01M3FY8V7RJDQJG83Z8264H331","redirect":"https://premitiktok.lovable.app/up2-fr","label":"RICEVERE IL RIMBORSO DELLA SPESA DI 27,97€","style":"display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 600; padding: 12px 20px; font-size: 15px; border-radius: 8px; background-color: #dc0909; color: #ffffff; border: none;  cursor: pointer;"},"fallback":null,"dismiss":null}],"initialStep":0,"startInFallback":false,"routingMode":"fallback","processingText":"Processando...","noMoreOffersText":"Grazie! Nessun'altra offerta.","connectScriptUrl":"https://orbit.cooud.com/scripts/connect"}</script>
+<div style="display:flex;flex-direction:column;gap:12px;width:fit-content;font-family:inherit;" data-cooud-flow-root>
+  <script type="application/json">{"steps":[{"title":"01","priceText":"15,90 €","primary":{"id":"01M3G5X766Q9DGQHTM0JHG1QCB","redirect":"https://premitiktok.lovable.app/up2-fr","label":"RICEVERE IL RIMBORSO DELLA SPESA DI 27,97€","style":"display: flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 600; padding: 12px 20px; font-size: 15px; border-radius: 8px; background-color: #dc0909; color: #ffffff; border: none; width: 100%; cursor: pointer;"},"fallback":null,"dismiss":{"primary":{"label":"Não, obrigado","style":"display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 8px; background-color: transparent; color: transparent; border: none;  cursor: pointer;"},"fallback":{"label":"Não, obrigado","style":"display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 8px; background-color: transparent; color: transparent; border: none;  cursor: pointer;"}}}],"initialStep":0,"startInFallback":false,"routingMode":"fallback","processingText":"Processando...","noMoreOffersText":"Obrigado! Sem mais ofertas.","connectScriptUrl":"https://orbit.cooud.com/scripts/connect"}</script>
   <button
     type="button"
     data-cooud-flow-primary
     data-connect-action="take"
-    data-connect-id="01M3FY8V7RJDQJG83Z8264H331"
+    data-connect-id="01M3G5X766Q9DGQHTM0JHG1QCB"
     data-connect-redirect="https://premitiktok.lovable.app/up2-fr"
-    style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 600; padding: 12px 20px; font-size: 15px; border-radius: 8px; background-color: #dc0909; color: #ffffff; border: none;  cursor: pointer;"
+    style="display: flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 600; padding: 12px 20px; font-size: 15px; border-radius: 8px; background-color: #dc0909; color: #ffffff; border: none; width: 100%; cursor: pointer;"
   >
     RICEVERE IL RIMBORSO DELLA SPESA DI 27,97€
   </button>
-  <button type="button" data-cooud-flow-dismiss data-connect-action="dismiss" style="display:none !important;" aria-hidden="true">No, grazie</button>
+  <button
+    type="button"
+    data-cooud-flow-dismiss
+    data-connect-action="dismiss"
+    style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 8px; background-color: transparent; color: transparent; border: none;  cursor: pointer;"
+  >
+    Não, obrigado
+  </button>
 </div>
+<script src="https://js.stripe.com/v3/" async defer></script>
 <script src="https://orbit.cooud.com/scripts/flow" async defer></script>
       <!-- =====================================================================
       CTRL+F: [TROCAR-ONECLICK-UPSELL-02] — FIN DU SCRIPT À REMPLACER
