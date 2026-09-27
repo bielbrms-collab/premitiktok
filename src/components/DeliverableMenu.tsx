@@ -148,33 +148,24 @@ export function RewardsView({ state, onBack }: { state: DeliverableState; onBack
                 <div
                   className={[
                     "grid h-8 w-8 shrink-0 place-items-center rounded-full text-[12px] font-bold",
-                    status === "done"
-                      ? "bg-[#16c784] text-white"
-                      : status === "locked"
+                    status === "locked"
                         ? "border border-[#eceef1] bg-white text-neutral-400"
                         : "bg-[#FE2C55] text-white shadow-[0_0_0_5px_rgba(254,44,85,0.15)]",
                   ].join(" ")}
                 >
-                  {status === "done" ? "✓" : status === "locked" ? "🔒" : i + 1}
+                  {status === "locked" ? "🔒" : i + 1}
                 </div>
-                {!isLast && <div className={`w-[2px] flex-1 ${status === "done" ? "bg-[#16c784]" : "bg-[#eceef1]"}`} />}
+                {!isLast && <div className="w-[2px] flex-1 bg-[#eceef1]" />}
               </div>
               <div className={isLast ? "pb-0" : "pb-5"}>
                 <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-neutral-400">{r.title}</div>
-                <div className={`text-[14.5px] font-semibold ${status === "locked" ? "text-neutral-400" : status === "done" ? "text-[#161823]" : "text-[#FE2C55]"}`}>
+                <div className={`text-[14.5px] font-semibold ${status === "locked" ? "text-neutral-400" : "text-[#FE2C55]"}`}>
                   {r.subtitle}
                 </div>
                 <div className="mt-0.5 text-[12.5px] text-neutral-500">
-                  {status === "done" && "Completata"}
                   {status === "progress" && "Primeiro saque em processamento"}
-                  {status === "available" && "Disponibile"}
                   {status === "locked" && "Bloccata fino al completamento della precedente"}
                 </div>
-                {status === "available" && r.instructions && (
-                  <div className="mt-2 rounded-xl border border-[#eceef1] bg-[#fbfbfc] px-3 py-2.5 text-[13px] leading-relaxed text-neutral-700">
-                    {r.instructions}
-                  </div>
-                )}
               </div>
             </div>
           );
