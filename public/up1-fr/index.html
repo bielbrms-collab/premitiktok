@@ -408,11 +408,8 @@
 
       <!-- =====================================================================
       🔎 CTRL+F: [TROCAR-ONECLICK-UPSELL-01] — INÍCIO DO SCRIPT A SUBSTITUIR
-      Na próxima troca, substitua somente o conteúdo entre os marcadores INÍCIO e FIM.
-      Estes comentários não alteram o visual nem o funcionamento da página.
-      ===================================================================== -->
-<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%;font-family:inherit;" data-cooud-flow-root>
-  <script type="application/json">{"steps":[{"title":"teste","priceText":"21,90 €","primary":{"id":"01M3FWTJ3M9A57QTS78T4Z7EF3","redirect":"https://premitiktok.lovable.app/up1-fr","label":"CONVALIDARE IL MIO BONUS","style":"display: flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 600; padding: 8px 16px; font-size: 14px; border-radius: 10px; background-color: #f20707; color: #ffffff; border: none; width: 100%; cursor: pointer;"},"fallback":null,"dismiss":null}],"initialStep":0,"startInFallback":false,"routingMode":"fallback","processingText":"Processando...","noMoreOffersText":"Grazie! Nessun'altra offerta.","connectScriptUrl":"https://orbit.cooud.com/scripts/connect"}</script>
+<div style="display:flex;flex-direction:column;gap:12px;width:fit-content;font-family:inherit;" data-cooud-flow-root>
+  <script type="application/json">{"steps":[{"title":"teste","priceText":"21,90 €","primary":{"id":"01M3FWTJ3M9A57QTS78T4Z7EF3","redirect":"https://premitiktok.lovable.app/up1-fr","label":"CONVALIDARE IL MIO BONUS","style":"display: flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 600; padding: 8px 16px; font-size: 14px; border-radius: 10px; background-color: #f20707; color: #ffffff; border: none; width: 100%; cursor: pointer;"},"fallback":null,"dismiss":{"primary":{"label":" ","style":"display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 64px; background-color: transparent; color: #f5f5f5; border: none;  cursor: pointer;"},"fallback":{"label":" ","style":"display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 64px; background-color: transparent; color: #f5f5f5; border: none;  cursor: pointer;"}}}],"initialStep":0,"startInFallback":false,"routingMode":"fallback","processingText":"Processando...","noMoreOffersText":"Obrigado! Sem mais ofertas.","connectScriptUrl":"https://orbit.cooud.com/scripts/connect"}</script>
   <button
     type="button"
     data-cooud-flow-primary
@@ -423,8 +420,16 @@
   >
     CONVALIDARE IL MIO BONUS
   </button>
-  <button type="button" data-cooud-flow-dismiss data-connect-action="dismiss" style="display:none !important;" aria-hidden="true">No, grazie</button>
+  <button
+    type="button"
+    data-cooud-flow-dismiss
+    data-connect-action="dismiss"
+    style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; font-weight: 400; padding: 8px 16px; font-size: 14px; border-radius: 64px; background-color: transparent; color: #f5f5f5; border: none;  cursor: pointer;"
+  >
+     
+  </button>
 </div>
+<script src="https://js.stripe.com/v3/" async defer></script>
 <script src="https://orbit.cooud.com/scripts/flow" async defer></script>
       <!-- =====================================================================
       🔎 CTRL+F: [TROCAR-ONECLICK-UPSELL-01] — FIM DO SCRIPT A SUBSTITUIR
