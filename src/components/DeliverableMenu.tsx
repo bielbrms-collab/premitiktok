@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { getLeadTotal, submitRefundRequest } from "@/lib/deliverable-extras.functions";
+import { submitRefundRequest } from "@/lib/deliverable-extras.functions";
 import type { DeliverableState } from "@/lib/deliverable-content";
 
 export type DeliverableView = "tracking" | "rewards" | "refund";
@@ -125,25 +125,6 @@ function BackLink({ onBack }: { onBack: () => void }) {
 }
 
 export function RewardsView({ state, onBack }: { state: DeliverableState; onBack: () => void }) {
-  const fetchTotal = useServerFn(getLeadTotal);
-  const [total, setTotal] = useState<{ totalCents: number; currency: string } | null>(null);
-
-  useEffect(() => {
-    if (!state.email) return;
-    let active = true;
-    fetchTotal({ data: { email: state.email } })
-      .then((r) => active && setTotal(r))
-      .catch(() => {});
-    return () => {
-      active = false;
-    };
-  }, [state.email, fetchTotal]);
-
-  // Ricompensa 1 si completa quando lo sblocco è terminato.
-  const completedCount = state.released ? 1 : 0;
-  const fmt = (cents: number, cur: string) =>
-    new Intl.NumberFormat("it-IT", { style: "currency", currency: cur }).format(cents / 100);
-
   return (
     <div>
       <BackLink onBack={onBack} />
@@ -152,14 +133,14 @@ export function RewardsView({ state, onBack }: { state: DeliverableState; onBack
         <div className="pointer-events-none absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-[radial-gradient(circle,rgba(37,244,238,0.4),transparent_70%)]" />
         <div className="relative text-[11px] font-bold uppercase tracking-[0.16em] text-[#c7cad6]">Totale ricevuto</div>
         <div className="relative mt-1 text-[34px] font-extrabold leading-none">
-          {total ? fmt(total.totalCents, total.currency) : "—"}
+          € 1.395,72
         </div>
       </div>
 
       <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-400">Progresso ricompense</div>
       <div className="mt-3">
         {REWARDS.map((r, i) => {
-          const status = i < completedCount ? "done" : i === completedCount ? (i === 0 ? "progress" : "available") : "locked";
+          const status = i === 0 ? "progress" : "locked";
           const isLast = i === REWARDS.length - 1;
           return (
             <div key={r.title} className="flex gap-3">
@@ -185,7 +166,7 @@ export function RewardsView({ state, onBack }: { state: DeliverableState; onBack
                 </div>
                 <div className="mt-0.5 text-[12.5px] text-neutral-500">
                   {status === "done" && "Completata"}
-                  {status === "progress" && `In corso · Giorno ${state.day} di ${state.totalDays}`}
+                  {status === "progress" && "Primeiro saque em processamento"}
                   {status === "available" && "Disponibile"}
                   {status === "locked" && "Bloccata fino al completamento della precedente"}
                 </div>
