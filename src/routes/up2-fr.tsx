@@ -1,21 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+// Serve the raw HTML directly so Cooud's scanner finds the script in the page source.
 export const Route = createFileRoute("/up2-fr")({
-  head: () => ({
-    meta: [
-      { title: "Richiesta di rimborso confermata — Up 2.2" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
-  component: Up2FrPage,
+  server: {
+    handlers: {
+      GET: async ({ request }) => {
+        const res = await fetch(new URL("/up2-fr/index.html", request.url));
+        const html = await res.text();
+        return new Response(html, {
+          headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" },
+        });
+      },
+    },
+  },
 });
-
-function Up2FrPage() {
-  return (
-    <iframe
-      src="/up2-fr/index.html"
-      title="Up 2.2"
-      style={{ position: "fixed", inset: 0, width: "100%", height: "100%", border: "none" }}
-    />
-  );
-}
