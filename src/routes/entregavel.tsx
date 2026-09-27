@@ -3,6 +3,13 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { ensureDeliverable, lookupDeliverableByEmail } from "@/lib/deliverable.functions";
 import { PHRASES, STEP_TITLES, type DeliverableState } from "@/lib/deliverable-content";
+import {
+  MenuButton,
+  RefundView,
+  RewardsView,
+  SideMenu,
+  type DeliverableView,
+} from "@/components/DeliverableMenu";
 
 export const SESSION_STORAGE_KEY = "tk_deliverable_session";
 export const EMAIL_STORAGE_KEY = "tk_deliverable_email";
@@ -47,6 +54,8 @@ function EntregavelPage() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [view, setView] = useState<DeliverableView>("tracking");
 
   useEffect(() => {
     const sessionId = readSessionId();
@@ -107,7 +116,14 @@ function EntregavelPage() {
   return (
     <main className="min-h-screen w-full bg-[#f7f8fa] bg-[radial-gradient(1200px_600px_at_50%_-10%,rgba(254,44,85,0.10),transparent_60%),radial-gradient(900px_500px_at_90%_0%,rgba(37,244,238,0.10),transparent_55%)] px-4 pb-16 pt-6 sm:px-6">
       <div className="mx-auto w-full max-w-[560px]">
-        <Brand />
+        <div className="relative">
+          <Brand />
+          {status === "ready" && state && (
+            <div className="absolute right-0 top-1/2 -translate-y-1/2">
+              <MenuButton onClick={() => setMenuOpen(true)} />
+            </div>
+          )}
+        </div>
 
         <section className="rounded-[22px] border border-[#eceef1] bg-white px-5 py-7 shadow-[0_24px_60px_-30px_rgba(22,24,35,0.28)] sm:px-7">
           {status === "loading" && <Loading />}
@@ -125,7 +141,13 @@ function EntregavelPage() {
               Impossibile mostrare il tuo monitoraggio al momento. Aggiorna la pagina tra qualche secondo.
             </p>
           )}
-          {status === "ready" && state && <Tracking state={state} />}
+          {status === "ready" && state && view === "tracking" && <Tracking state={state} />}
+          {status === "ready" && state && view === "rewards" && (
+            <RewardsView state={state} onBack={() => setView("tracking")} />
+          )}
+          {status === "ready" && state && view === "refund" && (
+            <RefundView state={state} onBack={() => setView("tracking")} />
+          )}
         </section>
 
         <p className="mx-auto mt-5 max-w-[420px] text-center text-[12px] leading-relaxed text-neutral-400">
@@ -133,6 +155,16 @@ function EntregavelPage() {
           anche se chiudi questa pagina.
         </p>
       </div>
+      <SideMenu
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        view={view}
+        onSelect={(v) => {
+          setView(v);
+          setMenuOpen(false);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      />
     </main>
   );
 }
