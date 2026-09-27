@@ -117,7 +117,25 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
         }
 
         // Compra aprovada: dispara o e-mail de entrega para o comprador.
-        if (paid) {
+        // Somente vendas do Front recebem e-mail — upsells e back-redirect
+        // seguem apenas com registro da venda e Purchase no TikTok.
+        const paidData = (event.data ?? {}) as Record<string, unknown>;
+        const paidAmount =
+          typeof paidData["total_amount"] === "number"
+            ? (paidData["total_amount"] as number)
+            : typeof paidData["amount"] === "number"
+              ? (paidData["amount"] as number)
+              : null;
+        const paidCurrency =
+          typeof paidData["currency"] === "string"
+            ? (paidData["currency"] as string).toUpperCase()
+            : "EUR";
+        const paidMatch = Object.entries(PRODUCTS).find(
+          ([, p]) => p.amount === paidAmount && p.currency === paidCurrency,
+        );
+        const isFrontSale = paidMatch?.[1]?.stage === "front";
+
+        if (paid && isFrontSale) {
           try {
             const data = (event.data ?? {}) as Record<string, unknown>;
             const pick = (...keys: string[]) => {
