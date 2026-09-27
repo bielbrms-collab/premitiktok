@@ -133,7 +133,12 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
         const paidMatch = Object.entries(PRODUCTS).find(
           ([, p]) => p.amount === paidAmount && p.currency === paidCurrency,
         );
-        const isFrontSale = paidMatch?.[1]?.stage === "front";
+        // Upsells one-click (up1-fr/up2-fr/up3-fr) chegam como pedidos de
+        // upsell; o up2-fr tem o mesmo valor do Back Redirect (15,90 €).
+        const billingReason = String(paidData["billing_reason"] ?? "").toLowerCase();
+        const isUpsellOrder = /upsell|upgrade/.test(billingReason);
+        const stage = paidMatch?.[1]?.stage;
+        const isFrontSale = !isUpsellOrder && (stage === "front" || stage === "back_redirect");
 
         if (paid && isFrontSale) {
           try {
