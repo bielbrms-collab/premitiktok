@@ -1799,7 +1799,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fetch("/api/public/cooud/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: PRODUCT_ID, buyerEmail: email, quantity: 1, origin: window.location.origin, returnPath: "/up1" })
+        body: JSON.stringify({ productId: PRODUCT_ID, buyerEmail: email, quantity: 1, origin: window.location.origin, returnPath: "/up1-fr" })
       }).then(function (response) {
         return response.text().then(function (raw) {
           var data;
@@ -1830,7 +1830,7 @@ document.addEventListener("DOMContentLoaded", function () {
         customerEmail: email,
         customerCountry: "IT",
         onSuccess: function () {
-          window.location.assign("/up1?checkout_session_id=" + encodeURIComponent(config.sessionId) + "&productId=" + encodeURIComponent(PRODUCT_ID) + "&redirect_status=succeeded");
+          window.location.assign("/up1-fr?checkout_session_id=" + encodeURIComponent(config.sessionId) + "&productId=" + encodeURIComponent(PRODUCT_ID) + "&redirect_status=succeeded");
         },
         onError: function (error) {
           showPayError((error && error.message ? error.message : "Impossibile elaborare il pagamento.") + (error && error.code ? " (" + error.code + ")" : ""));
