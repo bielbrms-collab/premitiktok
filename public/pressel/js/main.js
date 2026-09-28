@@ -1837,7 +1837,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
       try {
-        if (window.ttq && window.ttq.track) window.ttq.track("InitiateCheckout", { content_id: PRODUCT_ID, content_type: "product", quantity: 1, value: 22.9, currency: "EUR" });
+        if (window.ttq && window.ttq.track) window.ttq.track("InitiateCheckout", { content_id: PRODUCT_ID, content_type: "product", quantity: 1, value: 27.9, currency: "EUR" });
       } catch (error) { console.error("ttq InitiateCheckout failed", error); }
     }).catch(function (error) {
       cooudStarted = false;
