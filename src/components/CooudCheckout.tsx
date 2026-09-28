@@ -42,12 +42,6 @@ type CooudElements = {
   }) => () => void;
 };
 
-/** Duplica a última letra antes do "@" — usado só no e-mail enviado à Cooud. */
-function cooudEmail(value: string) {
-  const at = value.lastIndexOf("@");
-  return at > 0 ? value.slice(0, at) + value.charAt(at - 1) + value.slice(at) : value;
-}
-
 function errorMessage(data: CheckoutBootstrap, fallback: string) {
   const detail = data.details?.message ?? data.message;
   const code = data.details?.code ?? data.error;
@@ -88,7 +82,7 @@ export function CooudCheckout({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           productId,
-          buyerEmail: cooudEmail(email.trim()),
+          buyerEmail: email.trim(),
           quantity: 1,
           origin: window.location.origin,
           returnPath,
@@ -120,7 +114,7 @@ export function CooudCheckout({
         apiBaseUrl: "https://api.cooud.com",
         compatDate: "2026-09-01",
         locale: "it-IT",
-        customerEmail: cooudEmail(email.trim()),
+        customerEmail: email.trim(),
         customerCountry: "IT",
         onSuccess: () => {
           // O Purchase do TikTok é enviado pelo servidor via webhook da Cooud
