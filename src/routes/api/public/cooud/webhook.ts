@@ -199,7 +199,11 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
           } catch (error) {
             console.error("[Cooud webhook] falha ao enviar e-mail de entrega", error);
           }
+        }
 
+        // Purchase vai ao TikTok para TODA compra aprovada (front, back-redirect
+        // e upsells) — só o e-mail fica restrito ao front/back-redirect.
+        if (paid) {
           // Fonte única do Purchase no TikTok: o servidor. O ID do pedido é
           // estável entre reenvios do webhook, então a mesma compra nunca é
           // contada duas vezes (event_id deduplica na própria TikTok).
