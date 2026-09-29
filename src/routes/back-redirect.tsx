@@ -12,12 +12,12 @@ export const Route = createFileRoute("/back-redirect")({
       {
         name: "description",
         content:
-          "Abbiamo individuato una riduzione di tasse e commissioni: paga solo 19,50 € e ricevi 150,00 € di bonus allo sblocco del tuo saldo.",
+          "Abbiamo individuato una riduzione di tasse e commissioni: paga solo 16,90 € e ricevi 150,00 € di bonus allo sblocco del tuo saldo.",
       },
       { property: "og:title", content: "Riduzione delle tasse applicata" },
       {
         property: "og:description",
-        content: "Commissioni ridotte a 19,50 € + 150,00 € di bonus. Offerta a tempo limitato.",
+        content: "Commissioni ridotte a 16,90 € + 150,00 € di bonus. Offerta a tempo limitato.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
