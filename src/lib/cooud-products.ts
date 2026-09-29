@@ -22,7 +22,7 @@ export const PRODUCTS: Record<string, ProductConfig> = {
     name: "Costi di sblocco ridotti",
     cooudLabel: "How to learn Spanish",
     stage: "back_redirect",
-    amount: 1950,
+    amount: 1690,
     currency: "EUR",
   },
   "65009b71-7660-44ef-ba87-24f29c7599a4": {
