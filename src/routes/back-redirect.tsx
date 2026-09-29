@@ -115,7 +115,7 @@ function BackRedirect() {
 
           <div className="mb-6 space-y-3">
             <p className="text-lg font-bold text-neutral-700">Commissioni ridotte a soli:</p>
-            <div className="text-4xl font-black italic text-neutral-900">19,50 €</div>
+            <div className="text-4xl font-black italic text-neutral-900">16,90 €</div>
             <div className="mx-auto my-4 h-[2px] w-12 bg-neutral-200" />
             <p className="bg-gradient-to-r from-rose-500 to-sky-500 bg-clip-text text-2xl font-black uppercase italic tracking-tighter text-transparent">
               + 150,00 € di bonus
@@ -123,7 +123,7 @@ function BackRedirect() {
           </div>
 
           <p className="border-t border-neutral-100 pt-4 text-[11px] italic leading-tight text-neutral-400">
-            *La riduzione di tasse e commissioni è stata applicata. Dopo il pagamento dei 19,50 €, il sistema
+            *La riduzione di tasse e commissioni è stata applicata. Dopo il pagamento dei 16,90 €, il sistema
             sblocca immediatamente il tuo saldo accumulato e il bonus di 150,00 €.
           </p>
         </div>
