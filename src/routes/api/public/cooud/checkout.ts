@@ -10,7 +10,7 @@ const requestSchema = z.object({
   buyerEmail: z.string().email(),
   quantity: z.number().int().min(1).max(10).default(1),
   origin: z.string().url(),
-  returnPath: z.string().startsWith("/").max(200).default("/up1-fr"),
+  returnPath: z.string().startsWith("/").max(200).default("/up1"),
 });
 
 type CooudError = {

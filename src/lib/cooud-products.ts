@@ -15,14 +15,14 @@ export const PRODUCTS: Record<string, ProductConfig> = {
     name: "How to learn French",
     cooudLabel: "How to learn French",
     stage: "front",
-    amount: 2790,
+    amount: 2490,
     currency: "EUR",
   },
   "43ca5d35-3492-4567-913d-dc2843ba6931": {
     name: "Costi di sblocco ridotti",
     cooudLabel: "How to learn Spanish",
     stage: "back_redirect",
-    amount: 1690,
+    amount: 1990,
     currency: "EUR",
   },
   "65009b71-7660-44ef-ba87-24f29c7599a4": {

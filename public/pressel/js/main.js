@@ -1799,7 +1799,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fetch("/api/public/cooud/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: PRODUCT_ID, buyerEmail: email, quantity: 1, origin: window.location.origin, returnPath: "/up1-fr" })
+        body: JSON.stringify({ productId: PRODUCT_ID, buyerEmail: email, quantity: 1, origin: window.location.origin, returnPath: "/up1" })
       }).then(function (response) {
         return response.text().then(function (raw) {
           var data;
@@ -1830,14 +1830,14 @@ document.addEventListener("DOMContentLoaded", function () {
         customerEmail: email,
         customerCountry: "IT",
         onSuccess: function () {
-          window.location.assign("/up1-fr?checkout_session_id=" + encodeURIComponent(config.sessionId) + "&productId=" + encodeURIComponent(PRODUCT_ID) + "&redirect_status=succeeded");
+          window.location.assign("/up1?checkout_session_id=" + encodeURIComponent(config.sessionId) + "&productId=" + encodeURIComponent(PRODUCT_ID) + "&redirect_status=succeeded");
         },
         onError: function (error) {
           showPayError((error && error.message ? error.message : "Impossibile elaborare il pagamento.") + (error && error.code ? " (" + error.code + ")" : ""));
         }
       });
       try {
-        if (window.ttq && window.ttq.track) window.ttq.track("InitiateCheckout", { content_id: PRODUCT_ID, content_type: "product", quantity: 1, value: 27.9, currency: "EUR" });
+        if (window.ttq && window.ttq.track) window.ttq.track("InitiateCheckout", { content_id: PRODUCT_ID, content_type: "product", quantity: 1, value: 22.9, currency: "EUR" });
       } catch (error) { console.error("ttq InitiateCheckout failed", error); }
     }).catch(function (error) {
       cooudStarted = false;

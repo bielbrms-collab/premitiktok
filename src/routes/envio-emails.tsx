@@ -57,10 +57,10 @@ const EMPTY: Draft = {
   from_name: "Il tuo team",
   from_email: "support@notify.suporttk.shop",
   reply_to: "support@notify.suporttk.shop",
-  heading: "Benvenuta nella tua area personale",
-  intro: "Ciao {{nome}}, il tuo accesso all'area membri è attivo.",
+  heading: "Benvenuto nella tua area personale",
+  intro: "Ciao {{nome}}, il tuo accesso all'area riservata è attivo.",
   body_text:
-    "Grazie per esserti registrata.\n\nDa ora in poi puoi accedere alla tua area personale e seguire ogni aggiornamento passo dopo passo.\n\nTroverai tutti i dettagli al link qui sotto.\n\nSe hai domande, rispondi semplicemente a questa email: siamo qui per aiutarti.",
+    "Grazie per la tua iscrizione.\n\nDa questo momento puoi entrare nella tua area personale e seguire tutti gli aggiornamenti passo dopo passo.\n\nTrovi ogni dettaglio al link qui sotto.\n\nPer qualsiasi domanda, rispondi direttamente a questa email: siamo qui per aiutarti.",
   button_label: "Accedi alla mia area",
   deliverable_url: "https://premitiktok.lovable.app/entregavel",
   fallback_note: "",

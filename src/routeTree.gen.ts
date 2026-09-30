@@ -9,12 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as Up3FrRouteImport } from './routes/up3-fr'
-import { Route as Up3BackRouteImport } from './routes/up3-back'
-import { Route as Up2FrRouteImport } from './routes/up2-fr'
-import { Route as Up2BackRouteImport } from './routes/up2-back'
-import { Route as Up1FrRouteImport } from './routes/up1-fr'
-import { Route as Up1BackRouteImport } from './routes/up1-back'
 import { Route as Up1RouteImport } from './routes/up1'
 import { Route as PresselRouteImport } from './routes/pressel'
 import { Route as Obrigado4RouteImport } from './routes/obrigado4'
@@ -33,36 +27,6 @@ import { Route as ApiPublicCooudWebhookRouteImport } from './routes/api/public/c
 import { Route as ApiPublicCooudPaymentEventRouteImport } from './routes/api/public/cooud/payment-event'
 import { Route as ApiPublicCooudCheckoutRouteImport } from './routes/api/public/cooud/checkout'
 
-const Up3FrRoute = Up3FrRouteImport.update({
-  id: '/up3-fr',
-  path: '/up3-fr',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Up3BackRoute = Up3BackRouteImport.update({
-  id: '/up3-back',
-  path: '/up3-back',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Up2FrRoute = Up2FrRouteImport.update({
-  id: '/up2-fr',
-  path: '/up2-fr',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Up2BackRoute = Up2BackRouteImport.update({
-  id: '/up2-back',
-  path: '/up2-back',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Up1FrRoute = Up1FrRouteImport.update({
-  id: '/up1-fr',
-  path: '/up1-fr',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Up1BackRoute = Up1BackRouteImport.update({
-  id: '/up1-back',
-  path: '/up1-back',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const Up1Route = Up1RouteImport.update({
   id: '/up1',
   path: '/up1',
@@ -162,12 +126,6 @@ export interface FileRoutesByFullPath {
   '/obrigado4': typeof Obrigado4Route
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
-  '/up1-back': typeof Up1BackRoute
-  '/up1-fr': typeof Up1FrRoute
-  '/up2-back': typeof Up2BackRoute
-  '/up2-fr': typeof Up2FrRoute
-  '/up3-back': typeof Up3BackRoute
-  '/up3-fr': typeof Up3FrRoute
   '/api/public/email-open': typeof ApiPublicEmailOpenRoute
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
@@ -187,12 +145,6 @@ export interface FileRoutesByTo {
   '/obrigado4': typeof Obrigado4Route
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
-  '/up1-back': typeof Up1BackRoute
-  '/up1-fr': typeof Up1FrRoute
-  '/up2-back': typeof Up2BackRoute
-  '/up2-fr': typeof Up2FrRoute
-  '/up3-back': typeof Up3BackRoute
-  '/up3-fr': typeof Up3FrRoute
   '/api/public/email-open': typeof ApiPublicEmailOpenRoute
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
@@ -213,12 +165,6 @@ export interface FileRoutesById {
   '/obrigado4': typeof Obrigado4Route
   '/pressel': typeof PresselRoute
   '/up1': typeof Up1Route
-  '/up1-back': typeof Up1BackRoute
-  '/up1-fr': typeof Up1FrRoute
-  '/up2-back': typeof Up2BackRoute
-  '/up2-fr': typeof Up2FrRoute
-  '/up3-back': typeof Up3BackRoute
-  '/up3-fr': typeof Up3FrRoute
   '/api/public/email-open': typeof ApiPublicEmailOpenRoute
   '/api/public/cooud/checkout': typeof ApiPublicCooudCheckoutRoute
   '/api/public/cooud/payment-event': typeof ApiPublicCooudPaymentEventRoute
@@ -240,12 +186,6 @@ export interface FileRouteTypes {
     | '/obrigado4'
     | '/pressel'
     | '/up1'
-    | '/up1-back'
-    | '/up1-fr'
-    | '/up2-back'
-    | '/up2-fr'
-    | '/up3-back'
-    | '/up3-fr'
     | '/api/public/email-open'
     | '/api/public/cooud/checkout'
     | '/api/public/cooud/payment-event'
@@ -265,12 +205,6 @@ export interface FileRouteTypes {
     | '/obrigado4'
     | '/pressel'
     | '/up1'
-    | '/up1-back'
-    | '/up1-fr'
-    | '/up2-back'
-    | '/up2-fr'
-    | '/up3-back'
-    | '/up3-fr'
     | '/api/public/email-open'
     | '/api/public/cooud/checkout'
     | '/api/public/cooud/payment-event'
@@ -290,12 +224,6 @@ export interface FileRouteTypes {
     | '/obrigado4'
     | '/pressel'
     | '/up1'
-    | '/up1-back'
-    | '/up1-fr'
-    | '/up2-back'
-    | '/up2-fr'
-    | '/up3-back'
-    | '/up3-fr'
     | '/api/public/email-open'
     | '/api/public/cooud/checkout'
     | '/api/public/cooud/payment-event'
@@ -316,12 +244,6 @@ export interface RootRouteChildren {
   Obrigado4Route: typeof Obrigado4Route
   PresselRoute: typeof PresselRoute
   Up1Route: typeof Up1Route
-  Up1BackRoute: typeof Up1BackRoute
-  Up1FrRoute: typeof Up1FrRoute
-  Up2BackRoute: typeof Up2BackRoute
-  Up2FrRoute: typeof Up2FrRoute
-  Up3BackRoute: typeof Up3BackRoute
-  Up3FrRoute: typeof Up3FrRoute
   ApiPublicEmailOpenRoute: typeof ApiPublicEmailOpenRoute
   ApiPublicCooudCheckoutRoute: typeof ApiPublicCooudCheckoutRoute
   ApiPublicCooudPaymentEventRoute: typeof ApiPublicCooudPaymentEventRoute
@@ -333,48 +255,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/up3-fr': {
-      id: '/up3-fr'
-      path: '/up3-fr'
-      fullPath: '/up3-fr'
-      preLoaderRoute: typeof Up3FrRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/up3-back': {
-      id: '/up3-back'
-      path: '/up3-back'
-      fullPath: '/up3-back'
-      preLoaderRoute: typeof Up3BackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/up2-fr': {
-      id: '/up2-fr'
-      path: '/up2-fr'
-      fullPath: '/up2-fr'
-      preLoaderRoute: typeof Up2FrRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/up2-back': {
-      id: '/up2-back'
-      path: '/up2-back'
-      fullPath: '/up2-back'
-      preLoaderRoute: typeof Up2BackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/up1-fr': {
-      id: '/up1-fr'
-      path: '/up1-fr'
-      fullPath: '/up1-fr'
-      preLoaderRoute: typeof Up1FrRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/up1-back': {
-      id: '/up1-back'
-      path: '/up1-back'
-      fullPath: '/up1-back'
-      preLoaderRoute: typeof Up1BackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/up1': {
       id: '/up1'
       path: '/up1'
@@ -508,12 +388,6 @@ const rootRouteChildren: RootRouteChildren = {
   Obrigado4Route: Obrigado4Route,
   PresselRoute: PresselRoute,
   Up1Route: Up1Route,
-  Up1BackRoute: Up1BackRoute,
-  Up1FrRoute: Up1FrRoute,
-  Up2BackRoute: Up2BackRoute,
-  Up2FrRoute: Up2FrRoute,
-  Up3BackRoute: Up3BackRoute,
-  Up3FrRoute: Up3FrRoute,
   ApiPublicEmailOpenRoute: ApiPublicEmailOpenRoute,
   ApiPublicCooudCheckoutRoute: ApiPublicCooudCheckoutRoute,
   ApiPublicCooudPaymentEventRoute: ApiPublicCooudPaymentEventRoute,

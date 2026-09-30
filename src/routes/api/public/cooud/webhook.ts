@@ -117,30 +117,7 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
         }
 
         // Compra aprovada: dispara o e-mail de entrega para o comprador.
-        // Somente vendas do Front recebem e-mail — upsells e back-redirect
-        // seguem apenas com registro da venda e Purchase no TikTok.
-        const paidData = (event.data ?? {}) as Record<string, unknown>;
-        const paidAmount =
-          typeof paidData["total_amount"] === "number"
-            ? (paidData["total_amount"] as number)
-            : typeof paidData["amount"] === "number"
-              ? (paidData["amount"] as number)
-              : null;
-        const paidCurrency =
-          typeof paidData["currency"] === "string"
-            ? (paidData["currency"] as string).toUpperCase()
-            : "EUR";
-        const paidMatch = Object.entries(PRODUCTS).find(
-          ([, p]) => p.amount === paidAmount && p.currency === paidCurrency,
-        );
-        // Upsells one-click (up1-fr/up2-fr/up3-fr) chegam como pedidos de
-        // upsell; o up2-fr tem o mesmo valor do Back Redirect (15,90 €).
-        const billingReason = String(paidData["billing_reason"] ?? "").toLowerCase();
-        const isUpsellOrder = /upsell|upgrade/.test(billingReason);
-        const stage = paidMatch?.[1]?.stage;
-        const isFrontSale = !isUpsellOrder && (stage === "front" || stage === "back_redirect");
-
-        if (paid && isFrontSale) {
+        if (paid) {
           try {
             const data = (event.data ?? {}) as Record<string, unknown>;
             const pick = (...keys: string[]) => {
@@ -199,11 +176,7 @@ export const Route = createFileRoute("/api/public/cooud/webhook")({
           } catch (error) {
             console.error("[Cooud webhook] falha ao enviar e-mail de entrega", error);
           }
-        }
 
-        // Purchase vai ao TikTok para TODA compra aprovada (front, back-redirect
-        // e upsells) — só o e-mail fica restrito ao front/back-redirect.
-        if (paid) {
           // Fonte única do Purchase no TikTok: o servidor. O ID do pedido é
           // estável entre reenvios do webhook, então a mesma compra nunca é
           // contada duas vezes (event_id deduplica na própria TikTok).
